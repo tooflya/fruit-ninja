@@ -21,6 +21,11 @@ class Splash : public Entity
 		// ===========================================================
 		// Fields
 		// ===========================================================
+    
+        float mLiveTime;
+        float mLiveTimeElapsed;
+    
+        float mAlphaSpeed;
 
 		// ===========================================================
 		// Constructors

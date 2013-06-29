@@ -9,6 +9,11 @@
 #include "Splash.h"
 #include "Label.h"
 #include "BatchEntityManager.h"
+#include "DropsManager.h"
+#include "Processor.h"
+#include "Spark.h"
+#include "Drop.h"
+#include "Mark.h"
 
 using namespace cocos2d;
 
@@ -30,23 +35,28 @@ class Menu : public Screen
 		int mFruitRemaning;
 
 		float mFruitTime;
-		float mFruitTimeElapsed;
+        float mFruitTimeElapsed;
+    
+        float mAwesomeFruitTime;
+        float mAwesomeFruitTimeElapsed;
 
 		float mSpecialChalengeTime;
 		float mSpecialChalengeTimeElapsed;
 
 		bool mIsSpecialChalengeRunning;
+        bool mIsAwesomeChalengeRunning;
 
 		float mTimeBeforeRestartElapsed;
 
 		Entity* mBackground;
 		Entity* mCounter;
+        Entity* mWhiteEffect;
 
 		Entity* test;
 
 		CCLayer* mMainMenuLayer;
 		CCLayer* mTopLayer;
-		CCLayer* mBottomLayer;
+        CCLayer* mBottomLayer;
 
 		// ===========================================================
 		// Constructors
@@ -103,59 +113,13 @@ class Menu : public Screen
 		// Inner Classes
 		// ===========================================================
 
-		class Spark : public Entity
-		{
-		protected:
-			float pVectorX;
-			float pVectorY;
-
-		public:
-			Spark() : Entity("spark.png", 2, 3)
-			{
-			}
-
-			void onCreate()
-			{
-				Entity::onCreate();
-
-				this->pVectorX = Utils::randomf(-1000.0, 1000.0);
-				this->pVectorY = Utils::randomf(-1000.0, 1000.0);
-
-				this->setScale(Utils::randomf(0.4, 1.5));
-			}
-
-			Spark* deepCopy()
-			{
-				return new Spark();
-			}
-
-			void update(float pDeltaTime)
-			{
-				Entity::update(pDeltaTime);
-
-				this->setCenterPosition(this->getCenterX() + this->pVectorX * pDeltaTime, this->getCenterY() + this->pVectorY * pDeltaTime);
-				
-				this->pVectorX = this->pVectorX > 0 ? this->pVectorX + this->pVectorX * 0.1 : this->pVectorX + this->pVectorX * 0.1;
-				this->pVectorY = this->pVectorY > 0 ? this->pVectorY + this->pVectorY * 0.1 : this->pVectorY + this->pVectorY * 0.1;
-
-				if(this->getCenterX() < 0 || this->getCenterX() > Options::CAMERA_WIDTH || this->getCenterY() < 0 || this->getCenterY() > Options::CAMERA_HEIGHT)
-				{
-					this->destroy();
-				}
-			}
-		};
-
 		// ===========================================================
 		// Constants
 		// ===========================================================
-
-		static CCPoint mTouchCoordinate;
-
+    
 		static int FRUITS;
 		static int SCORE;
 		static int LIFES;
-
-		static Entity* SPECIAL_FRUIT;
 
 		// ===========================================================
 		// Fields
@@ -166,13 +130,18 @@ class Menu : public Screen
 		BatchEntityManager* mSplashes;
 		BatchEntityManager* mLifes;
 		BatchEntityManager* mCriticalHits;
-		BatchEntityManager* mSparks;
+        BatchEntityManager* mSparks;
+        BatchEntityManager* mShadows;
+        BatchEntityManager* mMarks;
+    
+        DropsManager* mDropsManager;
     
     	CCParticleSystemQuad* mParticlesTypeDanger;
-    	CCParticleSystemQuad* mParticlesTypeFruits;
 
 		CCLabelTTF* mSpecialLabel;
-		CCLabelTTF* mSpecialLabelScore;
+        CCLabelTTF* mSpecialLabelScore;
+    
+        CCLayer* mFruitsLayer;
 
 		// ===========================================================
 		// Constructors
@@ -189,7 +158,9 @@ class Menu : public Screen
 		void addScore(int pScore);
 		void removeLife();
 		void runSpecialChalenge();
+        void runAwesomeChalenge();
 		void stopSpecialChalenge();
+        void hitedAwesome();
 		
 		// ===========================================================
 		// Virtual Methods

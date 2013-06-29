@@ -21,6 +21,11 @@ class Part : public ImpulseEntity
 		// ===========================================================
 		// Fields
 		// ===========================================================
+    
+        float mAwesomeVectorX;
+        float mAwesomeVectorY;
+    
+        bool mAwesome;
 
 		// ===========================================================
 		// Constructors
@@ -85,6 +90,8 @@ class Part : public ImpulseEntity
 		// ===========================================================
 
         void update(float pDelta);
+    
+        void setAwesome(int pCounter, int pCapacity);
 		
 		// ===========================================================
 		// Virtual Methods

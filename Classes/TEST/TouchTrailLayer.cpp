@@ -11,15 +11,10 @@
 TouchTrailLayer::TouchTrailLayer()
 {
     setTouchEnabled(true);
-
-    this->mBladeParticleSystemQuad = CCParticleSystemQuad::create("blade_sparkle.plist");
-    this->mBladeParticleSystemQuad->stopSystem();
-    this->mBladeParticleSystemQuad->setPosition(Options::CAMERA_CENTER_X, Options::CAMERA_CENTER_Y);
-
+    
     this->mSunParticleSystemQuad = CCParticleSystemQuad::create("sun.plist");
 
     this->addChild(this->mSunParticleSystemQuad, 10);
-    this->addChild(this->mBladeParticleSystemQuad, 10);
 
     this->mTimeBeforeNextBladeSound = 0.15f;
     this->mTimeBeforeNextBladeSoundElapsed = 0;
@@ -50,15 +45,16 @@ void TouchTrailLayer::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
         
         CCPoint point = convertTouchToNodeSpace(touch);
 		blade->push(point);
-
-        this->mBladeParticleSystemQuad->setPosition(point);
-        //this->mBladeParticleSystemQuad->resumeSystem();
 	}
 }
 
 void TouchTrailLayer::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 {
+    int i = -1;
+    
     for (CCSetIterator it = pTouches->begin(); it != pTouches->end(); it++) {
+        i++;
+        
         CCTouch *touch = (CCTouch *)*it;
         if (_map.find(touch) == _map.end()) continue;
         
@@ -72,32 +68,31 @@ void TouchTrailLayer::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
             {
                 this->mTimeBeforeNextBladeSoundElapsed = 0;
 
-                SimpleAudioEngine::sharedEngine()->playEffect("Sound/swoosh.mp3");
+                SimpleAudioEngine::sharedEngine()->playEffect("swoosh.mp3");
 
                 this->mBladeLastCoordinates = point;
             }
         }
-
-        this->mBladeParticleSystemQuad->setPosition(point);
-
-        Menu::mTouchCoordinate = point;
+        
+        Processor::TOUCH_COORDINATES[i] = point;
     }
 }
 
 void TouchTrailLayer::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent)
 {
+    int i = -1;
     for (CCSetIterator it = pTouches->begin(); it != pTouches->end(); it++) {
+        i++;
+        
         CCTouch *touch = (CCTouch *)*it;
         if (_map.find(touch) == _map.end()) continue;
         
         CCBlade *blade = _map[touch];
         blade->autoCleanup();
         _map.erase(touch);
-
-        this->mBladeParticleSystemQuad->stopSystem();
+        
+        Processor::TOUCH_COORDINATES[i] = ccp(-1000, -1000);
     }
-
-    Menu::mTouchCoordinate = ccp(-1000, -1000);
 }
 
 void TouchTrailLayer::update(float pDeltaTime)

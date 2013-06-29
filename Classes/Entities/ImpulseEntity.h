@@ -5,6 +5,8 @@
 
 #include "Entity.h"
 
+#include "Processor.h"
+
 using namespace cocos2d;
 
 class ImpulseEntity : public Entity

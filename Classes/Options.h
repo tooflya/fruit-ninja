@@ -79,6 +79,11 @@ class Options
 
 		static bool MUSIC_ENABLE;
 		static bool SOUND_ENABLE;
+    
+        static const char* FONT;
+        static const char* GAME_MUSIC;
+        static const char* GAME_OVER;
+        static const char* START_LEVEL;
 
 		// ===========================================================
 		// Fields

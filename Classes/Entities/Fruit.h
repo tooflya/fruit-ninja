@@ -24,6 +24,7 @@ class Fruit : public ImpulseEntity
 		// ===========================================================
     
     	Entity* mLight;
+        Entity* mShadow;
 
     	CCParticleSystemQuad* mParticlesTypeDanger;
     	CCParticleSystemQuad* mParticlesTypePineApple;
@@ -37,6 +38,10 @@ class Fruit : public ImpulseEntity
     	int mLifes;
 
     	bool mSpecial;
+        bool mAwesome;
+    
+        float mMarkTime;
+        float mMarkTimeElapsed;
 
 		// ===========================================================
 		// Constructors
@@ -108,6 +113,8 @@ class Fruit : public ImpulseEntity
     
         float mTimeUntilDown;
         float mTimeUntilDownElapsed;
+    
+        bool mMustBeDestroy;
 
 		// ===========================================================
 		// Constructors
@@ -124,6 +131,7 @@ class Fruit : public ImpulseEntity
         void draw();
 
         void setSpecialChalenge();
+        void setAwesomeChalenge();
 		
 		// ===========================================================
 		// Virtual Methods
