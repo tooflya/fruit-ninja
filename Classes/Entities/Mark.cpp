@@ -38,8 +38,10 @@ void Mark::onCreate()
     Entity::onCreate();
     
     this->setOpacity(255.0);
-        
+    this->setScale(0.7);
+    
     this->runAction(CCFadeTo::create(0.5, 0.0));
+    this->runAction(CCScaleTo::create(0.5, 0.3));
 }
     
 Mark* Mark::deepCopy()

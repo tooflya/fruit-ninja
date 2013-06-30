@@ -72,37 +72,37 @@ void Part::update(float pDeltaTime)
         switch(this->mType)
         {
             case 1:
-                SimpleAudioEngine::sharedEngine()->playEffect("impact-apple.ogg");
+                SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_APPLE);
             break;
             case 2:
-                SimpleAudioEngine::sharedEngine()->playEffect("impact-apple.ogg");
+                SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_APPLE);
             break;
             case 3:
-                SimpleAudioEngine::sharedEngine()->playEffect("impact-banana.ogg");
+                SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_BANANA);
             break;
             case 4:
-                SimpleAudioEngine::sharedEngine()->playEffect("impact-coconut.ogg");
+                SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_COCONUT);
             break;
             case 5:
-                SimpleAudioEngine::sharedEngine()->playEffect("impact-watermelon.ogg");
+                SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_WATERMELON);
             break;
             case 6:
-                SimpleAudioEngine::sharedEngine()->playEffect("impact-kiwifruit.ogg");
+                SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_KIWIFRUIT);
             break;
             case 7:
-                SimpleAudioEngine::sharedEngine()->playEffect("squash.mp3");
+                SimpleAudioEngine::sharedEngine()->playEffect(Options::SQUASH);
             break;
             case 8:
-                SimpleAudioEngine::sharedEngine()->playEffect("squash.mp3");
+                SimpleAudioEngine::sharedEngine()->playEffect(Options::SQUASH);
             break;
             case 9:
-                SimpleAudioEngine::sharedEngine()->playEffect("squash.mp3");
+                SimpleAudioEngine::sharedEngine()->playEffect(Options::SQUASH);
             break;
             case 10:
-                SimpleAudioEngine::sharedEngine()->playEffect("impact-orange.ogg");
+                SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_ORANGE);
             break;
             case 11:
-                SimpleAudioEngine::sharedEngine()->playEffect("squash.mp3");
+                SimpleAudioEngine::sharedEngine()->playEffect(Options::SQUASH);
             break;
         }
         

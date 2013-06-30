@@ -37,7 +37,7 @@ Fruit::Fruit() :
         this->mSpecial = false;
         this->mAwesome = false;
         
-        this->mMarkTime = 0.1;
+        this->mMarkTime = 0.02;
         this->mMarkTimeElapsed = 0;
     }
 
@@ -129,49 +129,48 @@ void Fruit::update(float pDeltaTime)
                 this->setScale(1.3);
                 this->runAction(CCScaleTo::create(0.2, 1));
 
-                sprintf(text, "combo-%d.mp3", this->mLifes);
-                SimpleAudioEngine::sharedEngine()->playEffect(text);
+                SimpleAudioEngine::sharedEngine()->playEffect(Options::COMBO[this->mLifes]);
 
                 switch(this->mType)
                 {
                     case 1:
-                        SimpleAudioEngine::sharedEngine()->playEffect("impact-apple.ogg");
+                        SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_APPLE);
                     break;
                     case 2:
-                        SimpleAudioEngine::sharedEngine()->playEffect("impact-apple.ogg");
+                        SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_APPLE);
                     break;
                     case 3:
-                        SimpleAudioEngine::sharedEngine()->playEffect("impact-banana.ogg");
+                        SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_BANANA);
                     break;
                     case 4:
-                        SimpleAudioEngine::sharedEngine()->playEffect("impact-coconut.ogg");
+                        SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_COCONUT);
                     break;
                     case 5:
-                        SimpleAudioEngine::sharedEngine()->playEffect("impact-watermelon.ogg");
+                        SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_WATERMELON);
                     break;
                     case 6:
-                        SimpleAudioEngine::sharedEngine()->playEffect("impact-kiwifruit.ogg");
+                        SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_KIWIFRUIT);
                     break;
                     case 7:
-                        SimpleAudioEngine::sharedEngine()->playEffect("squash.mp3");
+                        SimpleAudioEngine::sharedEngine()->playEffect(Options::SQUASH);
                     break;
                     case 8:
-                        SimpleAudioEngine::sharedEngine()->playEffect("squash.mp3");
+                        SimpleAudioEngine::sharedEngine()->playEffect(Options::SQUASH);
                     break;
                     case 9:
-                        SimpleAudioEngine::sharedEngine()->playEffect("squash.mp3");
+                        SimpleAudioEngine::sharedEngine()->playEffect(Options::SQUASH);
                     break;
                     case 10:
-                        SimpleAudioEngine::sharedEngine()->playEffect("impact-orange.ogg");
+                        SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_ORANGE);
                     break;
                     case 11:
-                        SimpleAudioEngine::sharedEngine()->playEffect("squash.mp3");
+                        SimpleAudioEngine::sharedEngine()->playEffect(Options::SQUASH);
                     break;
                     case TYPE_DANGER:
                         menu->mParticlesTypeDanger->setPosition(this->getCenterX(), this->getCenterY());
                         menu->mParticlesTypeDanger->resetSystem();
 
-                        SimpleAudioEngine::sharedEngine()->playEffect("explosion.mp3");
+                        SimpleAudioEngine::sharedEngine()->playEffect(Options::EXPLOSION);
                     break;
                 }
                 
@@ -210,43 +209,43 @@ void Fruit::update(float pDeltaTime)
             switch(this->mType)
             {
                 case 1:
-                    SimpleAudioEngine::sharedEngine()->playEffect("Sound/impact-apple.ogg");
+                    SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_APPLE);
                 break;
                 case 2:
-                    SimpleAudioEngine::sharedEngine()->playEffect("Sound/impact-apple.ogg");
+                    SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_APPLE);
                 break;
                 case 3:
-                    SimpleAudioEngine::sharedEngine()->playEffect("Sound/impact-banana.ogg");
+                    SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_BANANA);
                 break;
                 case 4:
-                    SimpleAudioEngine::sharedEngine()->playEffect("Sound/impact-coconut.ogg");
+                    SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_COCONUT);
                 break;
                 case 5:
-                    SimpleAudioEngine::sharedEngine()->playEffect("Sound/impact-watermelon.ogg");
+                    SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_WATERMELON);
                 break;
                 case 6:
-                    SimpleAudioEngine::sharedEngine()->playEffect("Sound/impact-kiwifruit.ogg");
+                    SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_KIWIFRUIT);
                 break;
                 case 7:
-                    SimpleAudioEngine::sharedEngine()->playEffect("Sound/squash.mp3");
+                    SimpleAudioEngine::sharedEngine()->playEffect(Options::SQUASH);
                 break;
                 case 8:
-                    SimpleAudioEngine::sharedEngine()->playEffect("Sound/squash.mp3");
+                    SimpleAudioEngine::sharedEngine()->playEffect(Options::SQUASH);
                 break;
                 case 9:
-                    SimpleAudioEngine::sharedEngine()->playEffect("Sound/squash.mp3");
+                    SimpleAudioEngine::sharedEngine()->playEffect(Options::SQUASH);
                 break;
                 case 10:
-                    SimpleAudioEngine::sharedEngine()->playEffect("Sound/impact-orange.ogg");
+                    SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_ORANGE);
                 break;
                 case 11:
-                    SimpleAudioEngine::sharedEngine()->playEffect("Sound/squash.mp3");
+                    SimpleAudioEngine::sharedEngine()->playEffect(Options::SQUASH);
                 break;
                 case TYPE_DANGER:
                     menu->mParticlesTypeDanger->setPosition(this->getCenterX(), this->getCenterY());
                     menu->mParticlesTypeDanger->resetSystem();
 
-                    SimpleAudioEngine::sharedEngine()->playEffect("Sound/explosion.mp3");
+                    SimpleAudioEngine::sharedEngine()->playEffect(Options::EXPLOSION);
                 break;
             }
             
@@ -415,12 +414,16 @@ void Fruit::update(float pDeltaTime)
                     }
                 }
             }
+            else
+            {
+                menu->shake(1.0, 15.0);
+            }
 
             // Critical hit
 
             if(this->mImpulsePower > Utils::coord(500) && this->mType != TYPE_DANGER)
             {
-                SimpleAudioEngine::sharedEngine()->playEffect("Sound/critical.ogg");
+                SimpleAudioEngine::sharedEngine()->playEffect(Options::CRITICAL);
 
                 menu->mCriticalHits->create()->setCenterPosition(this->getCenterX(), this->getCenterY());
 
@@ -444,7 +447,7 @@ void Fruit::update(float pDeltaTime)
 
         if(this->mType != TYPE_DANGER)
         {
-            SimpleAudioEngine::sharedEngine()->playEffect("Sound/lose_life.mp3");
+            SimpleAudioEngine::sharedEngine()->playEffect(Options::LOSE_LIFE);
 
             menu->removeLife();
         }
@@ -467,7 +470,18 @@ void Fruit::update(float pDeltaTime)
     {
         this->mMarkTimeElapsed = 0;
         
-        menu->mMarks->create()->setCenterPosition(this->getCenterX(), this->getCenterY());
+        Entity* entity = menu->mMarks->create();
+        
+        entity->setCenterPosition(this->getCenterX(), this->getCenterY());
+        
+        if(this->mType == TYPE_DANGER)
+        {
+            entity->setColor(ccc3(255.0, 0.0, 0.0));
+        }
+        else
+        {
+            entity->setColor(ccc3(255.0, 255.0, 255.0));
+        }
     }
 }
 
@@ -554,12 +568,12 @@ void Fruit::onCreate()
 
     if(this->mType == TYPE_DANGER)
     {
-        this->mSoundEffect = SimpleAudioEngine::sharedEngine()->playEffect("throw-bomb.ogg");
-        this->mSoundEffect = SimpleAudioEngine::sharedEngine()->playEffect("bomb-fuse.ogg");
+        this->mSoundEffect = SimpleAudioEngine::sharedEngine()->playEffect(Options::THROW_BOMB);
+        this->mSoundEffect = SimpleAudioEngine::sharedEngine()->playEffect(Options::BOMB_FUSE);
     }
     else
     {
-        this->mSoundEffect = SimpleAudioEngine::sharedEngine()->playEffect("throw-fruit.ogg");
+        this->mSoundEffect = SimpleAudioEngine::sharedEngine()->playEffect(Options::THROW_FRUIT);
     }
 
     if(this->mLight->getParent() == false)

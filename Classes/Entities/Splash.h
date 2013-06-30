@@ -25,6 +25,8 @@ class Splash : public Entity
         float mLiveTime;
         float mLiveTimeElapsed;
     
+        float mScaleSpeed;
+    
         float mAlphaSpeed;
 
 		// ===========================================================

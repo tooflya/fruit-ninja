@@ -194,7 +194,6 @@
 		7864DDF1177E8910008DF95F /* Processor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Processor.h; sourceTree = "<group>"; };
 		78B37C71177E4A4A00773C6A /* AppDelegate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppDelegate.cpp; sourceTree = "<group>"; };
 		78B37C72177E4A4A00773C6A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		78B37C74177E4A4A00773C6A /* Bucket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bucket.h; sourceTree = "<group>"; };
 		78B37C75177E4A4A00773C6A /* Entity.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Entity.cpp; sourceTree = "<group>"; };
 		78B37C76177E4A4A00773C6A /* Entity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Entity.h; sourceTree = "<group>"; };
 		78B37C77177E4A4A00773C6A /* Fruit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Fruit.cpp; sourceTree = "<group>"; };
@@ -434,7 +433,6 @@
 				782FFF70177F62AE0071BCDC /* Drop.h */,
 				782FFF71177F62AE0071BCDC /* Spark.cpp */,
 				782FFF72177F62AE0071BCDC /* Spark.h */,
-				78B37C74177E4A4A00773C6A /* Bucket.h */,
 				78B37C75177E4A4A00773C6A /* Entity.cpp */,
 				78B37C76177E4A4A00773C6A /* Entity.h */,
 				78B37C77177E4A4A00773C6A /* Fruit.cpp */,

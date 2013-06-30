@@ -20,7 +20,7 @@
 // ===========================================================
 
 Drop::Drop() :
-    Entity("drops.png", 2, 3)
+    Entity("drops.png", 6, 3)
     {
     
     }
@@ -49,7 +49,7 @@ void Drop::onCreate()
     this->mAlphaSpeed = Utils::randomf(0.01, 0.1);
     
     this->mSpeedX = Utils::randomf(-10.0, 10.0);
-    this->mSpeedY = Utils::randomf(1.0, 10.0);
+    this->mSpeedY = Utils::randomf(1.0, 5.0);
     
     this->mWeight = Utils::randomf(0.1, 1.0);
 }

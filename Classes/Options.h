@@ -82,8 +82,28 @@ class Options
     
         static const char* FONT;
         static const char* GAME_MUSIC;
+        static const char* COMBO[10];
         static const char* GAME_OVER;
         static const char* START_LEVEL;
+        static const char* COMBO_BLITZ_BACKING_LIGHT;
+        static const char* COMBO_BLITZ_BACKING;
+        static const char* NATURE_BGM;
+        static const char* COMBO_BLITZ_BACKING_END;
+        static const char* TOSS_SIMULTANEOUS;
+        static const char* SWOOSH;
+        static const char* IMPACT_APPLE;
+        static const char* IMPACT_BANANA;
+        static const char* IMPACT_COCONUT;
+        static const char* IMPACT_WATERMELON;
+        static const char* IMPACT_KIWIFRUIT;
+        static const char* SQUASH;
+        static const char* IMPACT_ORANGE;
+        static const char* EXPLOSION;
+        static const char* CRITICAL;
+        static const char* LOSE_LIFE;
+        static const char* THROW_BOMB;
+        static const char* BOMB_FUSE;
+        static const char* THROW_FRUIT;
 
 		// ===========================================================
 		// Fields

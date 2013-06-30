@@ -151,8 +151,10 @@ Menu::Menu()
 		this->mDebugInformation[8] = CCLabelTTF::create("0 / 0", Options::FONT, Utils::coord(16));
 		this->mDebugInformation[9] = CCLabelTTF::create("Splashes: ", Options::FONT, Utils::coord(16));
 		this->mDebugInformation[10] = CCLabelTTF::create("0 / 0", Options::FONT, Utils::coord(16));
+		this->mDebugInformation[11] = CCLabelTTF::create("Marks: ", Options::FONT, Utils::coord(16));
+		this->mDebugInformation[12] = CCLabelTTF::create("0 / 0", Options::FONT, Utils::coord(16));
 
-		for(int i = 0; i < 11; i++)
+		for(int i = 0; i < 13; i++)
 		{
 			this->addChild(this->mDebugInformation[i], 555);
 		}
@@ -167,7 +169,9 @@ Menu::Menu()
 		this->mDebugInformation[7]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(278), Utils::coord(180)));
 		this->mDebugInformation[8]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[8]->getContentSize().width / 2, Utils::coord(180)));
 		this->mDebugInformation[9]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(269), Utils::coord(150)));
-		this->mDebugInformation[10]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[10]->getContentSize().width / 2, Utils::coord(150)));
+		this->mDebugInformation[10]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[10]->getContentSize().width / 2, Utils::coord(120)));
+		this->mDebugInformation[11]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(269), Utils::coord(120)));
+		this->mDebugInformation[12]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[12]->getContentSize().width / 2, Utils::coord(120)));
 	}
 }
 
@@ -248,7 +252,7 @@ void Menu::removeLife()
 	((Entity*) this->mLifes->objectAtIndex(LIFES))->setScale(1.3);
 	((Entity*) this->mLifes->objectAtIndex(LIFES))->runAction(CCScaleTo::create(0.3, 1));
 
-	LIFES++;
+	//LIFES++;
 
 	if(LIFES == 3)
 	{
@@ -268,7 +272,7 @@ void Menu::runSpecialChalenge()
 	{
 		this->mSpecialChalengeTime = 1000.0;
 
-		SimpleAudioEngine::sharedEngine()->playBackgroundMusic("Sound/combo-blitz-backing-light.ogg", true);
+		SimpleAudioEngine::sharedEngine()->playBackgroundMusic(Options::COMBO_BLITZ_BACKING_LIGHT, true);
 	}
 	else
 	{
@@ -276,7 +280,7 @@ void Menu::runSpecialChalenge()
 
 		this->mSpecialChalengeTime = 3.0;
 
-		SimpleAudioEngine::sharedEngine()->playEffect("Sound/combo-blitz-backing.ogg");
+		SimpleAudioEngine::sharedEngine()->playEffect(Options::COMBO_BLITZ_BACKING);
 	}
 }
 
@@ -295,9 +299,9 @@ void Menu::stopSpecialChalenge()
 	this->mSpecialChalengeTimeElapsed = 0;
 
 	SimpleAudioEngine::sharedEngine()->stopBackgroundMusic();
-	SimpleAudioEngine::sharedEngine()->playBackgroundMusic("nature_bgm.mp3", true);
+	SimpleAudioEngine::sharedEngine()->playBackgroundMusic(Options::NATURE_BGM, true);
 	
-	SimpleAudioEngine::sharedEngine()->playEffect("combo-blitz-backing-end.ogg");
+	SimpleAudioEngine::sharedEngine()->playEffect(Options::COMBO_BLITZ_BACKING_END);
 }
 
 void Menu::hitedAwesome()
@@ -348,7 +352,7 @@ void Menu::update(float pDeltaTime)
 
 			this->mFruitRemaning++;
 
-			SimpleAudioEngine::sharedEngine()->playEffect("toss_simultaneous.mp3");
+			SimpleAudioEngine::sharedEngine()->playEffect(Options::TOSS_SIMULTANEOUS);
 
 			if(this->mFruitRemaning >= 100)
 			{
@@ -373,7 +377,7 @@ void Menu::update(float pDeltaTime)
 
 			this->mFruits->create();
 
-			SimpleAudioEngine::sharedEngine()->playEffect("toss_simultaneous.mp3");
+			SimpleAudioEngine::sharedEngine()->playEffect(Options::TOSS_SIMULTANEOUS);
 
 			this->mFruitRemaning--;
 
@@ -462,14 +466,49 @@ void Menu::update(float pDeltaTime)
 			this->mDebugInformation[8]->setString(text);
 			sprintf(text, "%d / %d", this->mSplashes->getCount(), this->mSplashes->getCapacity());
 			this->mDebugInformation[10]->setString(text);
+			sprintf(text, "%d / %d", this->mMarks->getCount(), this->mMarks->getCapacity());
+			this->mDebugInformation[12]->setString(text);
 
 			this->mDebugInformation[2]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[2]->getContentSize().width / 2, Utils::coord(270)));
 			this->mDebugInformation[4]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[4]->getContentSize().width / 2, Utils::coord(240)));
 			this->mDebugInformation[6]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[6]->getContentSize().width / 2, Utils::coord(210)));
 			this->mDebugInformation[8]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[8]->getContentSize().width / 2, Utils::coord(180)));
 			this->mDebugInformation[10]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[10]->getContentSize().width / 2, Utils::coord(150)));
+			this->mDebugInformation[12]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[12]->getContentSize().width / 2, Utils::coord(120)));
 		}
 	}
+    
+    if(this->mShaking)
+	{
+		this->mShakeDurationElapsed += pDeltaTime;
+        
+		if(this->mShakeDurationElapsed > this->mShakeDuration)
+		{
+			this->mShaking = false;
+			this->mShakeDuration = 0;
+            
+            this->mFruitsLayer->setPosition(ccp(0, 0));
+		}
+		else
+		{
+			int sentitX = 1;
+			int sentitY = 1;
+            
+			if(Utils::randomf(0, 1) < 0.5) sentitX = -1;
+			if(Utils::randomf(0, 1) < 0.5) sentitY = -1;
+            
+			this->mFruitsLayer->setPosition(this->mFruitsLayer->getPosition().x + Utils::randomf(0, 1) * this->mShakeIntensity * sentitX, this->mFruitsLayer->getPosition().y + Utils::randomf(0, 1) * this->mShakeIntensity * sentitY);
+		}
+	}
+}
+
+void Menu::shake(float d, float i)
+{
+	this->mShaking = true;
+	this->mShakeDuration = d;
+	this->mShakeIntensity = i;
+    
+	this->mShakeDurationElapsed = 0;
 }
 
 void Menu::onEnter()

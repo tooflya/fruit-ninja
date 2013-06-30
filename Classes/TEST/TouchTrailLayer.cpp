@@ -35,7 +35,7 @@ void TouchTrailLayer::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 
     for (CCSetIterator it = pTouches->begin(); it != pTouches->end(); it++) {
         CCTouch *touch = (CCTouch *)*it;
-		CCBlade *blade = CCBlade::create(kFileStreak, Utils::coord(10), 10);
+		CCBlade *blade = CCBlade::create(kFileStreak, Utils::coord(20), 12);
         _map[touch] = blade;
 		addChild(blade);
         
@@ -68,7 +68,7 @@ void TouchTrailLayer::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
             {
                 this->mTimeBeforeNextBladeSoundElapsed = 0;
 
-                SimpleAudioEngine::sharedEngine()->playEffect("swoosh.mp3");
+                SimpleAudioEngine::sharedEngine()->playEffect(Options::SWOOSH);
 
                 this->mBladeLastCoordinates = point;
             }

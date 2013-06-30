@@ -57,6 +57,12 @@ class Menu : public Screen
 		CCLayer* mMainMenuLayer;
 		CCLayer* mTopLayer;
         CCLayer* mBottomLayer;
+    
+        bool mShaking;
+    
+        float mShakeDuration;
+        float mShakeIntensity;
+        float mShakeDurationElapsed;
 
 		// ===========================================================
 		// Constructors
@@ -91,7 +97,7 @@ class Menu : public Screen
 
 		bool mDebugInformationNeed;
 
-		CCLabelTTF* mDebugInformation[16];
+		CCLabelTTF* mDebugInformation[32];
 
 		float mDebugUpdateTime;
 		float mDebugUpdateTimeElapsed;
@@ -161,6 +167,8 @@ class Menu : public Screen
         void runAwesomeChalenge();
 		void stopSpecialChalenge();
         void hitedAwesome();
+    
+        void shake(float d, float i);
 		
 		// ===========================================================
 		// Virtual Methods

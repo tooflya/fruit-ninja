@@ -40,7 +40,7 @@ void Splash::update(float pDeltaTime)
     if(this->mLiveTimeElapsed >= this->mLiveTime)
     {
         this->setOpacity(this->getOpacity() - this->mAlphaSpeed);
-        this->setScaleY(this->getScaleY() + 0.001);
+        this->setScaleY(this->getScaleY() + this->mScaleSpeed);
     }
 
     if(this->getOpacity() <= 0)
@@ -58,12 +58,13 @@ void Splash::onCreate()
     Entity::onCreate();
     
     this->setCurrentFrameIndex(Utils::random(0, 7));
-    this->setOpacity(150.0);
+    this->setOpacity(80.0);
     
     this->mLiveTime = Utils::randomf(1.5, 4.0);
     this->mLiveTimeElapsed = 0;
     
     this->mAlphaSpeed = Utils::randomf(0.1, 3.0);
+    this->mScaleSpeed = 0.001;
     
     this->setScale(1.0);
 }
