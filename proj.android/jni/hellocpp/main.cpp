@@ -16,6 +16,11 @@
 #include "Part.cpp"
 #include "Splash.cpp"
 #include "Label.cpp"
+#include "Processor.cpp"
+#include "DropsManager.cpp"
+#include "Drop.cpp"
+#include "Spark.cpp"
+#include "Mark.cpp"
 #include "platform/android/jni/JniHelper.h"
 #include <jni.h>
 #include <android/log.h>

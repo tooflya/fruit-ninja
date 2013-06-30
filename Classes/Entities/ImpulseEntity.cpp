@@ -47,6 +47,8 @@ void ImpulseEntity::update(float pDelta)
     
     Entity::update(pDelta);
     
+    pDelta *= Processor::FREEZY_TIME;
+    
     if(this->mImpulsePower >= 0.0f)
     {
         this->setCenterPosition(this->getCenterX(), this->getCenterY() + this->mImpulsePower * pDelta);
@@ -66,6 +68,8 @@ void ImpulseEntity::update(float pDelta)
 
 bool ImpulseEntity::isCollideWithPoint(float pX, float pY)
 {
+    if(pX < 0 || pY < 0) return false;
+    
     float x = pX - this->getCenterX();
     float y = pY - this->getCenterY();
     

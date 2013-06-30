@@ -26,7 +26,8 @@ bool Fruit::SPECIAL_EXIST = false;
 Fruit::Fruit() :
     ImpulseEntity("fruits.png", 6, 3)
     {
-        this->mLight = new Entity("light.png");
+        this->mLight = new Entity("light.png", 1, 2);
+        this->mShadow = NULL;
 
         this->mTimeUntilDown = 0.22;
 
@@ -34,6 +35,10 @@ Fruit::Fruit() :
         this->mLifes = -1;
 
         this->mSpecial = false;
+        this->mAwesome = false;
+        
+        this->mMarkTime = 0.02;
+        this->mMarkTimeElapsed = 0;
     }
 
 // ===========================================================
@@ -54,15 +59,55 @@ void Fruit::update(float pDeltaTime)
     
     ImpulseEntity::update(pDeltaTime);
 
-    Menu* menu = (Menu*) this->getParent()->getParent();
+    Menu* menu = (Menu*) this->getParent()->getParent()->getParent();
     
     if(this->getCenterY() < -Utils::coord(200))
     {
         this->destroy();
     }
-
-    if(this->isCollideWithPoint(Menu::mTouchCoordinate.x, Menu::mTouchCoordinate.y))
+    
+    bool collides = false;
+    
+    for(int i = 0; i < 10; i++)
     {
+        if(this->isCollideWithPoint(Processor::TOUCH_COORDINATES[i].x, Processor::TOUCH_COORDINATES[i].y))
+        {
+            collides = true;
+            
+            if(this->mAwesome)
+            {
+                if(this->mLifes > 0 && menu->mFruitsLayer->getScaleX() == 1.0)
+                {
+                    collides = false;
+                }
+            }
+        }
+    }
+    
+    if(this->mAwesome)
+    {
+        if(Processor::FREEZY_TIME == 1.0 && this->mLifes > 0)
+        {
+            collides = true;
+            
+            this->mLifes = -1;
+        }
+    }
+    
+    if(this->mMustBeDestroy)
+    {
+        this->mLifes = -1;
+        
+        collides = true;
+    }
+    
+    if(collides)
+    {
+        if(this->mAwesome)
+        {
+            menu->hitedAwesome();
+        }
+        
         if(this->mLifes >= 0)
         {
             if(this->getScaleX() == 1)
@@ -84,132 +129,63 @@ void Fruit::update(float pDeltaTime)
                 this->setScale(1.3);
                 this->runAction(CCScaleTo::create(0.2, 1));
 
-                sprintf(text, "Sound/combo-%d.ogg", this->mLifes);
-                SimpleAudioEngine::sharedEngine()->playEffect(text);
-
-                Entity* splash = menu->mSplashes->create();
-                splash->setCenterPosition(this->getCenterX(), this->getCenterY());
+                SimpleAudioEngine::sharedEngine()->playEffect(Options::COMBO[this->mLifes]);
 
                 switch(this->mType)
                 {
                     case 1:
-                        splash->setColor(ccc3(181.0, 40.0, 46.0));
+                        SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_APPLE);
                     break;
                     case 2:
-                        splash->setColor(ccc3(193.0, 214.0, 47.0));
+                        SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_APPLE);
                     break;
                     case 3:
-                        splash->setColor(ccc3(251.0, 226.0, 22.0));
+                        SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_BANANA);
                     break;
                     case 4:
-                        splash->setColor(ccc3(255.0, 255.0, 255.0));
+                        SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_COCONUT);
                     break;
                     case 5:
-                        splash->setColor(ccc3(237.0, 51.0, 65.0));
+                        SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_WATERMELON);
                     break;
                     case 6:
-                        splash->setColor(ccc3(119.0, 190.0, 68.0));
+                        SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_KIWIFRUIT);
                     break;
                     case 7:
-                        splash->setColor(ccc3(247.0, 207.0, 58.0));
+                        SimpleAudioEngine::sharedEngine()->playEffect(Options::SQUASH);
                     break;
                     case 8:
-                        splash->setColor(ccc3(47.0, 165.0, 72.0));
+                        SimpleAudioEngine::sharedEngine()->playEffect(Options::SQUASH);
                     break;
                     case 9:
-                        splash->setColor(ccc3(250.0, 166.0, 50.0));
+                        SimpleAudioEngine::sharedEngine()->playEffect(Options::SQUASH);
                     break;
                     case 10:
-                        splash->setColor(ccc3(244.0, 107.0, 37.0));
+                        SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_ORANGE);
                     break;
                     case 11:
-                        splash->setColor(ccc3(225.0, 204.0, 33.0));
-                    break;
-                    case TYPE_DANGER:
-
-                        splash->destroy();
-                    break;
-                }
-
-                switch(this->mType)
-                {
-                    case 1:
-                        menu->mParticlesTypeFruits->setPosition(this->getCenterX(), this->getCenterY());
-                        //menu->mParticlesTypeFruits->resumeSystem();
-
-                        SimpleAudioEngine::sharedEngine()->playEffect("Sound/impact-apple.ogg");
-                    break;
-                    case 2:
-                        menu->mParticlesTypeFruits->setPosition(this->getCenterX(), this->getCenterY());
-                        //menu->mParticlesTypeFruits->resumeSystem();
-
-                        SimpleAudioEngine::sharedEngine()->playEffect("Sound/impact-apple.ogg");
-                    break;
-                    case 3:
-                        menu->mParticlesTypeFruits->setPosition(this->getCenterX(), this->getCenterY());
-                        //menu->mParticlesTypeFruits->resumeSystem();
-
-                        SimpleAudioEngine::sharedEngine()->playEffect("Sound/impact-banana.ogg");
-                    break;
-                    case 4:
-                        menu->mParticlesTypeFruits->setPosition(this->getCenterX(), this->getCenterY());
-                       // menu->mParticlesTypeFruits->resumeSystem();
-
-                        SimpleAudioEngine::sharedEngine()->playEffect("Sound/impact-coconut.ogg");
-                    break;
-                    case 5:
-                        menu->mParticlesTypeFruits->setPosition(this->getCenterX(), this->getCenterY());
-                        //menu->mParticlesTypeFruits->resumeSystem();
-
-                        SimpleAudioEngine::sharedEngine()->playEffect("Sound/impact-watermelon.ogg");
-                    break;
-                    case 6:
-                        menu->mParticlesTypeFruits->setPosition(this->getCenterX(), this->getCenterY());
-                       // menu->mParticlesTypeFruits->resumeSystem();
-
-                        SimpleAudioEngine::sharedEngine()->playEffect("Sound/impact-kiwifruit.ogg");
-                    break;
-                    case 7:
-                        menu->mParticlesTypeFruits->setPosition(this->getCenterX(), this->getCenterY());
-                       // menu->mParticlesTypeFruits->resumeSystem();
-
-                        SimpleAudioEngine::sharedEngine()->playEffect("Sound/squash.mp3");
-                    break;
-                    case 8:
-                        menu->mParticlesTypeFruits->setPosition(this->getCenterX(), this->getCenterY());
-                        //menu->mParticlesTypeFruits->resumeSystem();
-
-                        SimpleAudioEngine::sharedEngine()->playEffect("Sound/squash.mp3");
-                    break;
-                    case 9:
-                        menu->mParticlesTypeFruits->setPosition(this->getCenterX(), this->getCenterY());
-                       // menu->mParticlesTypeFruits->resumeSystem();
-
-                        SimpleAudioEngine::sharedEngine()->playEffect("Sound/squash.mp3");
-                    break;
-                    case 10:
-                        menu->mParticlesTypeFruits->setPosition(this->getCenterX(), this->getCenterY());
-                        //menu->mParticlesTypeFruits->resumeSystem();
-
-                        SimpleAudioEngine::sharedEngine()->playEffect("Sound/impact-orange.ogg");
-                    break;
-                    case 11:
-                        menu->mParticlesTypeFruits->setPosition(this->getCenterX(), this->getCenterY());
-                       // menu->mParticlesTypeFruits->resumeSystem();
-
-                        SimpleAudioEngine::sharedEngine()->playEffect("Sound/squash.mp3");
+                        SimpleAudioEngine::sharedEngine()->playEffect(Options::SQUASH);
                     break;
                     case TYPE_DANGER:
                         menu->mParticlesTypeDanger->setPosition(this->getCenterX(), this->getCenterY());
-                        //menu->mParticlesTypeDanger->resumeSystem();
+                        menu->mParticlesTypeDanger->resetSystem();
 
-                        SimpleAudioEngine::sharedEngine()->playEffect("Sound/explosion.mp3");
+                        SimpleAudioEngine::sharedEngine()->playEffect(Options::EXPLOSION);
                     break;
                 }
+                
+                menu->mDropsManager->init(this->getCenterX(), this->getCenterY(),this->mType);
 
                 if(this->mLifes == 8)
                 {
-                    this->mLifes = -1;
+                    if(this->mAwesome)
+                    {
+                        this->mLifes = 7;
+                    }
+                    else
+                    {
+                        this->mLifes = -1;
+                    }
                 }
             }
         }
@@ -224,132 +200,191 @@ void Fruit::update(float pDeltaTime)
             }
             else
             {
-                menu->removeLife();
+                if(!this->mMustBeDestroy)
+                {
+                    menu->removeLife();
+                }
             }
 
             switch(this->mType)
             {
                 case 1:
-                    menu->mParticlesTypeFruits->setPosition(this->getCenterX(), this->getCenterY());
-                    //menu->mParticlesTypeFruits->resumeSystem();
-
-                    SimpleAudioEngine::sharedEngine()->playEffect("Sound/impact-apple.ogg");
+                    SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_APPLE);
                 break;
                 case 2:
-                    menu->mParticlesTypeFruits->setPosition(this->getCenterX(), this->getCenterY());
-                   // menu->mParticlesTypeFruits->resumeSystem();
-
-                    SimpleAudioEngine::sharedEngine()->playEffect("Sound/impact-apple.ogg");
+                    SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_APPLE);
                 break;
                 case 3:
-                    menu->mParticlesTypeFruits->setPosition(this->getCenterX(), this->getCenterY());
-                   // menu->mParticlesTypeFruits->resumeSystem();
-
-                    SimpleAudioEngine::sharedEngine()->playEffect("Sound/impact-banana.ogg");
+                    SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_BANANA);
                 break;
                 case 4:
-                    menu->mParticlesTypeFruits->setPosition(this->getCenterX(), this->getCenterY());
-                    //menu->mParticlesTypeFruits->resumeSystem();
-
-                    SimpleAudioEngine::sharedEngine()->playEffect("Sound/impact-coconut.ogg");
+                    SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_COCONUT);
                 break;
                 case 5:
-                    menu->mParticlesTypeFruits->setPosition(this->getCenterX(), this->getCenterY());
-                   // menu->mParticlesTypeFruits->resumeSystem();
-
-                    SimpleAudioEngine::sharedEngine()->playEffect("Sound/impact-watermelon.ogg");
+                    SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_WATERMELON);
                 break;
                 case 6:
-                    menu->mParticlesTypeFruits->setPosition(this->getCenterX(), this->getCenterY());
-                   // menu->mParticlesTypeFruits->resumeSystem();
-
-                    SimpleAudioEngine::sharedEngine()->playEffect("Sound/impact-kiwifruit.ogg");
+                    SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_KIWIFRUIT);
                 break;
                 case 7:
-                    menu->mParticlesTypeFruits->setPosition(this->getCenterX(), this->getCenterY());
-                    //menu->mParticlesTypeFruits->resumeSystem();
-
-                    SimpleAudioEngine::sharedEngine()->playEffect("Sound/squash.mp3");
+                    SimpleAudioEngine::sharedEngine()->playEffect(Options::SQUASH);
                 break;
                 case 8:
-                    menu->mParticlesTypeFruits->setPosition(this->getCenterX(), this->getCenterY());
-                   // menu->mParticlesTypeFruits->resumeSystem();
-
-                    SimpleAudioEngine::sharedEngine()->playEffect("Sound/squash.mp3");
+                    SimpleAudioEngine::sharedEngine()->playEffect(Options::SQUASH);
                 break;
                 case 9:
-                    menu->mParticlesTypeFruits->setPosition(this->getCenterX(), this->getCenterY());
-                    //menu->mParticlesTypeFruits->resumeSystem();
-
-                    SimpleAudioEngine::sharedEngine()->playEffect("Sound/squash.mp3");
+                    SimpleAudioEngine::sharedEngine()->playEffect(Options::SQUASH);
                 break;
                 case 10:
-                    menu->mParticlesTypeFruits->setPosition(this->getCenterX(), this->getCenterY());
-                   // menu->mParticlesTypeFruits->resumeSystem();
-
-                    SimpleAudioEngine::sharedEngine()->playEffect("Sound/impact-orange.ogg");
+                    SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_ORANGE);
                 break;
                 case 11:
-                    menu->mParticlesTypeFruits->setPosition(this->getCenterX(), this->getCenterY());
-                   // menu->mParticlesTypeFruits->resumeSystem();
-
-                    SimpleAudioEngine::sharedEngine()->playEffect("Sound/squash.mp3");
+                    SimpleAudioEngine::sharedEngine()->playEffect(Options::SQUASH);
                 break;
                 case TYPE_DANGER:
                     menu->mParticlesTypeDanger->setPosition(this->getCenterX(), this->getCenterY());
-                   // menu->mParticlesTypeDanger->resumeSystem();
+                    menu->mParticlesTypeDanger->resetSystem();
 
-                    SimpleAudioEngine::sharedEngine()->playEffect("Sound/explosion.mp3");
+                    SimpleAudioEngine::sharedEngine()->playEffect(Options::EXPLOSION);
                 break;
             }
-
-            Entity* splash = menu->mSplashes->create();
-            splash->setCenterPosition(this->getCenterX(), this->getCenterY());
-
-            switch(this->mType)
+            
+            menu->mDropsManager->init(this->getCenterX(), this->getCenterY(),this->mType);
+            
+            int u = 1;
+            
+            if(this->mAwesome)
             {
-                case 1:
-                    splash->setColor(ccc3(181.0, 40.0, 46.0));
-                break;
-                case 2:
-                    splash->setColor(ccc3(193.0, 214.0, 47.0));
-                break;
-                case 3:
-                    splash->setColor(ccc3(251.0, 226.0, 22.0));
-                break;
-                case 4:
-                    splash->setColor(ccc3(255.0, 255.0, 255.0));
-                break;
-                case 5:
-                    splash->setColor(ccc3(237.0, 51.0, 65.0));
-                break;
-                case 6:
-                    splash->setColor(ccc3(119.0, 190.0, 68.0));
-                break;
-                case 7:
-                    splash->setColor(ccc3(247.0, 207.0, 58.0));
-                break;
-                case 8:
-                    splash->setColor(ccc3(47.0, 165.0, 72.0));
-                break;
-                case 9:
-                    splash->setColor(ccc3(250.0, 166.0, 50.0));
-                break;
-                case 10:
-                    splash->setColor(ccc3(244.0, 107.0, 37.0));
-                break;
-                case 11:
-                    splash->setColor(ccc3(225.0, 204.0, 33.0));
-                break;
-                case TYPE_DANGER:
+                u = 20;
+            }
+            
+            int padding = 0;
+            
+            for(int i = 0; i < u; i++)
+            {
+                Entity* splash = menu->mSplashes->create();
+                
+                if(u == 1)
+                {
+                    splash->setCenterPosition(this->getCenterX(), this->getCenterY());
+                }
+                else
+                {
+                    float x, y;
+                    
+                    if(i == 0)
+                    {
+                        x = this->getCenterX();
+                        y = this->getCenterY();
+                    }
+                    else if(i < 5)
+                    {
+                        x = this->getCenterX() - Utils::coord(100.0) * padding;
+                        y = this->getCenterY() + Utils::coord(100.0) * padding;
+                    }
+                    else if(i < 9)
+                    {
+                        x = this->getCenterX() + Utils::coord(100.0) * padding;
+                        y = this->getCenterY() + Utils::coord(100.0) * padding;
+                    }
+                    else if(i < 13)
+                    {
+                        x = this->getCenterX() - Utils::coord(100.0) * padding;
+                        y = this->getCenterY() - Utils::coord(100.0) * padding;
+                    }
+                    else if(i < 17)
+                    {
+                        x = this->getCenterX() + Utils::coord(100.0) * padding;
+                        y = this->getCenterY() - Utils::coord(100.0) * padding;
+                    }
+                    else if(i < 18)
+                    {
+                        x = this->getCenterX();
+                        y = this->getCenterY() + Utils::coord(300.0);
+                    }
+                    else if(i < 19)
+                    {
+                        x = this->getCenterX();
+                        y = this->getCenterY() - Utils::coord(300.0);
+                    }
+                    else if(i < 20)
+                    {
+                        x = this->getCenterX() + Utils::coord(300.0);
+                        y = this->getCenterY();
+                    }
+                    else if(i < 21)
+                    {
+                        x = this->getCenterX() - Utils::coord(300.0);
+                        y = this->getCenterY();
+                    }
+                    else
+                    {
+                        x = 0;
+                        y = 0;
+                    }
+                    
+                    splash->setCenterPosition(x, y);
+                    
+                    padding++;
+                    
+                    if(i == 0 || i == 4 || i == 8 || i == 12 || i == 16) padding = 1;
+                }
 
-                    splash->destroy();
-                break;
+                switch(this->mType)
+                {
+                    case 1:
+                        splash->setColor(ccc3(181.0, 40.0, 46.0));
+                        break;
+                    case 2:
+                        splash->setColor(ccc3(193.0, 214.0, 47.0));
+                        break;
+                    case 3:
+                        splash->setColor(ccc3(251.0, 226.0, 22.0));
+                        break;
+                    case 4:
+                        splash->setColor(ccc3(255.0, 255.0, 255.0));
+                        break;
+                    case 5:
+                        splash->setColor(ccc3(237.0, 51.0, 65.0));
+                        break;
+                    case 6:
+                        splash->setColor(ccc3(119.0, 190.0, 68.0));
+                        break;
+                    case 7:
+                        splash->setColor(ccc3(247.0, 207.0, 58.0));
+                        break;
+                    case 8:
+                        splash->setColor(ccc3(47.0, 165.0, 72.0));
+                        break;
+                    case 9:
+                        splash->setColor(ccc3(250.0, 166.0, 50.0));
+                        break;
+                    case 10:
+                        splash->setColor(ccc3(244.0, 107.0, 37.0));
+                        break;
+                    case 11:
+                        splash->setColor(ccc3(225.0, 204.0, 33.0));
+                        break;
+                    case TYPE_DANGER:
+                        splash->destroy();
+                        break;
+                }
             }
 
             if(this->mType != TYPE_DANGER)
             {
-                for(int i = 0; i < 2; i++)
+                int u;
+                
+                if(this->mAwesome)
+                {
+                    u = 10;
+                }
+                else
+                {
+                    u = 2;
+                }
+                
+                for(int i = 0; i < u; i++)
                 {
                     Part* part = (Part*) menu->mParts->create();
 
@@ -362,14 +397,33 @@ void Fruit::update(float pDeltaTime)
                     part->mWeight = this->mWeight;
 
                     part->mType = this->mType;
+                    
+                    if(this->mAwesome || this->mMustBeDestroy)
+                    {
+                        part->setAwesome(i, u);
+                        
+                        part->mRotateImpulse = Utils::randomf(-500.0, 500.0);
+                    }
                 }
+                
+                if(this->mAwesome)
+                {
+                    for(int i = 0; i < menu->mFruits->getCount(); i++)
+                    {
+                        ((Fruit*) menu->mFruits->objectAtIndex(i))->mMustBeDestroy = true;
+                    }
+                }
+            }
+            else
+            {
+                menu->shake(1.0, 15.0);
             }
 
             // Critical hit
 
             if(this->mImpulsePower > Utils::coord(500) && this->mType != TYPE_DANGER)
             {
-                SimpleAudioEngine::sharedEngine()->playEffect("Sound/critical.ogg");
+                SimpleAudioEngine::sharedEngine()->playEffect(Options::CRITICAL);
 
                 menu->mCriticalHits->create()->setCenterPosition(this->getCenterX(), this->getCenterY());
 
@@ -393,16 +447,41 @@ void Fruit::update(float pDeltaTime)
 
         if(this->mType != TYPE_DANGER)
         {
-            SimpleAudioEngine::sharedEngine()->playEffect("Sound/lose_life.mp3");
+            SimpleAudioEngine::sharedEngine()->playEffect(Options::LOSE_LIFE);
 
             menu->removeLife();
         }
     }
 
-    if(this->mSpecial)
+    if(this->mSpecial || this->mAwesome)
     {
         this->mLight->setCenterPosition(this->getCenterX(), this->getCenterY());
         this->mLight->setRotation(this->mLight->getRotation() + 3.0);
+    }
+    
+    if(this->mShadow != NULL)
+    {
+        this->mShadow->setCenterPosition(this->getCenterX() - Utils::coord(20.0), this->getCenterY() - Utils::coord(70));
+    }
+    
+    this->mMarkTimeElapsed += pDeltaTime;
+    
+    if(this->mMarkTimeElapsed >= this->mMarkTime)
+    {
+        this->mMarkTimeElapsed = 0;
+        
+        Entity* entity = menu->mMarks->create();
+        
+        entity->setCenterPosition(this->getCenterX(), this->getCenterY());
+        
+        if(this->mType == TYPE_DANGER)
+        {
+            entity->setColor(ccc3(255.0, 0.0, 0.0));
+        }
+        else
+        {
+            entity->setColor(ccc3(255.0, 255.0, 255.0));
+        }
     }
 }
 
@@ -428,9 +507,9 @@ void Fruit::setSpecialChalenge()
     if(this->mSpecial)
     {
         SPECIAL_EXIST = false;
-        Menu::SPECIAL_FRUIT = NULL;
+        Processor::SPECIAL_FRUIT = NULL;
 
-        Menu* menu = (Menu*) this->getParent()->getParent();
+        Menu* menu = (Menu*) this->getParent()->getParent()->getParent();
 
         menu->mSpecialLabel->setVisible(false);
         menu->mSpecialLabelScore->setVisible(false);
@@ -442,11 +521,33 @@ void Fruit::setSpecialChalenge()
     this->mLight->destroy();
 }
 
+void Fruit::setAwesomeChalenge()
+{
+    if(this->mType == TYPE_DANGER)
+    {
+        
+    }
+    else
+    {
+    
+        this->mLight->create()->setCurrentFrameIndex(1);
+    
+        Processor::AWESOME_FRUIT = this;
+    
+        this->mAwesome = true;
+        
+        this->mLifes = 0;
+    }
+}
+
 void Fruit::onCreate()
 {
     ImpulseEntity::onCreate();
+    
+    this->mSpecial = false;
+    this->mAwesome = false;
 
-    this->mType = Utils::random(0, 11);
+    this->mType = Utils::random(0, 14);
     
     this->mIsDown = false;
     this->mTimeUntilDownElapsed = 0;
@@ -454,6 +555,7 @@ void Fruit::onCreate()
     this->mImpulsePower = Utils::coord(1200.0f);
     
     this->mIsGone = false;
+    this->mMustBeDestroy = false;
     
     this->setCenterPosition(Utils::randomf(0, Options::CAMERA_WIDTH), Utils::randomf(-180.0, 0.0));
     
@@ -466,12 +568,12 @@ void Fruit::onCreate()
 
     if(this->mType == TYPE_DANGER)
     {
-        this->mSoundEffect = SimpleAudioEngine::sharedEngine()->playEffect("Sound/throw-bomb.ogg");
-        this->mSoundEffect = SimpleAudioEngine::sharedEngine()->playEffect("Sound/bomb-fuse.ogg");
+        this->mSoundEffect = SimpleAudioEngine::sharedEngine()->playEffect(Options::THROW_BOMB);
+        this->mSoundEffect = SimpleAudioEngine::sharedEngine()->playEffect(Options::BOMB_FUSE);
     }
     else
     {
-        this->mSoundEffect = SimpleAudioEngine::sharedEngine()->playEffect("Sound/throw-fruit.ogg");
+        this->mSoundEffect = SimpleAudioEngine::sharedEngine()->playEffect(Options::THROW_FRUIT);
     }
 
     if(this->mLight->getParent() == false)
@@ -485,17 +587,27 @@ void Fruit::onCreate()
     {
         this->mSpecial = true;
 
-        this->mLight->create();
+        this->mLight->create()->setCurrentFrameIndex(0);
 
         this->mLifes = 0;
 
         SPECIAL_EXIST = true;
-        Menu::SPECIAL_FRUIT = this;
+        Processor::SPECIAL_FRUIT = this;
     }
     else
     {
         this->mLifes = -1;
     }
+    
+    if(this->mShadow != NULL) // TODO: Remove this.
+    {
+        this->mShadow->destroy();
+        this->mShadow = NULL;
+    }
+    
+    Menu* menu = (Menu*) this->getParent()->getParent()->getParent();
+    
+    this->mShadow = menu->mShadows->create();
 }
 
 void Fruit::onDestroy()
@@ -510,9 +622,9 @@ void Fruit::onDestroy()
     if(this->mSpecial)
     {
         SPECIAL_EXIST = false;
-        Menu::SPECIAL_FRUIT = NULL;
+        Processor::SPECIAL_FRUIT = NULL;
 
-        Menu* menu = (Menu*) this->getParent()->getParent();
+        Menu* menu = (Menu*) this->getParent()->getParent()->getParent();
 
         menu->mSpecialLabel->setVisible(false);
         menu->mSpecialLabelScore->setVisible(false);
@@ -520,6 +632,12 @@ void Fruit::onDestroy()
 
     this->mSpecial = false;
     this->mLight->destroy();
+    
+    if(this->mShadow != NULL)
+    {
+        this->mShadow->destroy();
+        this->mShadow = NULL;
+    }
 }
 
 Fruit* Fruit::deepCopy()

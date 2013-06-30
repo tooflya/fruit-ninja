@@ -36,7 +36,7 @@ Entity* BatchEntityManager::create()
 
 		return object;
 	}
-return NULL;
+
 	// Create a new object if manager hasn't free object.
 
 	Entity* object = ((Entity*) this->objectAtIndex(0))->deepCopy(); // TODO: Increase CCArray capacity? Really? I think it's works like a charm!

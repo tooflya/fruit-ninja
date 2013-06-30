@@ -43,11 +43,8 @@ class TouchTrailLayer : public CCLayer {
 private:
     std::map< cocos2d::CCTouch *, CCBlade * >  _map;
 private:
-    CCParticleSystemQuad* mBladeParticleSystemQuad;
-
 	CCPoint mBladeLastCoordinates;
 	
-    CCParticleSystem* mBladeParticles;
     CCParticleSystem* mSunParticleSystemQuad;
 
 	float mTimeBeforeNextBladeSound;

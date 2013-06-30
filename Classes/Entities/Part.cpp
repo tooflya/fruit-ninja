@@ -22,7 +22,7 @@
 // ===========================================================
 
 Part::Part() :
-    ImpulseEntity("parts.png", 6, 6)
+    ImpulseEntity("parts.png", 6, 8)
     {
     }
 
@@ -34,129 +34,79 @@ void Part::update(float pDeltaTime)
 {
     if(!this->isVisible()) return;
     
-    ImpulseEntity::update(pDeltaTime);
-
-    if(this->isCollideWithPoint(Menu::mTouchCoordinate.x, Menu::mTouchCoordinate.y))
+    if(this->mAwesome)
+    {
+        this->setCenterPosition(this->getCenterX() + this->mAwesomeVectorX, this->getCenterY() + this->mAwesomeVectorY);
+        
+        this->setRotation(this->getRotation() - this->mRotateImpulse * pDeltaTime);
+        
+        if(this->getCenterX() < 0 || this->getCenterX() > Options::CAMERA_WIDTH || this->getCenterY() < 0 || this->getCenterY() > Options::CAMERA_HEIGHT)
+        {
+            this->destroy();
+        }
+    }
+    else
+    {
+        ImpulseEntity::update(pDeltaTime);
+    }
+    
+    bool collides = false;
+    
+    for(int i = 0; i < 10; i++)
+    {
+        if(this->isCollideWithPoint(Processor::TOUCH_COORDINATES[i].x, Processor::TOUCH_COORDINATES[i].y))
+        {
+            collides = true;
+        }
+    }
+    
+    if(collides)
     {
         if(this->getScaleX() != 1) return;
 
         this->setScale(1.3);
         this->runAction(CCScaleTo::create(0.3, 1));
 
-        Menu* menu = (Menu*) this->getParent()->getParent();
+        Menu* menu = (Menu*) this->getParent()->getParent()->getParent();
         
-        menu->mParticlesTypeFruits->setPosition(this->getCenterX(), this->getCenterY());
-        //menu->mParticlesTypeFruits->resumeSystem();
-
         switch(this->mType)
         {
             case 1:
-                menu->mParticlesTypeFruits->setPosition(this->getCenterX(), this->getCenterY());
-                //menu->mParticlesTypeFruits->resumeSystem();
-
-                SimpleAudioEngine::sharedEngine()->playEffect("Sound/impact-apple.ogg");
+                SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_APPLE);
             break;
             case 2:
-                menu->mParticlesTypeFruits->setPosition(this->getCenterX(), this->getCenterY());
-               // menu->mParticlesTypeFruits->resumeSystem();
-
-                SimpleAudioEngine::sharedEngine()->playEffect("Sound/impact-apple.ogg");
+                SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_APPLE);
             break;
             case 3:
-                menu->mParticlesTypeFruits->setPosition(this->getCenterX(), this->getCenterY());
-                //menu->mParticlesTypeFruits->resumeSystem();
-
-                SimpleAudioEngine::sharedEngine()->playEffect("Sound/impact-banana.ogg");
+                SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_BANANA);
             break;
             case 4:
-                menu->mParticlesTypeFruits->setPosition(this->getCenterX(), this->getCenterY());
-               // menu->mParticlesTypeFruits->resumeSystem();
-
-                SimpleAudioEngine::sharedEngine()->playEffect("Sound/impact-coconut.ogg");
+                SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_COCONUT);
             break;
             case 5:
-                menu->mParticlesTypeFruits->setPosition(this->getCenterX(), this->getCenterY());
-                //menu->mParticlesTypeFruits->resumeSystem();
-
-                SimpleAudioEngine::sharedEngine()->playEffect("Sound/impact-watermelon.ogg");
+                SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_WATERMELON);
             break;
             case 6:
-                menu->mParticlesTypeFruits->setPosition(this->getCenterX(), this->getCenterY());
-               // menu->mParticlesTypeFruits->resumeSystem();
-
-                SimpleAudioEngine::sharedEngine()->playEffect("Sound/impact-kiwifruit.ogg");
+                SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_KIWIFRUIT);
             break;
             case 7:
-                menu->mParticlesTypeFruits->setPosition(this->getCenterX(), this->getCenterY());
-                //menu->mParticlesTypeFruits->resumeSystem();
-
-                SimpleAudioEngine::sharedEngine()->playEffect("Sound/squash.mp3");
+                SimpleAudioEngine::sharedEngine()->playEffect(Options::SQUASH);
             break;
             case 8:
-                menu->mParticlesTypeFruits->setPosition(this->getCenterX(), this->getCenterY());
-               // menu->mParticlesTypeFruits->resumeSystem();
-
-                SimpleAudioEngine::sharedEngine()->playEffect("Sound/squash.mp3");
+                SimpleAudioEngine::sharedEngine()->playEffect(Options::SQUASH);
             break;
             case 9:
-                menu->mParticlesTypeFruits->setPosition(this->getCenterX(), this->getCenterY());
-                //menu->mParticlesTypeFruits->resumeSystem();
-
-                SimpleAudioEngine::sharedEngine()->playEffect("Sound/squash.mp3");
+                SimpleAudioEngine::sharedEngine()->playEffect(Options::SQUASH);
             break;
             case 10:
-                menu->mParticlesTypeFruits->setPosition(this->getCenterX(), this->getCenterY());
-                //menu->mParticlesTypeFruits->resumeSystem();
-
-                SimpleAudioEngine::sharedEngine()->playEffect("Sound/impact-orange.ogg");
+                SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_ORANGE);
             break;
             case 11:
-                menu->mParticlesTypeFruits->setPosition(this->getCenterX(), this->getCenterY());
-               // menu->mParticlesTypeFruits->resumeSystem();
-
-                SimpleAudioEngine::sharedEngine()->playEffect("Sound/squash.mp3");
+                SimpleAudioEngine::sharedEngine()->playEffect(Options::SQUASH);
             break;
         }
-
-        Entity* splash = menu->mSplashes->create();
-        splash->setCenterPosition(this->getCenterX(), this->getCenterY());
-
-        switch(this->mType)
-        {
-            case 1:
-                splash->setColor(ccc3(181.0, 40.0, 46.0));
-            break;
-            case 2:
-                splash->setColor(ccc3(193.0, 214.0, 47.0));
-            break;
-            case 3:
-                splash->setColor(ccc3(251.0, 226.0, 22.0));
-            break;
-            case 4:
-                splash->setColor(ccc3(255.0, 255.0, 255.0));
-            break;
-            case 5:
-                splash->setColor(ccc3(237.0, 51.0, 65.0));
-            break;
-            case 6:
-                splash->setColor(ccc3(119.0, 190.0, 68.0));
-            break;
-            case 7:
-                splash->setColor(ccc3(247.0, 207.0, 58.0));
-            break;
-            case 8:
-                splash->setColor(ccc3(47.0, 165.0, 72.0));
-            break;
-            case 9:
-                splash->setColor(ccc3(250.0, 166.0, 50.0));
-            break;
-            case 10:
-                splash->setColor(ccc3(244.0, 107.0, 37.0));
-            break;
-            case 11:
-                splash->setColor(ccc3(225.0, 204.0, 33.0));
-            break;
-        }
+        
+        menu->mDropsManager->init(this->getCenterX(), this->getCenterY(),this->mType);
         
         menu->addScore(10);
     }
@@ -167,6 +117,14 @@ void Part::update(float pDeltaTime)
     }
 }
 
+void Part::setAwesome(int pCounter, int pCapacity)
+{
+    this->mAwesome = true;
+
+    this->mAwesomeVectorX = Utils::coord(25.0f) * sin(pCounter * 2 * Utils::Pi / pCapacity);
+    this->mAwesomeVectorY = Utils::coord(25.0f) * cos(pCounter * 2 * Utils::Pi / pCapacity);
+}
+
 // ===========================================================
 // Virtual Methods
 // ===========================================================
@@ -175,6 +133,8 @@ void Part::onCreate()
 {
     ImpulseEntity::onCreate();
 
+    this->mAwesome = false;
+    
     this->setScale(1.3);
     this->runAction(CCScaleTo::create(0.3, 1));
 }
