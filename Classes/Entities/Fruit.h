@@ -5,6 +5,7 @@
 
 #include "ImpulseEntity.h"
 #include "Part.h"
+#include "Cutter.h"
 
 using namespace cocos2d;
 

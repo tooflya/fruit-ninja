@@ -31,9 +31,9 @@ Splash::Splash() :
 
 void Splash::update(float pDeltaTime)
 {
-    if(!this->isVisible()) return;
-    
     Entity::update(pDeltaTime);
+    
+    if(!this->isVisible()) return;
     
     this->mLiveTimeElapsed += pDeltaTime;
     

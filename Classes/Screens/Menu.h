@@ -14,6 +14,9 @@
 #include "Spark.h"
 #include "Drop.h"
 #include "Mark.h"
+#include "Cutter.h"
+#include "Wave.h"
+#include "Heart.h"
 
 using namespace cocos2d;
 
@@ -63,6 +66,13 @@ class Menu : public Screen
         float mShakeDuration;
         float mShakeIntensity;
         float mShakeDurationElapsed;
+    
+        bool mSlide;
+    
+        int mSlideOperations;
+    
+        float mSlideVectorX;
+        float mSlideVectorY;
 
 		// ===========================================================
 		// Constructors
@@ -101,6 +111,9 @@ class Menu : public Screen
 
 		float mDebugUpdateTime;
 		float mDebugUpdateTimeElapsed;
+    
+        float mFpsSum;
+        int mFpsCount;
 
 		// ===========================================================
 		// Constructors
@@ -139,6 +152,8 @@ class Menu : public Screen
         BatchEntityManager* mSparks;
         BatchEntityManager* mShadows;
         BatchEntityManager* mMarks;
+        BatchEntityManager* mCutters;
+        BatchEntityManager* mWaves;
     
         DropsManager* mDropsManager;
     
@@ -169,6 +184,10 @@ class Menu : public Screen
         void hitedAwesome();
     
         void shake(float d, float i);
+    
+        void randomSlide();
+    
+        void hitedAwesomeLast();
 		
 		// ===========================================================
 		// Virtual Methods

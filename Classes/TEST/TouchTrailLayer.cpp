@@ -50,11 +50,7 @@ void TouchTrailLayer::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 
 void TouchTrailLayer::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 {
-    int i = -1;
-    
     for (CCSetIterator it = pTouches->begin(); it != pTouches->end(); it++) {
-        i++;
-        
         CCTouch *touch = (CCTouch *)*it;
         if (_map.find(touch) == _map.end()) continue;
         
@@ -74,7 +70,7 @@ void TouchTrailLayer::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
             }
         }
         
-        Processor::TOUCH_COORDINATES[i] = point;
+        Processor::TOUCH_COORDINATES[touch->getID()] = point;
     }
 }
 
@@ -91,7 +87,7 @@ void TouchTrailLayer::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent)
         blade->autoCleanup();
         _map.erase(touch);
         
-        Processor::TOUCH_COORDINATES[i] = ccp(-1000, -1000);
+        Processor::TOUCH_COORDINATES[touch->getID()] = ccp(-1000, -1000);
     }
 }
 

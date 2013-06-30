@@ -21,6 +21,9 @@
 #include "Drop.cpp"
 #include "Spark.cpp"
 #include "Mark.cpp"
+#include "Cutter.cpp"
+#include "Heart.cpp"
+#include "Wave.cpp"
 #include "platform/android/jni/JniHelper.h"
 #include <jni.h>
 #include <android/log.h>

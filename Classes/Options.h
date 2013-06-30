@@ -104,6 +104,7 @@ class Options
         static const char* THROW_BOMB;
         static const char* BOMB_FUSE;
         static const char* THROW_FRUIT;
+        static const char* BONUS_BLOW;
 
 		// ===========================================================
 		// Fields

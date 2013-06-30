@@ -1,13 +1,13 @@
-#ifndef CONST_FRUIT_H
-#define CONST_FRUIT_H
+#ifndef CONST_CUTTER_H
+#define CONST_CUTTER_H
 
 #include "cocos2d.h"
 
-#include "ImpulseEntity.h"
+#include "Entity.h"
 
 using namespace cocos2d;
 
-class Fruit : public ImpulseEntity
+class Cutter : public Entity
 {
 	protected:
 		// ===========================================================
@@ -20,7 +20,7 @@ class Fruit : public ImpulseEntity
 
 		// ===========================================================
 		// Fields
-		// ===========================================================
+        // ===========================================================
 
 		// ===========================================================
 		// Constructors
@@ -67,49 +67,30 @@ class Fruit : public ImpulseEntity
 		// ===========================================================
 		// Constants
 		// ===========================================================
-    
-        static int const TYPE_BUCKET = 0;
-        static int const TYPE_COLA = 1;
-        static int const TYPE_SUPER = 2;
-        static int const TYPE_DANGER = 3;
 
 		// ===========================================================
 		// Fields
-        // ===========================================================
-    
-        int mType;
-    
-        bool mIsGone;
-    
-        bool mIsDown;
-    
-        float mGoneVectorX;
-        float mGoneVectorY;
-    
-        float mTimeUntilDown;
-        float mTimeUntilDownElapsed;
+		// ===========================================================
 
 		// ===========================================================
 		// Constructors
 		// ===========================================================
     
-        Fruit();
+        Cutter();
 
 		// ===========================================================
 		// Methods
 		// ===========================================================
-    
-        void fall(float pVectorX, float pVectorY, bool pMustReverse);
-        void update(float pDelta);
 		
 		// ===========================================================
 		// Virtual Methods
 		// ===========================================================
     
-        virtual void onCreate();
-        virtual void onDestroy();
+        void update(float pDeltaTime);
     
-        virtual Fruit* deepCopy();
+        void onCreate();
+    
+        Cutter* deepCopy();
 };
 
 #endif

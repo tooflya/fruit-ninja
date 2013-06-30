@@ -51,6 +51,8 @@ Spark* Spark::deepCopy()
 void Spark::update(float pDeltaTime)
 {
     Entity::update(pDeltaTime);
+    
+    if(!this->isVisible()) return;
         
     pDeltaTime *= Processor::FREEZY_TIME;
         

@@ -7,6 +7,8 @@ BatchEntityManager::BatchEntityManager(int pCreateCount, Entity* pEntity, CCNode
 	CCSpriteBatchNode()
 	{
 		this->initWithFile(pEntity->getTextureFileName(), 50);
+        
+        this->mInitCapacity = pCreateCount;
 
 		this->mLastElementNumber = -1;
 		this->mCapacity = pCreateCount; // TODO: increase to pMaxCount
@@ -106,6 +108,11 @@ void BatchEntityManager::resumeSchedulerAndActions()
 	{
 		((Entity*) this->objectAtIndex(i))->resumeSchedulerAndActions();
 	}
+}
+
+int BatchEntityManager::getInitCapacity()
+{
+    return this->mInitCapacity;
 }
 
 #endif

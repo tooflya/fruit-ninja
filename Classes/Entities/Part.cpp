@@ -106,7 +106,10 @@ void Part::update(float pDeltaTime)
             break;
         }
         
-        menu->mDropsManager->init(this->getCenterX(), this->getCenterY(),this->mType);
+        if(this->mType != 3 && this->mType != 0)
+        {
+            menu->mDropsManager->init(this->getCenterX(), this->getCenterY(),this->mType);
+        }
         
         menu->addScore(10);
     }

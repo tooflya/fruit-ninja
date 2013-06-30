@@ -1,7 +1,7 @@
-#ifndef CONST_MARK
-#define CONST_MARK
+#ifndef CONST_WAVE
+#define CONST_WAVE
 
-#include "Mark.h"
+#include "Wave.h"
 
 // ===========================================================
 // Inner Classes
@@ -19,46 +19,45 @@
 // Constructors
 // ===========================================================
 
-Mark::Mark() :
-    Entity("mark.png")
+Wave::Wave() :
+    Entity("red-wave.png")
     {
-        
     }
 
 // ===========================================================
 // Methods
 // ===========================================================
 
+void Wave::update(float pDeltaTime)
+{
+    Entity::update(pDeltaTime);
+    
+    if(!this->isVisible()) return;
+    
+    if(this->getScaleX() >= 20.0 || this->getOpacity() <= 0.0)
+    {
+        this->destroy();
+    }
+}
+
 // ===========================================================
 // Virtual Methods
 // ===========================================================
 
-void Mark::onCreate()
+void Wave::onCreate()
 {
     Entity::onCreate();
     
+    this->setScale(0.0);
     this->setOpacity(255.0);
-    this->setScale(0.7);
     
-    this->runAction(CCFadeTo::create(0.5, 0.0));
-    this->runAction(CCScaleTo::create(0.5, 0.3));
+    this->runAction(CCScaleTo::create(1.7, 20.0));
+    this->runAction(CCFadeTo::create(1.7, 0.0));
 }
-    
-Mark* Mark::deepCopy()
+
+Wave* Wave::deepCopy()
 {
-    return new Mark();
-}
-    
-void Mark::update(float pDeltaTime)
-{
-    Entity::update(pDeltaTime);
-    
-    // if(!this->isVisible()) return;
-    
-    if(this->getOpacity() <= 0.0 || this->getScaleX() <= 0.0)
-    {
-        this->destroy();
-    }
+    return new Wave();
 }
 
 #endif

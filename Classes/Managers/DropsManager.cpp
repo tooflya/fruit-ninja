@@ -38,6 +38,15 @@ void DropsManager::init(float pX, float pY, int pType)
         particle->setCenterPosition(pX, pY);
         particle->setCurrentFrameIndex(pType);
     }
+    
+    for(int i = 0; i < 20; i++)
+    {
+        Drop* particle = (Drop*) this->create();
+        
+        particle->setCenterPosition(pX, pY);
+        particle->setCurrentFrameIndex(pType);
+        particle->initSmall();
+    }
 }
 
 // ===========================================================

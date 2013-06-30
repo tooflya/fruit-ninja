@@ -12,6 +12,7 @@ class BatchEntityManager : public CCSpriteBatchNode
 	protected:
 		int mLastElementNumber;
 		int mCapacity;
+        int mInitCapacity;
 
 	public:
 		BatchEntityManager(int pCreateCount, Entity* pEntity, CCNode* pScreen);
@@ -28,6 +29,8 @@ class BatchEntityManager : public CCSpriteBatchNode
 
 		void pauseSchedulerAndActions();
 		void resumeSchedulerAndActions();
+    
+        int getInitCapacity();
 };
 
 #endif

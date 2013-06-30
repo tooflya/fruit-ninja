@@ -52,11 +52,23 @@ void Drop::onCreate()
     this->mSpeedY = Utils::randomf(1.0, 5.0);
     
     this->mWeight = Utils::randomf(0.1, 1.0);
+    
+    this->mIsSmall = false;
+}
+
+void Drop::initSmall()
+{
+    this->mUp = true;
+    this->mScale = false;
+    
+    this->mIsSmall = true;
 }
 
 void Drop::update(float pDeltaTime)
 {
     Entity::update(pDeltaTime);
+    
+    //if(!this->isVisible()) return;
     
     if(this->mScale)
     {
@@ -78,11 +90,14 @@ void Drop::update(float pDeltaTime)
     {
         this->setCenterPosition(this->getCenterX(), this->getCenterY() + this->mSpeedY);
         
-        this->mSpeedY -= this->mWeight;
-        
-        if(this->mSpeedY <= 0.0)
+        if(!this->mIsSmall)
         {
-            this->mUp = !this->mUp;
+            this->mSpeedY -= this->mWeight;
+        
+            if(this->mSpeedY <= 0.0)
+            {
+                this->mUp = !this->mUp;
+            }
         }
     }
     else

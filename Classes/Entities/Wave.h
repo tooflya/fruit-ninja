@@ -1,14 +1,13 @@
-#ifndef CONST_DROPSMANAGER_H
-#define CONST_DROPSMANAGER_H
+#ifndef CONST_WAVE_H
+#define CONST_WAVE_H
 
 #include "cocos2d.h"
 
-#include "Drop.h"
-#include "BatchEntityManager.h"
+#include "Entity.h"
 
 using namespace cocos2d;
 
-class DropsManager : public BatchEntityManager
+class Wave : public Entity
 {
 	protected:
 		// ===========================================================
@@ -71,23 +70,27 @@ class DropsManager : public BatchEntityManager
 
 		// ===========================================================
 		// Fields
-		// ===========================================================
+        // ===========================================================
 
 		// ===========================================================
 		// Constructors
 		// ===========================================================
     
-        DropsManager(int pCreateCount, Entity* pEntity, CCNode* pScreen);
+        Wave();
 
 		// ===========================================================
 		// Methods
 		// ===========================================================
-    
-        void init(float pX, float pY, int pType);
+
+        void update(float pDelta);
 		
 		// ===========================================================
 		// Virtual Methods
 		// ===========================================================
+    
+        virtual void onCreate();
+    
+        virtual Wave* deepCopy();
 };
 
 #endif

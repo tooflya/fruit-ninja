@@ -57,6 +57,8 @@ void Fruit::update(float pDeltaTime)
 {
     if(!this->isVisible()) return;
     
+    if(!this->isVisible()) return;
+    
     ImpulseEntity::update(pDeltaTime);
 
     Menu* menu = (Menu*) this->getParent()->getParent()->getParent();
@@ -67,6 +69,8 @@ void Fruit::update(float pDeltaTime)
     }
     
     bool collides = false;
+    
+    float angle = 0;
     
     for(int i = 0; i < 10; i++)
     {
@@ -81,6 +85,12 @@ void Fruit::update(float pDeltaTime)
                     collides = false;
                 }
             }
+            
+            CCPoint diff = ccpSub(
+                                  ccp(this->getCenterX(), this->getCenterY()),
+                                  ccp(Processor::TOUCH_COORDINATES[i].x, Processor::TOUCH_COORDINATES[i].y)
+                                  );
+            angle = -CC_RADIANS_TO_DEGREES(atan2f(diff.y, diff.x));
         }
     }
     
@@ -103,9 +113,24 @@ void Fruit::update(float pDeltaTime)
     
     if(collides)
     {
+        if(this->getScaleX() == 1)
+        {
+            Cutter* cutter = (Cutter*) menu->mCutters->create();
+        
+            cutter->setCenterPosition(this->getCenterX(), this->getCenterY());
+            cutter->setRotation(angle);
+        }
+        
         if(this->mAwesome)
         {
-            menu->hitedAwesome();
+            if(this->mLifes == -1)
+            {
+                menu->hitedAwesomeLast();
+            }
+            else
+            {
+                menu->hitedAwesome();
+            }
         }
         
         if(this->mLifes >= 0)
@@ -174,7 +199,10 @@ void Fruit::update(float pDeltaTime)
                     break;
                 }
                 
-                menu->mDropsManager->init(this->getCenterX(), this->getCenterY(),this->mType);
+                if(this->mType != 3 && this->mType != TYPE_DANGER)
+                {
+                    menu->mDropsManager->init(this->getCenterX(), this->getCenterY(),this->mType);
+                }
 
                 if(this->mLifes == 8)
                 {
@@ -249,7 +277,10 @@ void Fruit::update(float pDeltaTime)
                 break;
             }
             
-            menu->mDropsManager->init(this->getCenterX(), this->getCenterY(),this->mType);
+            if(this->mType != 3 && this->mType != TYPE_DANGER)
+            {
+                menu->mDropsManager->init(this->getCenterX(), this->getCenterY(),this->mType);
+            }
             
             int u = 1;
             
@@ -260,6 +291,8 @@ void Fruit::update(float pDeltaTime)
             
             int padding = 0;
             
+            
+            if(this->mType != 3 && this->mType != TYPE_DANGER)
             for(int i = 0; i < u; i++)
             {
                 Entity* splash = menu->mSplashes->create();
@@ -412,6 +445,8 @@ void Fruit::update(float pDeltaTime)
                     {
                         ((Fruit*) menu->mFruits->objectAtIndex(i))->mMustBeDestroy = true;
                     }
+                    
+                    menu->mWaves->create()->setCenterPosition(this->getCenterX(), this->getCenterY());
                 }
             }
             else

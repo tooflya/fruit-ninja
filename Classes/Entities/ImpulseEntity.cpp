@@ -47,6 +47,8 @@ void ImpulseEntity::update(float pDelta)
     
     Entity::update(pDelta);
     
+    if(!this->isVisible()) return;
+    
     pDelta *= Processor::FREEZY_TIME;
     
     if(this->mImpulsePower >= 0.0f)

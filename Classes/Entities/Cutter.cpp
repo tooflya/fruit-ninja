@@ -1,7 +1,7 @@
-#ifndef CONST_MARK
-#define CONST_MARK
+#ifndef CONST_CUTTER
+#define CONST_CUTTER
 
-#include "Mark.h"
+#include "Cutter.h"
 
 // ===========================================================
 // Inner Classes
@@ -19,8 +19,8 @@
 // Constructors
 // ===========================================================
 
-Mark::Mark() :
-    Entity("mark.png")
+Cutter::Cutter() :
+    Entity("cut-splash.png")
     {
         
     }
@@ -33,29 +33,26 @@ Mark::Mark() :
 // Virtual Methods
 // ===========================================================
 
-void Mark::onCreate()
+void Cutter::onCreate()
 {
     Entity::onCreate();
     
-    this->setOpacity(255.0);
-    this->setScale(0.7);
-    
-    this->runAction(CCFadeTo::create(0.5, 0.0));
-    this->runAction(CCScaleTo::create(0.5, 0.3));
+    this->setScale(0.0);
+    this->runAction(CCScaleTo::create(0.1, 1.0));
 }
     
-Mark* Mark::deepCopy()
+Cutter* Cutter::deepCopy()
 {
-    return new Mark();
+    return new Cutter();
 }
     
-void Mark::update(float pDeltaTime)
+void Cutter::update(float pDeltaTime)
 {
     Entity::update(pDeltaTime);
     
-    // if(!this->isVisible()) return;
+    if(!this->isVisible()) return;
     
-    if(this->getOpacity() <= 0.0 || this->getScaleX() <= 0.0)
+    if(this->getScaleX() >= 1.0)
     {
         this->destroy();
     }

@@ -1,14 +1,13 @@
-#ifndef CONST_DROPSMANAGER_H
-#define CONST_DROPSMANAGER_H
+#ifndef CONST_HEART_H
+#define CONST_HEART_H
 
 #include "cocos2d.h"
 
-#include "Drop.h"
-#include "BatchEntityManager.h"
+#include "Entity.h"
 
 using namespace cocos2d;
 
-class DropsManager : public BatchEntityManager
+class Heart : public Entity
 {
 	protected:
 		// ===========================================================
@@ -22,6 +21,13 @@ class DropsManager : public BatchEntityManager
 		// ===========================================================
 		// Fields
 		// ===========================================================
+    
+        float mTimeToBeat;
+        float mTimeToBeatElapsed;
+    
+        int mBeatCount;
+    
+        float mInitScale;
 
 		// ===========================================================
 		// Constructors
@@ -68,26 +74,34 @@ class DropsManager : public BatchEntityManager
 		// ===========================================================
 		// Constants
 		// ===========================================================
+    
+        static int I;
 
 		// ===========================================================
 		// Fields
-		// ===========================================================
+        // ===========================================================
 
 		// ===========================================================
 		// Constructors
 		// ===========================================================
     
-        DropsManager(int pCreateCount, Entity* pEntity, CCNode* pScreen);
+        Heart();
 
 		// ===========================================================
 		// Methods
 		// ===========================================================
+
+        void update(float pDelta);
     
-        void init(float pX, float pY, int pType);
+        void disable();
 		
 		// ===========================================================
 		// Virtual Methods
 		// ===========================================================
+    
+        virtual void onCreate();
+    
+        virtual Heart* deepCopy();
 };
 
 #endif
