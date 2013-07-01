@@ -249,6 +249,16 @@ bool Entity::destroy()
 	return this->destroy(true);
 }
 
+EntityManager* Entity::getEntityManager()
+{
+    return this->mEntityManager;
+}
+
+BatchEntityManager* Entity::getBatchEntityManager()
+{
+    return this->mBatchEntityManager;
+}
+
 void Entity::setEntityManager(EntityManager* pEntityManager)
 {
 	this->mEntityManager = pEntityManager;

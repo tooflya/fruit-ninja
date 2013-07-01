@@ -89,15 +89,10 @@ class Fruit : public ImpulseEntity
 		// ===========================================================
 		// Constants
 		// ===========================================================
-    
-        static int const TYPE_DANGER = 0;
-        static int const TYPE_PINEAPPLE = 1;
-        static int const TYPE_STRAWBERRY = 2;
-        static int const TYPE_WATERMELON = 3;
-        static int const TYPE_BANANA = 4;
-        static int const TYPE_GRAPES = 5;
 
         static bool SPECIAL_EXIST;
+    
+        static ccColor3B const FRUITS_COLORS[Options::FRUITS_COUNT + 1];
 
 		// ===========================================================
 		// Fields

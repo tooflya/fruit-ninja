@@ -80,6 +80,24 @@ class Options
 		static bool MUSIC_ENABLE;
 		static bool SOUND_ENABLE;
     
+        static int const TYPE_DANGER = 0;
+        static int const TYPE_REDAPPLE = 1;
+        static int const TYPE_GREENAPPLE = 2;
+        static int const TYPE_BANANA = 3;
+        static int const TYPE_COCONUT = 4;
+        static int const TYPE_WATERMELON = 5;
+        static int const TYPE_KIWIFRUIT = 6;
+        static int const TYPE_LEMON = 7;
+        static int const TYPE_LIME = 8;
+        static int const TYPE_MANGO = 9;
+        static int const TYPE_ORANGE = 10;
+        static int const TYPE_PEAR = 11;
+        static int const TYPE_PINEAPPLE = 12;
+        static int const TYPE_STARFRUIT = 13;
+        static int const TYPE_STRAWBERRY = 14;
+    
+        static int const FRUITS_COUNT = 14;
+    
         static const char* FONT;
         static const char* GAME_MUSIC;
         static const char* COMBO[10];

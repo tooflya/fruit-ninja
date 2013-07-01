@@ -35,16 +35,16 @@ void TouchTrailLayer::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 
     for (CCSetIterator it = pTouches->begin(); it != pTouches->end(); it++) {
         CCTouch *touch = (CCTouch *)*it;
-		CCBlade *blade = CCBlade::create(kFileStreak, Utils::coord(20), 12);
+		CCBlade *blade = CCBlade::create(kFileStreak, 20, 12);
         _map[touch] = blade;
 		addChild(blade);
         
-        blade->setColor(ccc3(255, 255, 255));
-        blade->setOpacity(255);
         blade->setDrainInterval(1.0 / 60.0);
         
         CCPoint point = convertTouchToNodeSpace(touch);
 		blade->push(point);
+        
+        Processor::TOUCH_COORDINATES_TIME[touch->getID()] = Utils::millisecondNow();
 	}
 }
 
@@ -57,17 +57,21 @@ void TouchTrailLayer::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
         CCBlade *blade = _map[touch];
         CCPoint point = convertTouchToNodeSpace(touch);
 		blade->push(point);
-
-        if(ccpDistance(point, this->mBladeLastCoordinates) > Utils::coord(200))
+        
+        if(abs(ccpDistance(point, Processor::TOUCH_COORDINATES_TIME_C[touch->getID()])) > Utils::coord(50))
         {
-            if(this->mTimeBeforeNextBladeSoundElapsed >= this->mTimeBeforeNextBladeSound)
+            float dtime = 20.0;
+            
+            if(Utils::millisecondNow() - Processor::TOUCH_COORDINATES_TIME[touch->getID()] < dtime && this->mTimeBeforeNextBladeSoundElapsed > 0.1)
             {
-                this->mTimeBeforeNextBladeSoundElapsed = 0;
-
                 SimpleAudioEngine::sharedEngine()->playEffect(Options::SWOOSH);
-
-                this->mBladeLastCoordinates = point;
+                
+                this->mTimeBeforeNextBladeSoundElapsed = 0;
             }
+            
+            Processor::TOUCH_COORDINATES_TIME_C[touch->getID()] = point;
+            Processor::TOUCH_COORDINATES_TIME[touch->getID()] = Utils::millisecondNow();
+            
         }
         
         Processor::TOUCH_COORDINATES[touch->getID()] = point;

@@ -58,6 +58,13 @@ CCPoint Utils::vectorNormalize(float pVectorX, float pVectorY, float pMultipleFa
 	return ccp(x, y);
 }
 
+long Utils::millisecondNow()
+{
+    struct cc_timeval now;
+    CCTime::gettimeofdayCocos2d(&now, NULL);
+    return (now.tv_sec * 1000.0 + now.tv_usec / 1000.0);
+}
+
 // ===========================================================
 // Virtual Methods
 // ===========================================================

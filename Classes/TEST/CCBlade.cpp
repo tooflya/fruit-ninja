@@ -110,7 +110,7 @@ float CCBlade::getStroke()
 
 void CCBlade::setStroke(float stroke)
 {
-    _stroke = stroke * CC_CONTENT_SCALE_FACTOR();
+    _stroke = Utils::coord(stroke);// * CC_CONTENT_SCALE_FACTOR();
 }
 
 CCBlade::~CCBlade()

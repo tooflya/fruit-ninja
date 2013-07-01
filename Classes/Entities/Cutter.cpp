@@ -3,6 +3,8 @@
 
 #include "Cutter.h"
 
+#include "BatchEntityManager.h"
+
 // ===========================================================
 // Inner Classes
 // ===========================================================
@@ -19,10 +21,13 @@
 // Constructors
 // ===========================================================
 
-Cutter::Cutter() :
+Cutter::Cutter(bool pBottomed) :
     Entity("cut-splash.png")
     {
+        this->mBottomed = pBottomed;
         
+        this->mTime = 1.0;
+        this->mTimeElapsed = 0;
     }
 
 // ===========================================================
@@ -43,7 +48,7 @@ void Cutter::onCreate()
     
 Cutter* Cutter::deepCopy()
 {
-    return new Cutter();
+    return new Cutter(this->mBottomed);
 }
     
 void Cutter::update(float pDeltaTime)
@@ -52,9 +57,30 @@ void Cutter::update(float pDeltaTime)
     
     if(!this->isVisible()) return;
     
-    if(this->getScaleX() >= 1.0)
+    if(this->mBottomed)
     {
-        this->destroy();
+        this->mTimeElapsed += pDeltaTime;
+        
+        if(this->mTimeElapsed > this->mTime)
+        {
+            this->mTimeElapsed = 0;
+            
+            this->destroy();
+        }
+        else
+        {
+            if(this->getBatchEntityManager()->getCount() > 2)
+            {
+                this->destroy();
+            }
+        }
+    }
+    else
+    {
+        if(this->getScaleX() >= 1.0)
+        {
+            this->destroy();
+        }
     }
 }
 

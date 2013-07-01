@@ -48,10 +48,8 @@ Menu::Menu()
     
 	this->mFruitsLayer->addChild(p, 100);
     
-    const char* backgrounds[3] = {"background.png", "background2.png",  "background3.png"};
-    
     /** */
-	this->mBackground = new Entity(backgrounds[Utils::random(0, 2)], this->mFruitsLayer);
+	this->mBackground = new Entity("background3.png", this->mFruitsLayer);
     
 	this->mBackground->create()->setCenterPosition(Options::CAMERA_CENTER_X, Options::CAMERA_CENTER_Y);
     
@@ -60,6 +58,7 @@ Menu::Menu()
 	this->mFruitsLayer->addChild(this->mTopLayer);
 	this->mFruitsLayer->addChild(this->mBottomLayer);
     
+	this->mAwCutters = new BatchEntityManager(3, new Cutter(true), this->mFruitsLayer);
     this->mMarks = new BatchEntityManager(20, new Mark(), this->mFruitsLayer);
 	this->mShadows = new BatchEntityManager(20, new Entity("shadow.png"), this->mFruitsLayer);
 	this->mWaves = new BatchEntityManager(5, new Wave(), this->mFruitsLayer);
@@ -68,7 +67,7 @@ Menu::Menu()
 	this->mParts = new BatchEntityManager(20, new Part(), this->mFruitsLayer);
 	this->mCriticalHits = new BatchEntityManager(5, new Label("critical.png", 1, 1), this->mFruitsLayer);
 	this->mSparks = new BatchEntityManager(200, new Spark(), this->mFruitsLayer);
-	this->mCutters = new BatchEntityManager(20, new Cutter(), this->mFruitsLayer);
+	this->mCutters = new BatchEntityManager(20, new Cutter(false), this->mFruitsLayer);
 	this->mDropsManager = new DropsManager(100, new Drop(), this->mFruitsLayer);
     
     this->mWhiteEffect = new Entity("white.png");
@@ -85,7 +84,7 @@ Menu::Menu()
     
 	this->mTimeBeforeRestartElapsed = 0;
     
-	this->mAwesomeFruitTime = 5.0;//Utils::randomf(15.0f, 150.0f);
+	this->mAwesomeFruitTime = Utils::randomf(15.0f, 150.0f);
 	this->mAwesomeFruitTimeElapsed = 0;
 
 	this->mFruitRemaning = 0;
@@ -141,7 +140,7 @@ Menu::Menu()
 	this->mIsSpecialChalengeRunning = false;
     this->mIsAwesomeChalengeRunning = false;
 
-	this->mDebugInformationNeed = false;
+	this->mDebugInformationNeed = true;
 
 	if(this->mDebugInformationNeed)
 	{
@@ -167,14 +166,18 @@ Menu::Menu()
 		this->mDebugInformation[16] = CCLabelTTF::create("0 / 0 / 0", Options::FONT, Utils::coord(16));
 		this->mDebugInformation[17] = CCLabelTTF::create("Cutters: ", Options::FONT, Utils::coord(16));
 		this->mDebugInformation[18] = CCLabelTTF::create("0 / 0 / 0", Options::FONT, Utils::coord(16));
-		this->mDebugInformation[19] = CCLabelTTF::create("Drops: ", Options::FONT, Utils::coord(16));
+		this->mDebugInformation[19] = CCLabelTTF::create("Aw cutters: ", Options::FONT, Utils::coord(16));
 		this->mDebugInformation[20] = CCLabelTTF::create("0 / 0 / 0", Options::FONT, Utils::coord(16));
 		this->mDebugInformation[21] = CCLabelTTF::create("Current fps: ", Options::FONT, Utils::coord(16));
 		this->mDebugInformation[22] = CCLabelTTF::create("0.0000", Options::FONT, Utils::coord(16));
 		this->mDebugInformation[23] = CCLabelTTF::create("Average fps: ", Options::FONT, Utils::coord(16));
 		this->mDebugInformation[24] = CCLabelTTF::create("0.0000", Options::FONT, Utils::coord(16));
+		this->mDebugInformation[25] = CCLabelTTF::create("Touch time: ", Options::FONT, Utils::coord(16));
+		this->mDebugInformation[26] = CCLabelTTF::create("0.0 / 0.0", Options::FONT, Utils::coord(16));
+		this->mDebugInformation[27] = CCLabelTTF::create("Drops: ", Options::FONT, Utils::coord(16));
+		this->mDebugInformation[28] = CCLabelTTF::create("0 / 0 / 0", Options::FONT, Utils::coord(16));
 
-		for(int i = 0; i < 25; i++)
+		for(int i = 0; i < 29; i++)
 		{
 			this->addChild(this->mDebugInformation[i], 555);
 		}
@@ -198,12 +201,16 @@ Menu::Menu()
 		this->mDebugInformation[16]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[16]->getContentSize().width / 2, Utils::coord(150)));
 		this->mDebugInformation[17]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(269), Utils::coord(120)));
 		this->mDebugInformation[18]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[18]->getContentSize().width / 2, Utils::coord(120)));
-		this->mDebugInformation[19]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(273), Utils::coord(90)));
+		this->mDebugInformation[19]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(257), Utils::coord(90)));
 		this->mDebugInformation[20]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[20]->getContentSize().width / 2, Utils::coord(90)));
 		this->mDebugInformation[21]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(258), Utils::coord(390)));
 		this->mDebugInformation[22]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[22]->getContentSize().width / 2, Utils::coord(390)));
 		this->mDebugInformation[23]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(256), Utils::coord(420)));
 		this->mDebugInformation[24]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[24]->getContentSize().width / 2, Utils::coord(420)));
+		this->mDebugInformation[25]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(261), Utils::coord(450)));
+		this->mDebugInformation[26]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[26]->getContentSize().width / 2, Utils::coord(450)));
+		this->mDebugInformation[27]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(273), Utils::coord(60)));
+		this->mDebugInformation[28]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[28]->getContentSize().width / 2, Utils::coord(60)));
         
         this->mFpsCount = 0;
         this->mFpsSum = 0;
@@ -223,7 +230,7 @@ void Menu::startGame()
 	this->mSpecialChalengeTime = 60.0;
 	this->mSpecialChalengeTimeElapsed = 0;
     
-	this->mAwesomeFruitTime = 5.0;//Utils::randomf(15.0f, 150.0f);
+	this->mAwesomeFruitTime = 0;//Utils::randomf(15.0f, 150.0f);
 	this->mAwesomeFruitTimeElapsed = 0;
 
 	this->mIsSpecialChalengeRunning = false;
@@ -292,7 +299,7 @@ void Menu::removeLife()
 {
 	((Heart*) this->mLifes->objectAtIndex(LIFES))->disable();
 
-    LIFES++;
+    //LIFES++;
     
 	if(LIFES == 3)
 	{
@@ -318,7 +325,7 @@ void Menu::runSpecialChalenge()
 	{
 		this->mIsSpecialChalengeRunning = true;
 
-		this->mSpecialChalengeTime = 3.0;
+		this->mSpecialChalengeTime = 2.7;
 
 		SimpleAudioEngine::sharedEngine()->playEffect(Options::COMBO_BLITZ_BACKING);
 	}
@@ -379,11 +386,102 @@ void Menu::update(float pDeltaTime)
 {
 	Screen::update(pDeltaTime);
     
+	// Debug Information
+    
+	if(this->mDebugInformationNeed)
+	{
+		this->mDebugUpdateTimeElapsed += pDeltaTime;
+        
+		if(this->mDebugUpdateTimeElapsed >= this->mDebugUpdateTime)
+		{
+			this->mDebugUpdateTimeElapsed = 0;
+            
+            float dt = CCDirector::sharedDirector()->getDeltaTime();
+            float fps = 1.0 / dt;
+            
+            this->mFpsCount++;
+            this->mFpsSum += fps;
+            
+			char text[256];
+			sprintf(text, "%f", dt);
+			this->mDebugInformation[2]->setString(text);
+			sprintf(text, "%d / %d / %d", this->mFruits->getCount(), this->mFruits->getCapacity(), this->mFruits->getInitCapacity());
+			this->mDebugInformation[4]->setString(text);
+            if(this->mFruits->getCapacity() > this->mFruits->getInitCapacity()) this->mDebugInformation[4]->setColor(ccc3(255.0, 0.0, 0.0));
+			sprintf(text, "%d / %d / %d", this->mParts->getCount(), this->mParts->getCapacity(), this->mParts->getInitCapacity());
+			this->mDebugInformation[6]->setString(text);
+            if(this->mParts->getCapacity() > this->mParts->getInitCapacity()) this->mDebugInformation[6]->setColor(ccc3(255.0, 0.0, 0.0));
+			sprintf(text, "%d / %d / %d", this->mSparks->getCount(), this->mSparks->getCapacity(), this->mSparks->getInitCapacity());
+			this->mDebugInformation[8]->setString(text);
+            if(this->mSparks->getCapacity() > this->mSparks->getInitCapacity()) this->mDebugInformation[8]->setColor(ccc3(255.0, 0.0, 0.0));
+			sprintf(text, "%d / %d / %d", this->mSplashes->getCount(), this->mSplashes->getCapacity(), this->mSplashes->getInitCapacity());
+			this->mDebugInformation[10]->setString(text);
+            if(this->mSplashes->getCapacity() > this->mSplashes->getInitCapacity()) this->mDebugInformation[10]->setColor(ccc3(255.0, 0.0, 0.0));
+			sprintf(text, "%d / %d / %d", this->mMarks->getCount(), this->mMarks->getCapacity(), this->mMarks->getInitCapacity());
+			this->mDebugInformation[12]->setString(text);
+            if(this->mMarks->getCapacity() > this->mMarks->getInitCapacity()) this->mDebugInformation[12]->setColor(ccc3(255.0, 0.0, 0.0));
+			sprintf(text, "%d / %d / %d", this->mShadows->getCount(), this->mShadows->getCapacity(), this->mShadows->getInitCapacity());
+			this->mDebugInformation[14]->setString(text);
+            if(this->mShadows->getCapacity() > this->mShadows->getInitCapacity()) this->mDebugInformation[14]->setColor(ccc3(255.0, 0.0, 0.0));
+			sprintf(text, "%d / %d / %d", this->mWaves->getCount(), this->mWaves->getCapacity(), this->mWaves->getInitCapacity());
+			this->mDebugInformation[16]->setString(text);
+            if(this->mWaves->getCapacity() > this->mWaves->getInitCapacity()) this->mDebugInformation[16]->setColor(ccc3(255.0, 0.0, 0.0));
+			sprintf(text, "%d / %d / %d", this->mCutters->getCount(), this->mCutters->getCapacity(), this->mCutters->getInitCapacity());
+			this->mDebugInformation[18]->setString(text);
+            if(this->mCutters->getCapacity() > this->mCutters->getInitCapacity()) this->mDebugInformation[18]->setColor(ccc3(255.0, 0.0, 0.0));
+			sprintf(text, "%d / %d / %d", this->mAwCutters->getCount(), this->mAwCutters->getCapacity(), this->mAwCutters->getInitCapacity());
+			this->mDebugInformation[20]->setString(text);
+            if(this->mAwCutters->getCapacity() > this->mAwCutters->getInitCapacity()) this->mDebugInformation[20]->setColor(ccc3(255.0, 0.0, 0.0));
+			sprintf(text, "%d / %d / %d", this->mDropsManager->getCount(), this->mDropsManager->getCapacity(), this->mDropsManager->getInitCapacity());
+			this->mDebugInformation[28]->setString(text);
+            if(this->mDropsManager->getCapacity() > this->mDropsManager->getInitCapacity()) this->mDebugInformation[20]->setColor(ccc3(255.0, 0.0, 0.0));
+			sprintf(text, "%f", fps);
+			this->mDebugInformation[22]->setString(text);
+			sprintf(text, "%f", this->mFpsSum / this->mFpsCount);
+			this->mDebugInformation[24]->setString(text);
+			sprintf(text, "%lu / %lu", Utils::millisecondNow(), Processor::TOUCH_COORDINATES_TIME[0]);
+			this->mDebugInformation[26]->setString(text);
+            
+            if(this->mFpsSum / this->mFpsCount < 55.0)
+            {
+                this->mDebugInformation[24]->setColor(ccc3(255.0, 0.0, 0.0));
+            }
+            else
+            {
+                this->mDebugInformation[24]->setColor(ccc3(255.0, 255.0, 255.0));
+            }
+            
+            if(fps < 55.0)
+            {
+                this->mDebugInformation[22]->setColor(ccc3(255.0, 0.0, 0.0));
+            }
+            else
+            {
+                this->mDebugInformation[22]->setColor(ccc3(255.0, 255.0, 255.0));
+            }
+            
+			this->mDebugInformation[2]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[2]->getContentSize().width / 2, Utils::coord(360)));
+			this->mDebugInformation[4]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[4]->getContentSize().width / 2, Utils::coord(330)));
+			this->mDebugInformation[6]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[6]->getContentSize().width / 2, Utils::coord(300)));
+			this->mDebugInformation[8]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[8]->getContentSize().width / 2, Utils::coord(270)));
+			this->mDebugInformation[10]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[10]->getContentSize().width / 2, Utils::coord(240)));
+			this->mDebugInformation[12]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[12]->getContentSize().width / 2, Utils::coord(210)));
+			this->mDebugInformation[14]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[14]->getContentSize().width / 2, Utils::coord(180)));
+			this->mDebugInformation[16]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[16]->getContentSize().width / 2, Utils::coord(150)));
+			this->mDebugInformation[18]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[18]->getContentSize().width / 2, Utils::coord(120)));
+			this->mDebugInformation[20]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[20]->getContentSize().width / 2, Utils::coord(90)));
+			this->mDebugInformation[22]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[22]->getContentSize().width / 2, Utils::coord(390)));
+			this->mDebugInformation[24]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[24]->getContentSize().width / 2, Utils::coord(420)));
+			this->mDebugInformation[26]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[26]->getContentSize().width / 2, Utils::coord(450)));
+			this->mDebugInformation[28]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[28]->getContentSize().width / 2, Utils::coord(60)));
+		}
+	}
+    
 	if(!this->mIsGameRunning)
 	{
 		this->mTimeBeforeRestartElapsed += pDeltaTime;
 
-		if(this->mTimeBeforeRestartElapsed >= 1.0) // 7)
+		if(this->mTimeBeforeRestartElapsed >= 7.0)
 		{
             this->mTimeBeforeRestartElapsed = 0;
             
@@ -493,94 +591,10 @@ void Menu::update(float pDeltaTime)
                 Processor::FREEZY_TIME = 1.0;
                 
                 this->mAwesomeFruitTimeElapsed = 0;
-                this->mAwesomeFruitTime = 5.0;//Utils::randomf(15.0, 300.0);
+                this->mAwesomeFruitTime = Utils::randomf(15.0, 300.0);
             }
         }
     }
-
-	// Debug Information
-
-	if(this->mDebugInformationNeed)
-	{
-		this->mDebugUpdateTimeElapsed += pDeltaTime;
-
-		if(this->mDebugUpdateTimeElapsed >= this->mDebugUpdateTime)
-		{
-			this->mDebugUpdateTimeElapsed = 0;
-
-            float dt = CCDirector::sharedDirector()->getDeltaTime();
-            float fps = 1.0 / dt;
-            
-            this->mFpsCount++;
-            this->mFpsSum += fps;
-            
-			char text[256];
-			sprintf(text, "%f", dt);
-			this->mDebugInformation[2]->setString(text);
-			sprintf(text, "%d / %d / %d", this->mFruits->getCount(), this->mFruits->getCapacity(), this->mFruits->getInitCapacity());
-			this->mDebugInformation[4]->setString(text);
-            if(this->mFruits->getCapacity() > this->mFruits->getInitCapacity()) this->mDebugInformation[4]->setColor(ccc3(255.0, 0.0, 0.0));
-			sprintf(text, "%d / %d / %d", this->mParts->getCount(), this->mParts->getCapacity(), this->mParts->getInitCapacity());
-			this->mDebugInformation[6]->setString(text);
-            if(this->mParts->getCapacity() > this->mParts->getInitCapacity()) this->mDebugInformation[6]->setColor(ccc3(255.0, 0.0, 0.0));
-			sprintf(text, "%d / %d / %d", this->mSparks->getCount(), this->mSparks->getCapacity(), this->mSparks->getInitCapacity());
-			this->mDebugInformation[8]->setString(text);
-            if(this->mSparks->getCapacity() > this->mSparks->getInitCapacity()) this->mDebugInformation[8]->setColor(ccc3(255.0, 0.0, 0.0));
-			sprintf(text, "%d / %d / %d", this->mSplashes->getCount(), this->mSplashes->getCapacity(), this->mSplashes->getInitCapacity());
-			this->mDebugInformation[10]->setString(text);
-            if(this->mSplashes->getCapacity() > this->mSplashes->getInitCapacity()) this->mDebugInformation[10]->setColor(ccc3(255.0, 0.0, 0.0));
-			sprintf(text, "%d / %d / %d", this->mMarks->getCount(), this->mMarks->getCapacity(), this->mMarks->getInitCapacity());
-			this->mDebugInformation[12]->setString(text);
-            if(this->mMarks->getCapacity() > this->mMarks->getInitCapacity()) this->mDebugInformation[12]->setColor(ccc3(255.0, 0.0, 0.0));
-			sprintf(text, "%d / %d / %d", this->mShadows->getCount(), this->mShadows->getCapacity(), this->mShadows->getInitCapacity());
-			this->mDebugInformation[14]->setString(text);
-            if(this->mShadows->getCapacity() > this->mShadows->getInitCapacity()) this->mDebugInformation[14]->setColor(ccc3(255.0, 0.0, 0.0));
-			sprintf(text, "%d / %d / %d", this->mWaves->getCount(), this->mWaves->getCapacity(), this->mWaves->getInitCapacity());
-			this->mDebugInformation[16]->setString(text);
-            if(this->mWaves->getCapacity() > this->mWaves->getInitCapacity()) this->mDebugInformation[16]->setColor(ccc3(255.0, 0.0, 0.0));
-			sprintf(text, "%d / %d / %d", this->mCutters->getCount(), this->mCutters->getCapacity(), this->mCutters->getInitCapacity());
-			this->mDebugInformation[18]->setString(text);
-            if(this->mCutters->getCapacity() > this->mCutters->getInitCapacity()) this->mDebugInformation[18]->setColor(ccc3(255.0, 0.0, 0.0));
-			sprintf(text, "%d / %d / %d", this->mDropsManager->getCount(), this->mDropsManager->getCapacity(), this->mDropsManager->getInitCapacity());
-			this->mDebugInformation[20]->setString(text);
-            if(this->mDropsManager->getCapacity() > this->mDropsManager->getInitCapacity()) this->mDebugInformation[20]->setColor(ccc3(255.0, 0.0, 0.0));
-			sprintf(text, "%f", fps);
-			this->mDebugInformation[22]->setString(text);
-			sprintf(text, "%f", this->mFpsSum / this->mFpsCount);
-			this->mDebugInformation[24]->setString(text);
-            
-            if(this->mFpsSum / this->mFpsCount < 55.0)
-            {
-                this->mDebugInformation[24]->setColor(ccc3(255.0, 0.0, 0.0));
-            }
-            else
-            {
-                this->mDebugInformation[24]->setColor(ccc3(255.0, 255.0, 255.0));
-            }
-            
-            if(fps < 55.0)
-            {
-                this->mDebugInformation[22]->setColor(ccc3(255.0, 0.0, 0.0));
-            }
-            else
-            {
-                this->mDebugInformation[22]->setColor(ccc3(255.0, 255.0, 255.0));
-            }
-
-			this->mDebugInformation[2]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[2]->getContentSize().width / 2, Utils::coord(360)));
-			this->mDebugInformation[4]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[4]->getContentSize().width / 2, Utils::coord(330)));
-			this->mDebugInformation[6]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[6]->getContentSize().width / 2, Utils::coord(300)));
-			this->mDebugInformation[8]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[8]->getContentSize().width / 2, Utils::coord(270)));
-			this->mDebugInformation[10]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[10]->getContentSize().width / 2, Utils::coord(240)));
-			this->mDebugInformation[12]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[12]->getContentSize().width / 2, Utils::coord(210)));
-			this->mDebugInformation[14]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[14]->getContentSize().width / 2, Utils::coord(180)));
-			this->mDebugInformation[16]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[16]->getContentSize().width / 2, Utils::coord(150)));
-			this->mDebugInformation[18]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[18]->getContentSize().width / 2, Utils::coord(120)));
-			this->mDebugInformation[20]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[20]->getContentSize().width / 2, Utils::coord(90)));
-			this->mDebugInformation[22]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[22]->getContentSize().width / 2, Utils::coord(390)));
-			this->mDebugInformation[24]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[24]->getContentSize().width / 2, Utils::coord(420)));
-		}
-	}
     
     if(this->mShaking)
 	{

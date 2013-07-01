@@ -17,6 +17,18 @@ CCPoint Processor::TOUCH_COORDINATES[10] =
     ccp(-1, -1),  ccp(-1, -1),  ccp(-1, -1),  ccp(-1, -1),  ccp(-1, -1)
 };
 
+CCPoint Processor::TOUCH_COORDINATES_TIME_C[10] =
+{
+    ccp(-1, -1),  ccp(-1, -1),  ccp(-1, -1),  ccp(-1, -1),  ccp(-1, -1),
+    ccp(-1, -1),  ccp(-1, -1),  ccp(-1, -1),  ccp(-1, -1),  ccp(-1, -1)
+};
+
+long Processor::TOUCH_COORDINATES_TIME[10] =
+{
+    0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0
+};
+
 float Processor::FREEZY_TIME = 1.0f;
 
 Entity* Processor::SPECIAL_FRUIT = NULL;

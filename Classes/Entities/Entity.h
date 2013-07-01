@@ -182,6 +182,9 @@ class Entity : public CCSprite, public Touchable
 		void setEntityManager(EntityManager* pEntityManager);
 		void setEntityManager(BatchEntityManager* pBatchEntityManager);
 
+        EntityManager* getEntityManager();
+        BatchEntityManager* getBatchEntityManager();
+    
 		void setEntityManagerId(int pId);
 
 		void setCurrentFrameIndex(int pIndex);

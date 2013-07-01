@@ -15,6 +15,25 @@
 
 bool Fruit::SPECIAL_EXIST = false;
 
+const ccColor3B Fruit::FRUITS_COLORS[Options::FRUITS_COUNT + 1] =
+{
+    ccc3(0.0, 0.0, 0.0),
+    ccc3(181.0, 40.0, 46.0),
+    ccc3(193.0, 214.0, 47.0),
+    ccc3(251.0, 226.0, 22.0),
+    ccc3(255.0, 255.0, 255.0),
+    ccc3(255.0, 0.0, 0.0),
+    ccc3(74.0, 165.0, 72.0),
+    ccc3(247.0, 218.0, 62.0),
+    ccc3(74.0, 165.0, 72.0),
+    ccc3(255.0, 166.0, 50.0),
+    ccc3(249.0, 161.0, 27.0),
+    ccc3(225.0, 200.0, 33.0),
+    ccc3(255.0, 181.0, 38.0),
+    ccc3(241.0, 237.0, 150.0),
+    ccc3(227.0, 37.0, 37.0)
+};
+
 // ===========================================================
 // Fields
 // ===========================================================
@@ -115,10 +134,22 @@ void Fruit::update(float pDeltaTime)
     {
         if(this->getScaleX() == 1)
         {
-            Cutter* cutter = (Cutter*) menu->mCutters->create();
-        
-            cutter->setCenterPosition(this->getCenterX(), this->getCenterY());
-            cutter->setRotation(angle);
+            if(this->mAwesome)
+            {
+                
+                Cutter* cutter = (Cutter*) menu->mAwCutters->create();
+                
+                cutter->setCenterPosition(this->getCenterX(), this->getCenterY());
+                cutter->setRotation(angle);
+            }
+            else
+            {
+                
+                Cutter* cutter = (Cutter*) menu->mCutters->create();
+                
+                cutter->setCenterPosition(this->getCenterX(), this->getCenterY());
+                cutter->setRotation(angle);
+            }
         }
         
         if(this->mAwesome)
@@ -158,40 +189,46 @@ void Fruit::update(float pDeltaTime)
 
                 switch(this->mType)
                 {
-                    case 1:
+                    case Options::TYPE_REDAPPLE:
                         SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_APPLE);
-                    break;
-                    case 2:
+                        break;
+                    case Options::TYPE_GREENAPPLE:
                         SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_APPLE);
-                    break;
-                    case 3:
+                        break;
+                    case Options::TYPE_BANANA:
                         SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_BANANA);
-                    break;
-                    case 4:
+                        break;
+                    case Options::TYPE_COCONUT:
                         SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_COCONUT);
-                    break;
-                    case 5:
+                        break;
+                    case Options::TYPE_WATERMELON:
                         SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_WATERMELON);
-                    break;
-                    case 6:
+                        break;
+                    case Options::TYPE_KIWIFRUIT:
                         SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_KIWIFRUIT);
-                    break;
-                    case 7:
+                        break;
+                    case Options::TYPE_LEMON:
                         SimpleAudioEngine::sharedEngine()->playEffect(Options::SQUASH);
-                    break;
-                    case 8:
+                        break;
+                    case Options::TYPE_LIME:
                         SimpleAudioEngine::sharedEngine()->playEffect(Options::SQUASH);
-                    break;
-                    case 9:
+                        break;
+                    case Options::TYPE_MANGO:
                         SimpleAudioEngine::sharedEngine()->playEffect(Options::SQUASH);
-                    break;
-                    case 10:
+                        break;
+                    case Options::TYPE_PEAR:
                         SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_ORANGE);
-                    break;
-                    case 11:
+                        break;
+                    case Options::TYPE_PINEAPPLE:
                         SimpleAudioEngine::sharedEngine()->playEffect(Options::SQUASH);
-                    break;
-                    case TYPE_DANGER:
+                        break;
+                    case Options::TYPE_STARFRUIT:
+                        SimpleAudioEngine::sharedEngine()->playEffect(Options::SQUASH);
+                        break;
+                    case Options::TYPE_STRAWBERRY:
+                        SimpleAudioEngine::sharedEngine()->playEffect(Options::SQUASH);
+                        break;
+                    case Options::TYPE_DANGER:
                         menu->mParticlesTypeDanger->setPosition(this->getCenterX(), this->getCenterY());
                         menu->mParticlesTypeDanger->resetSystem();
 
@@ -199,7 +236,7 @@ void Fruit::update(float pDeltaTime)
                     break;
                 }
                 
-                if(this->mType != 3 && this->mType != TYPE_DANGER)
+                if(this->mType != Options::TYPE_BANANA && this->mType != Options::TYPE_DANGER)
                 {
                     menu->mDropsManager->init(this->getCenterX(), this->getCenterY(),this->mType);
                 }
@@ -221,7 +258,7 @@ void Fruit::update(float pDeltaTime)
         {
             this->destroy();
 
-            if(this->mType != TYPE_DANGER)
+            if(this->mType != Options::TYPE_DANGER)
             {
                 menu->updateCounter();
                 menu->addScore(10);
@@ -236,40 +273,46 @@ void Fruit::update(float pDeltaTime)
 
             switch(this->mType)
             {
-                case 1:
+                case Options::TYPE_REDAPPLE:
                     SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_APPLE);
-                break;
-                case 2:
+                    break;
+                case Options::TYPE_GREENAPPLE:
                     SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_APPLE);
-                break;
-                case 3:
+                    break;
+                case Options::TYPE_BANANA:
                     SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_BANANA);
-                break;
-                case 4:
+                    break;
+                case Options::TYPE_COCONUT:
                     SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_COCONUT);
-                break;
-                case 5:
+                    break;
+                case Options::TYPE_WATERMELON:
                     SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_WATERMELON);
-                break;
-                case 6:
+                    break;
+                case Options::TYPE_KIWIFRUIT:
                     SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_KIWIFRUIT);
-                break;
-                case 7:
+                    break;
+                case Options::TYPE_LEMON:
                     SimpleAudioEngine::sharedEngine()->playEffect(Options::SQUASH);
-                break;
-                case 8:
+                    break;
+                case Options::TYPE_LIME:
                     SimpleAudioEngine::sharedEngine()->playEffect(Options::SQUASH);
-                break;
-                case 9:
+                    break;
+                case Options::TYPE_MANGO:
                     SimpleAudioEngine::sharedEngine()->playEffect(Options::SQUASH);
-                break;
-                case 10:
+                    break;
+                case Options::TYPE_PEAR:
                     SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_ORANGE);
-                break;
-                case 11:
+                    break;
+                case Options::TYPE_PINEAPPLE:
                     SimpleAudioEngine::sharedEngine()->playEffect(Options::SQUASH);
-                break;
-                case TYPE_DANGER:
+                    break;
+                case Options::TYPE_STARFRUIT:
+                    SimpleAudioEngine::sharedEngine()->playEffect(Options::SQUASH);
+                    break;
+                case Options::TYPE_STRAWBERRY:
+                    SimpleAudioEngine::sharedEngine()->playEffect(Options::SQUASH);
+                    break;
+                case Options::TYPE_DANGER:
                     menu->mParticlesTypeDanger->setPosition(this->getCenterX(), this->getCenterY());
                     menu->mParticlesTypeDanger->resetSystem();
 
@@ -277,7 +320,7 @@ void Fruit::update(float pDeltaTime)
                 break;
             }
             
-            if(this->mType != 3 && this->mType != TYPE_DANGER)
+            if(this->mType != Options::TYPE_BANANA && this->mType != Options::TYPE_DANGER)
             {
                 menu->mDropsManager->init(this->getCenterX(), this->getCenterY(),this->mType);
             }
@@ -292,7 +335,7 @@ void Fruit::update(float pDeltaTime)
             int padding = 0;
             
             
-            if(this->mType != 3 && this->mType != TYPE_DANGER)
+            if(this->mType != Options::TYPE_BANANA && this->mType != Options::TYPE_DANGER)
             for(int i = 0; i < u; i++)
             {
                 Entity* splash = menu->mSplashes->create();
@@ -365,46 +408,16 @@ void Fruit::update(float pDeltaTime)
 
                 switch(this->mType)
                 {
-                    case 1:
-                        splash->setColor(ccc3(181.0, 40.0, 46.0));
+                    default:
+                        splash->setColor(Fruit::FRUITS_COLORS[this->mType]);
                         break;
-                    case 2:
-                        splash->setColor(ccc3(193.0, 214.0, 47.0));
-                        break;
-                    case 3:
-                        splash->setColor(ccc3(251.0, 226.0, 22.0));
-                        break;
-                    case 4:
-                        splash->setColor(ccc3(255.0, 255.0, 255.0));
-                        break;
-                    case 5:
-                        splash->setColor(ccc3(237.0, 51.0, 65.0));
-                        break;
-                    case 6:
-                        splash->setColor(ccc3(119.0, 190.0, 68.0));
-                        break;
-                    case 7:
-                        splash->setColor(ccc3(247.0, 207.0, 58.0));
-                        break;
-                    case 8:
-                        splash->setColor(ccc3(47.0, 165.0, 72.0));
-                        break;
-                    case 9:
-                        splash->setColor(ccc3(250.0, 166.0, 50.0));
-                        break;
-                    case 10:
-                        splash->setColor(ccc3(244.0, 107.0, 37.0));
-                        break;
-                    case 11:
-                        splash->setColor(ccc3(225.0, 204.0, 33.0));
-                        break;
-                    case TYPE_DANGER:
+                    case Options::TYPE_DANGER:
                         splash->destroy();
                         break;
                 }
             }
 
-            if(this->mType != TYPE_DANGER)
+            if(this->mType != Options::TYPE_DANGER)
             {
                 int u;
                 
@@ -456,7 +469,7 @@ void Fruit::update(float pDeltaTime)
 
             // Critical hit
 
-            if(this->mImpulsePower > Utils::coord(500) && this->mType != TYPE_DANGER)
+            if(this->mImpulsePower > Utils::coord(500) && this->mType != Options::TYPE_DANGER)
             {
                 SimpleAudioEngine::sharedEngine()->playEffect(Options::CRITICAL);
 
@@ -480,7 +493,7 @@ void Fruit::update(float pDeltaTime)
     {
         this->destroy();
 
-        if(this->mType != TYPE_DANGER)
+        if(this->mType != Options::TYPE_DANGER)
         {
             SimpleAudioEngine::sharedEngine()->playEffect(Options::LOSE_LIFE);
 
@@ -509,7 +522,7 @@ void Fruit::update(float pDeltaTime)
         
         entity->setCenterPosition(this->getCenterX(), this->getCenterY());
         
-        if(this->mType == TYPE_DANGER)
+        if(this->mType == Options::TYPE_DANGER)
         {
             entity->setColor(ccc3(255.0, 0.0, 0.0));
         }
@@ -526,7 +539,7 @@ void Fruit::update(float pDeltaTime)
 
 void Fruit::setSpecialChalenge()
 {
-    if(this->mType == TYPE_DANGER)
+    if(this->mType == Options::TYPE_DANGER)
     {
         this->destroy();
     }
@@ -558,7 +571,7 @@ void Fruit::setSpecialChalenge()
 
 void Fruit::setAwesomeChalenge()
 {
-    if(this->mType == TYPE_DANGER)
+    if(this->mType == Options::TYPE_DANGER)
     {
         
     }
@@ -582,7 +595,7 @@ void Fruit::onCreate()
     this->mSpecial = false;
     this->mAwesome = false;
 
-    this->mType = Utils::random(0, 14);
+    this->mType = Utils::random(0, Options::FRUITS_COUNT);
     
     this->mIsDown = false;
     this->mTimeUntilDownElapsed = 0;
@@ -601,7 +614,7 @@ void Fruit::onCreate()
     
     this->setCurrentFrameIndex(this->mType);
 
-    if(this->mType == TYPE_DANGER)
+    if(this->mType == Options::TYPE_DANGER)
     {
         this->mSoundEffect = SimpleAudioEngine::sharedEngine()->playEffect(Options::THROW_BOMB);
         this->mSoundEffect = SimpleAudioEngine::sharedEngine()->playEffect(Options::BOMB_FUSE);
@@ -618,7 +631,7 @@ void Fruit::onCreate()
 
     // Special?
 
-    if(Utils::probably(25) && this->mType != TYPE_DANGER && !SPECIAL_EXIST)
+    if(Utils::probably(25) && this->mType != Options::TYPE_DANGER && !SPECIAL_EXIST)
     {
         this->mSpecial = true;
 
@@ -688,55 +701,6 @@ void Fruit::onEnter()
 void Fruit::draw()
 {
     Entity::draw();
-    /*CCPoint vertices2[4] = { ccp(0,0), ccp(this->getWidth(),0), ccp(0,this->getHeight()), ccp(0,this->getHeight()) };
-   
-
-    CC_PROFILER_START_CATEGORY(kCCProfilerCategorySprite, "CCSprite - draw");
-
-    CCAssert(!m_pobBatchNode, "If CCSprite is being rendered by CCSpriteBatchNode, CCSprite#draw SHOULD NOT be called");
-
-    CC_NODE_DRAW_SETUP();
-
-    ccGLBlendFunc( m_sBlendFunc.src, m_sBlendFunc.dst );
-
-    if (m_pobTexture != NULL)
-    {
-        ccGLBindTexture2D( m_pobTexture->getName() );
-        ccGLEnableVertexAttribs( kCCVertexAttribFlag_PosColorTex );
-    }
-    else
-    {
-        ccGLBindTexture2D(0);
-        ccGLEnableVertexAttribs( kCCVertexAttribFlag_Position | kCCVertexAttribFlag_Color );
-    }
-
-#define kQuadSize sizeof(m_sQuad.bl)
-#ifdef EMSCRIPTEN
-    long offset = 0;
-    setGLBufferData(&m_sQuad, 4 * kQuadSize, 0);
-#else
-    long offset = (long)&m_sQuad;
-#endif // EMSCRIPTEN
-
-    // vertex
-    int diff = offsetof( ccV3F_C4B_T2F, vertices2);
-    glVertexAttribPointer(kCCVertexAttrib_Position, 3, GL_FLOAT, GL_FALSE, kQuadSize, (void*) (offset + diff));
-
-    if (m_pobTexture != NULL)
-    {
-        // texCoods
-        diff = offsetof( ccV3F_C4B_T2F, texCoords);
-        glVertexAttribPointer(kCCVertexAttrib_TexCoords, 2, GL_FLOAT, GL_FALSE, kQuadSize, (void*)(offset + diff));
-    }
-    
-    // color
-    diff = offsetof( ccV3F_C4B_T2F, colors);
-    glVertexAttribPointer(kCCVertexAttrib_Color, 4, GL_UNSIGNED_BYTE, GL_TRUE, kQuadSize, (void*)(offset + diff));
-
-
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-
-    CHECK_GL_ERROR_DEBUG();*/
 }
 
 #endif

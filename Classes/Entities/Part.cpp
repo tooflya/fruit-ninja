@@ -71,42 +71,48 @@ void Part::update(float pDeltaTime)
         
         switch(this->mType)
         {
-            case 1:
+            case Options::TYPE_REDAPPLE:
                 SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_APPLE);
             break;
-            case 2:
+            case Options::TYPE_GREENAPPLE:
                 SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_APPLE);
             break;
-            case 3:
+            case Options::TYPE_BANANA:
                 SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_BANANA);
             break;
-            case 4:
+            case Options::TYPE_COCONUT:
                 SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_COCONUT);
             break;
-            case 5:
+            case Options::TYPE_WATERMELON:
                 SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_WATERMELON);
             break;
-            case 6:
+            case Options::TYPE_KIWIFRUIT:
                 SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_KIWIFRUIT);
             break;
-            case 7:
+            case Options::TYPE_LEMON:
                 SimpleAudioEngine::sharedEngine()->playEffect(Options::SQUASH);
             break;
-            case 8:
+            case Options::TYPE_LIME:
                 SimpleAudioEngine::sharedEngine()->playEffect(Options::SQUASH);
             break;
-            case 9:
+            case Options::TYPE_MANGO:
                 SimpleAudioEngine::sharedEngine()->playEffect(Options::SQUASH);
             break;
-            case 10:
+            case Options::TYPE_PEAR:
                 SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_ORANGE);
             break;
-            case 11:
+            case Options::TYPE_PINEAPPLE:
                 SimpleAudioEngine::sharedEngine()->playEffect(Options::SQUASH);
-            break;
+                break;
+            case Options::TYPE_STARFRUIT:
+                SimpleAudioEngine::sharedEngine()->playEffect(Options::SQUASH);
+                break;
+            case Options::TYPE_STRAWBERRY:
+                SimpleAudioEngine::sharedEngine()->playEffect(Options::SQUASH);
+                break;
         }
         
-        if(this->mType != 3 && this->mType != 0)
+        if(this->mType != Options::TYPE_BANANA && this->mType != Options::TYPE_DANGER)
         {
             menu->mDropsManager->init(this->getCenterX(), this->getCenterY(),this->mType);
         }

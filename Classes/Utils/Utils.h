@@ -99,6 +99,8 @@ class Utils
 		static int random(int min, int max);
 
 		static bool probably(int pProbably);
+    
+        static long millisecondNow();
 		
 		// ===========================================================
 		// Virtual Methods

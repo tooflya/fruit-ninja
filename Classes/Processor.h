@@ -77,6 +77,8 @@ class Processor
         // ===========================================================
     
         static CCPoint TOUCH_COORDINATES[10];
+        static CCPoint TOUCH_COORDINATES_TIME_C[10];
+        static long TOUCH_COORDINATES_TIME[10];
     
         static float FREEZY_TIME;
     

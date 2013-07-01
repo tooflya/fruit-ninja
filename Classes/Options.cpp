@@ -51,7 +51,7 @@ const char* Options::IMPACT_KIWIFRUIT = "impact-kiwifruit.mp3";
 const char* Options::IMPACT_ORANGE = "impact-orange.mp3";
 const char* Options::SQUASH = "squash.mp3";
 const char* Options::EXPLOSION = "explosion.mp3";
-const char* Options::CRITICAL = "critical.ogg";
+const char* Options::CRITICAL = "critical.mp3";
 const char* Options::LOSE_LIFE = "lose_life.mp3";
 const char* Options::THROW_BOMB = "throw-bomb.mp3";
 const char* Options::BOMB_FUSE = "bomb-fuse.mp3";
@@ -66,7 +66,7 @@ const char* Options::START_LEVEL = "Sound/game-start.ogg";
 
 const char* Options::COMBO[10] = { "Sound/combo-0.ogg", "Sound/combo-1.ogg", "Sound/combo-2.ogg", "Sound/combo-3.ogg", "Sound/combo-4.ogg", "Sound/combo-5.ogg", "Sound/combo-6.ogg", "Sound/combo-7.ogg", "Sound/combo-8.ogg", "Sound/combo-9.ogg" };
 
-const char* Options::COMBO_BLITZ_BACKING_LIGHT = "combo-blitz-backing-light.ogg";
+const char* Options::COMBO_BLITZ_BACKING_LIGHT = "Sound/combo-blitz-backing-light.ogg";
 const char* Options::COMBO_BLITZ_BACKING = "Sound/combo-blitz-backing.ogg";
 const char* Options::NATURE_BGM = "Music/nature_bgm.ogg";
 const char* Options::COMBO_BLITZ_BACKING_END = "Sound/combo-blitz-backing-end.ogg";

@@ -153,6 +153,7 @@ class Menu : public Screen
         BatchEntityManager* mShadows;
         BatchEntityManager* mMarks;
         BatchEntityManager* mCutters;
+        BatchEntityManager* mAwCutters;
         BatchEntityManager* mWaves;
     
         DropsManager* mDropsManager;
