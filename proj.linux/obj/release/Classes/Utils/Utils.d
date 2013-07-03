@@ -176,4 +176,5 @@ obj/release/Classes/Utils/Utils.o: ../Classes/Utils/Utils.cpp \
  /home/igor/Development/cocos2d-x-2.1.4/cocos2dx/CCScheduler.h \
  /home/igor/Development/cocos2d-x-2.1.4/cocos2dx/support/data_support/uthash.h \
  /home/igor/Development/cocos2d-x-2.1.4/cocos2dx/support/component/CCComponent.h \
- /home/igor/Development/cocos2d-x-2.1.4/cocos2dx/support/component/CCComponentContainer.h
+ /home/igor/Development/cocos2d-x-2.1.4/cocos2dx/support/component/CCComponentContainer.h \
+ ../Classes/Options.h

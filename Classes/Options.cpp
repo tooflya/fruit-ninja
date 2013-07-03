@@ -40,7 +40,8 @@ float const Options::AWESOME_SCALE_APPEAR_TIME = 0.3;
 float const Options::AWESOME_ROTATE_APPEAR = 10.0;
 float const Options::AWESOME_ROTATE_APPEAR_TIME = 0.3;
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFROM == CC_PLATFORM_MAC)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFROM == CC_PLATFORM_MAC) && false
+
 const char* Options::FONT = "Gang of Three";
 const char* Options::GAME_MUSIC = "nature_bgm.mp3";
 const char* Options::GAME_OVER = "game-over.mp3";
@@ -70,6 +71,7 @@ const char* Options::THROW_FRUIT = "throw-fruit.mp3";
 const char* Options::BONUS_BLOW = "bonus-blow.mp3";
 
 #else
+
 const char* Options::FONT = "Fonts/go3v2.ttf";
 const char* Options::GAME_MUSIC = "Music/nature_bgm.ogg";
 const char* Options::GAME_OVER = "Sound/game-over.ogg";
@@ -97,6 +99,7 @@ const char* Options::THROW_BOMB = "Sound/throw-bomb.ogg";
 const char* Options::BOMB_FUSE = "Sound/bomb-fuse.ogg";
 const char* Options::THROW_FRUIT = "Sound/throw-fruit.ogg";
 const char* Options::BONUS_BLOW = "Sound/bonus-blow.ogg";
+
 #endif
 
 // ===========================================================

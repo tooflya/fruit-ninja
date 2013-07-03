@@ -185,5 +185,11 @@ obj/release/Classes/TEST/TouchTrailLayer.o: \
  ../Classes/TEST/CCBlade.h ../Classes/Screens/Menu.h \
  ../Classes/Screens/Screen.h ../Classes/Entities/Fruit.h \
  ../Classes/Entities/ImpulseEntity.h ../Classes/Entities/Entity.h \
- ../Classes/Entities/Part.h ../Classes/Entities/Part.h \
- ../Classes/Entities/Splash.h ../Classes/Entities/Label.h
+ ../Classes/Processor.h ../Classes/Entities/Part.h \
+ ../Classes/Entities/Cutter.h ../Classes/Entities/Particles.h \
+ ../Classes/Entities/Part.h ../Classes/Entities/Splash.h \
+ ../Classes/Entities/Label.h ../Classes/Managers/DropsManager.h \
+ ../Classes/Entities/Drop.h ../Classes/Managers/BatchEntityManager.h \
+ ../Classes/Entities/Spark.h ../Classes/Entities/Mark.h \
+ ../Classes/Entities/Cutter.h ../Classes/Entities/Wave.h \
+ ../Classes/Entities/Heart.h ../Classes/Entities/Particles.h

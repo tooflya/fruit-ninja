@@ -182,7 +182,14 @@ obj/release/Classes/Entities/Part.o: ../Classes/Entities/Part.cpp \
  ../Classes/Utils/Utils.h ../Classes/Options.h \
  /home/igor/Development/cocos2d-x-2.1.4/CocosDenshion/include/SimpleAudioEngine.h \
  /home/igor/Development/cocos2d-x-2.1.4/CocosDenshion/include/Export.h \
+ ../Classes/Processor.h ../Classes/Entities/Entity.h \
  ../Classes/Screens/Menu.h ../Classes/Screens/Screen.h \
- ../Classes/Entities/Entity.h ../Classes/Entities/Fruit.h \
- ../Classes/Entities/Part.h ../Classes/Entities/Splash.h \
- ../Classes/Entities/Label.h ../Classes/Managers/BatchEntityManager.h
+ ../Classes/Entities/Fruit.h ../Classes/Entities/Cutter.h \
+ ../Classes/Entities/Particles.h ../Classes/Entities/Part.h \
+ ../Classes/Entities/Splash.h ../Classes/Entities/Label.h \
+ ../Classes/Managers/BatchEntityManager.h \
+ ../Classes/Managers/DropsManager.h ../Classes/Entities/Drop.h \
+ ../Classes/Managers/BatchEntityManager.h ../Classes/Entities/Spark.h \
+ ../Classes/Entities/Mark.h ../Classes/Entities/Cutter.h \
+ ../Classes/Entities/Wave.h ../Classes/Entities/Heart.h \
+ ../Classes/Entities/Particles.h

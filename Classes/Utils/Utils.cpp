@@ -45,6 +45,13 @@ float Utils::coordP(float pCoordinate)
 	return pCoordinate / sqrt(Options::CAMERA_WIDTH * Options::CAMERA_WIDTH + Options::CAMERA_HEIGHT * Options::CAMERA_HEIGHT) / CCDevice::getDPI() / 3.5;
 }
 
+float Utils::round(float x)
+{
+	float x2 = x * 100;
+
+ 	return (x2 - floor(x2) >= 0.5 ? ceil(x2) : floor(x2)) / 100;
+}
+
 float Utils::distance(float dX0, float dY0, float dX1, float dY1)
 {
     return sqrt((dX1 - dX0)*(dX1 - dX0) + (dY1 - dY0)*(dY1 - dY0));

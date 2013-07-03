@@ -177,4 +177,4 @@ obj/release/Classes/TEST/CCBlade.o: ../Classes/TEST/CCBlade.cpp \
  /home/igor/Development/cocos2d-x-2.1.4/cocos2dx/support/data_support/uthash.h \
  /home/igor/Development/cocos2d-x-2.1.4/cocos2dx/support/component/CCComponent.h \
  /home/igor/Development/cocos2d-x-2.1.4/cocos2dx/support/component/CCComponentContainer.h \
- ../Classes/Utils/Utils.h
+ ../Classes/Utils/Utils.h ../Classes/Options.h

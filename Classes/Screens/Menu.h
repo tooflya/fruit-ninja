@@ -108,7 +108,7 @@ class Menu : public Screen
 
 		bool mDebugInformationNeed;
 
-		CCLabelTTF* mDebugInformation[32];
+		CCLabelTTF* mDebugInformation[64];
 
 		float mDebugUpdateTime;
 		float mDebugUpdateTimeElapsed;

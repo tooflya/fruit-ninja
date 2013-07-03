@@ -182,4 +182,5 @@ obj/release/Classes/Entities/ImpulseEntity.o: \
  ../Classes/Utils/Touchable.h ../Classes/Utils/Utils.h \
  ../Classes/Options.h \
  /home/igor/Development/cocos2d-x-2.1.4/CocosDenshion/include/SimpleAudioEngine.h \
- /home/igor/Development/cocos2d-x-2.1.4/CocosDenshion/include/Export.h
+ /home/igor/Development/cocos2d-x-2.1.4/CocosDenshion/include/Export.h \
+ ../Classes/Processor.h ../Classes/Entities/Entity.h
