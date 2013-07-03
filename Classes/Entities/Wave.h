@@ -5,6 +5,8 @@
 
 #include "Entity.h"
 
+#include "Processor.h"
+
 using namespace cocos2d;
 
 class Wave : public Entity
@@ -21,6 +23,9 @@ class Wave : public Entity
 		// ===========================================================
 		// Fields
 		// ===========================================================
+    
+        float mScaleSpeed;
+        float mAlphaSpeed;
 
 		// ===========================================================
 		// Constructors

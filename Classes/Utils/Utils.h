@@ -3,6 +3,8 @@
 
 #include "cocos2d.h"
 
+#include "Options.h"
+
 #include <string>
 #include <sstream>
 #include <stdlib.h>
@@ -90,7 +92,8 @@ class Utils
 
 		static CCPoint vectorNormalize(float pVectorX, float pVectorY, float pMultipleFactor);
 
-		static float coord(float pCoordinate);
+        static float coord(float pCoordinate);
+        static float coordP(float pCoordinate);
 
 		static float distance(float dX0, float dY0, float dX1, float dY1);
 

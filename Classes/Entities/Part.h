@@ -92,6 +92,7 @@ class Part : public ImpulseEntity
         void update(float pDelta);
     
         void setAwesome(int pCounter, int pCapacity);
+        void setAwesomeByVectors(float pVectorX, float pVectorY);
 		
 		// ===========================================================
 		// Virtual Methods

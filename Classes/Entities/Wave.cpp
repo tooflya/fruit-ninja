@@ -34,6 +34,9 @@ void Wave::update(float pDeltaTime)
     
     if(!this->isVisible()) return;
     
+    this->setScale(this->getScaleX() + this->mScaleSpeed * Processor::FREEZY_TIME);
+    this->setOpacity(this->getOpacity() - this->mAlphaSpeed * Processor::FREEZY_TIME);
+    
     if(this->getScaleX() >= 20.0 || this->getOpacity() <= 0.0)
     {
         this->destroy();
@@ -51,8 +54,8 @@ void Wave::onCreate()
     this->setScale(0.0);
     this->setOpacity(255.0);
     
-    this->runAction(CCScaleTo::create(1.7, 20.0));
-    this->runAction(CCFadeTo::create(1.7, 0.0));
+    this->mScaleSpeed = 0.2;
+    this->mAlphaSpeed = 0.35;
 }
 
 Wave* Wave::deepCopy()

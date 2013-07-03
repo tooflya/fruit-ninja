@@ -7,6 +7,15 @@
 
 using namespace cocos2d;
 
+typedef struct tagCCTouchInformation {
+    bool slice;
+    long last_sound_time;
+    long last_slice_time;
+    CCPoint last_sound_position;
+    CCPoint last_slice_position;
+    CCPoint position;
+} CCTouchInformation;
+
 class Processor
 {
 	protected:
@@ -76,9 +85,14 @@ class Processor
 		// Constructors
         // ===========================================================
     
-        static CCPoint TOUCH_COORDINATES[10];
-        static CCPoint TOUCH_COORDINATES_TIME_C[10];
-        static long TOUCH_COORDINATES_TIME[10];
+        static int FREEZY_STATUS;
+    
+        static const int FREEZY_STATUS_NONE = 0;
+        static const int FREEZY_STATUS_END_SCALING = 1;
+        static const int FREEZY_STATUS_START_BLOW = 2;
+        static const int FREEZY_STATUS_RETURN_TIME = 3;
+    
+        static CCTouchInformation TOUCH_INFORMATION[10];
     
         static float FREEZY_TIME;
     

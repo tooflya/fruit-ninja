@@ -95,8 +95,20 @@ class Options
         static int const TYPE_PINEAPPLE = 12;
         static int const TYPE_STARFRUIT = 13;
         static int const TYPE_STRAWBERRY = 14;
+        static int const TYPE_GARNET = 15;
     
         static int const FRUITS_COUNT = 14;
+    
+        static float const EFFECT_WHITE_APPEAR_TIME;
+        static float const EFFECT_BLACK_APPEAR_TIME;
+        static float const EFFECT_SLIDE_VECTOR_X;
+        static float const EFFECT_SLIDE_VECTOR_Y;
+    
+        static float const AWESOME_SCALE_APPEAR;
+        static float const AWESOME_SCALE_APPEAR_TIME;
+    
+        static float const AWESOME_ROTATE_APPEAR;
+        static float const AWESOME_ROTATE_APPEAR_TIME;
     
         static const char* FONT;
         static const char* GAME_MUSIC;

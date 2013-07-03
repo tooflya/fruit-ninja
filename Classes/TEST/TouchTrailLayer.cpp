@@ -44,7 +44,7 @@ void TouchTrailLayer::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
         CCPoint point = convertTouchToNodeSpace(touch);
 		blade->push(point);
         
-        Processor::TOUCH_COORDINATES_TIME[touch->getID()] = Utils::millisecondNow();
+        Processor::TOUCH_INFORMATION[touch->getID()].last_sound_time = Utils::millisecondNow();
 	}
 }
 
@@ -58,23 +58,40 @@ void TouchTrailLayer::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
         CCPoint point = convertTouchToNodeSpace(touch);
 		blade->push(point);
         
-        if(abs(ccpDistance(point, Processor::TOUCH_COORDINATES_TIME_C[touch->getID()])) > Utils::coord(50))
+        if(abs(ccpDistance(point, Processor::TOUCH_INFORMATION[touch->getID()].last_sound_position)) > Options::CAMERA_WIDTH / 15.0)
         {
             float dtime = 20.0;
             
-            if(Utils::millisecondNow() - Processor::TOUCH_COORDINATES_TIME[touch->getID()] < dtime && this->mTimeBeforeNextBladeSoundElapsed > 0.1)
+            if(Utils::millisecondNow() - Processor::TOUCH_INFORMATION[touch->getID()].last_sound_time < dtime && this->mTimeBeforeNextBladeSoundElapsed > 0.1)
             {
                 SimpleAudioEngine::sharedEngine()->playEffect(Options::SWOOSH);
                 
                 this->mTimeBeforeNextBladeSoundElapsed = 0;
             }
             
-            Processor::TOUCH_COORDINATES_TIME_C[touch->getID()] = point;
-            Processor::TOUCH_COORDINATES_TIME[touch->getID()] = Utils::millisecondNow();
+            Processor::TOUCH_INFORMATION[touch->getID()].last_sound_position = point;
+            Processor::TOUCH_INFORMATION[touch->getID()].last_sound_time = Utils::millisecondNow();
             
         }
         
-        Processor::TOUCH_COORDINATES[touch->getID()] = point;
+        if(abs(ccpDistance(point, Processor::TOUCH_INFORMATION[touch->getID()].last_slice_position)) > Options::CAMERA_WIDTH / 30.0)
+         {
+             float dtime = 50.0;
+             
+             if(Utils::millisecondNow() - Processor::TOUCH_INFORMATION[touch->getID()].last_slice_time < dtime)
+             {
+                 Processor::TOUCH_INFORMATION[touch->getID()].slice = true;
+             }
+             else
+             {
+                 Processor::TOUCH_INFORMATION[touch->getID()].slice = false;
+             }
+             
+             Processor::TOUCH_INFORMATION[touch->getID()].last_slice_time = Utils::millisecondNow();
+         }
+        
+        Processor::TOUCH_INFORMATION[touch->getID()].last_slice_position = point;
+        Processor::TOUCH_INFORMATION[touch->getID()].position = point;
     }
 }
 
@@ -91,7 +108,8 @@ void TouchTrailLayer::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent)
         blade->autoCleanup();
         _map.erase(touch);
         
-        Processor::TOUCH_COORDINATES[touch->getID()] = ccp(-1000, -1000);
+        Processor::TOUCH_INFORMATION[touch->getID()].slice = false;
+        Processor::TOUCH_INFORMATION[touch->getID()].position = ccp(-1000, -1000);
     }
 }
 
@@ -100,6 +118,20 @@ void TouchTrailLayer::update(float pDeltaTime)
     CCLayer::update(pDeltaTime);
 
     this->mTimeBeforeNextBladeSoundElapsed += pDeltaTime;
+    
+    /*for(int i = 0; i < 10; i++)
+    {
+        float dtime = 5.0;
+        
+        if(Utils::millisecondNow() - Processor::TOUCH_INFORMATION[i].last_slice_time < dtime)
+        {
+            Processor::TOUCH_INFORMATION[i].slice = true;
+        }
+        else
+        {
+            Processor::TOUCH_INFORMATION[i].slice = false;
+        }
+    }*/
 }
 
 #endif

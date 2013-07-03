@@ -1,32 +1,24 @@
-#ifndef CONST_MENU_H
-#define CONST_MENU_H
+#ifndef CONST_PARTICLES_H
+#define CONST_PARTICLES_H
 
 #include "cocos2d.h"
 
-#include "Screen.h"
-#include "Fruit.h"
-#include "Part.h"
-#include "Splash.h"
-#include "Label.h"
-#include "BatchEntityManager.h"
-#include "DropsManager.h"
+#include "Entity.h"
 #include "Processor.h"
-#include "Spark.h"
-#include "Drop.h"
-#include "Mark.h"
-#include "Cutter.h"
-#include "Wave.h"
-#include "Heart.h"
-#include "Particles.h"
 
 using namespace cocos2d;
 
-class Menu : public Screen
+class Particles : public Entity
 {
 	protected:
 		// ===========================================================
 		// Inner Classes
 		// ===========================================================
+    
+        int mType;
+    
+        float mAwesomeVectorX;
+        float mAwesomeVectorY;
 
 		// ===========================================================
 		// Constants
@@ -34,46 +26,7 @@ class Menu : public Screen
 
 		// ===========================================================
 		// Fields
-		// ===========================================================
-
-		int mFruitRemaning;
-
-		float mFruitTime;
-        float mFruitTimeElapsed;
-    
-        float mAwesomeFruitTime;
-        float mAwesomeFruitTimeElapsed;
-
-		float mSpecialChalengeTime;
-		float mSpecialChalengeTimeElapsed;
-
-		bool mIsSpecialChalengeRunning;
-        bool mIsAwesomeChalengeRunning;
-
-		float mTimeBeforeRestartElapsed;
-
-		Entity* mBackground;
-		Entity* mCounter;
-        Entity* mEffect[2];
-
-		Entity* test;
-
-		CCLayer* mMainMenuLayer;
-		CCLayer* mTopLayer;
-        CCLayer* mBottomLayer;
-    
-        bool mShaking;
-    
-        float mShakeDuration;
-        float mShakeIntensity;
-        float mShakeDurationElapsed;
-    
-        bool mSlide;
-    
-        int mSlideOperations;
-    
-        float mSlideVectorX;
-        float mSlideVectorY;
+        // ===========================================================
 
 		// ===========================================================
 		// Constructors
@@ -100,22 +53,6 @@ class Menu : public Screen
 		// Fields
 		// ===========================================================
 
-		CCLabelTTF* mFruitsSlashed;
-		CCLabelTTF* mBestFruitsSlashed;
-		CCLabelTTF* mScore;
-
-		bool mIsGameRunning;
-
-		bool mDebugInformationNeed;
-
-		CCLabelTTF* mDebugInformation[32];
-
-		float mDebugUpdateTime;
-		float mDebugUpdateTimeElapsed;
-    
-        float mFpsSum;
-        int mFpsCount;
-
 		// ===========================================================
 		// Constructors
 		// ===========================================================
@@ -137,70 +74,35 @@ class Menu : public Screen
 		// Constants
 		// ===========================================================
     
-		static int FRUITS;
-		static int SCORE;
-		static int LIFES;
+        static const int TYPE_GARNET_CORE_BIG = 0;
+        static const int TYPE_GARNET_CORE_SMALL = 1;
 
 		// ===========================================================
 		// Fields
 		// ===========================================================
 
-		BatchEntityManager* mFruits;
-		BatchEntityManager* mParts;
-		BatchEntityManager* mSplashes;
-		BatchEntityManager* mLifes;
-		BatchEntityManager* mCriticalHits;
-        BatchEntityManager* mSparks;
-        BatchEntityManager* mShadows;
-        BatchEntityManager* mMarks;
-        BatchEntityManager* mCutters;
-        BatchEntityManager* mAwCutters;
-        BatchEntityManager* mWaves;
-        BatchEntityManager* mParticles;
-    
-        DropsManager* mDropsManager;
-    
-        Entity* mAwesomeLights;
-    
-    	CCParticleSystemQuad* mParticlesTypeDanger;
-
-		CCLabelTTF* mSpecialLabel;
-        CCLabelTTF* mSpecialLabelScore;
-    
-        CCLayer* mFruitsLayer;
-
 		// ===========================================================
 		// Constructors
 		// ===========================================================
-
-		Menu();
+    
+        Particles();
 
 		// ===========================================================
 		// Methods
 		// ===========================================================
-
-		void startGame();
-		void updateCounter();
-		void addScore(int pScore);
-		void removeLife();
-		void runSpecialChalenge();
-        void runAwesomeChalenge();
-		void stopSpecialChalenge();
-        void hitedAwesome();
     
-        void shake(float d, float i);
-    
-        void randomSlide();
-    
-        void hitedAwesomeLast();
+        Particles* setType(int pType);
+        void setAwesome(int pCounter, int pCapacity);
 		
 		// ===========================================================
 		// Virtual Methods
 		// ===========================================================
-
-		void update(float pDeltaTime);
-
-		void onEnter();
+    
+        void update(float pDeltaTime);
+    
+        void onCreate();
+    
+        Particles* deepCopy();
 };
 
 #endif

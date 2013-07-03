@@ -11,23 +11,41 @@
 // Constants
 // ===========================================================
 
-CCPoint Processor::TOUCH_COORDINATES[10] =
+CCTouchInformation Processor::TOUCH_INFORMATION[10] =
 {
-    ccp(-1, -1),  ccp(-1, -1),  ccp(-1, -1),  ccp(-1, -1),  ccp(-1, -1),
-    ccp(-1, -1),  ccp(-1, -1),  ccp(-1, -1),  ccp(-1, -1),  ccp(-1, -1)
+    {
+        false, 0, 0, ccp(-1000, -1000), ccp(-1000, -1000), ccp(-1000, -1000)
+    },
+    {
+        false, 0, 0, ccp(-1000, -1000), ccp(-1000, -1000), ccp(-1000, -1000)
+    },
+    {
+        false, 0, 0, ccp(-1000, -1000), ccp(-1000, -1000), ccp(-1000, -1000)
+    },
+    {
+        false, 0, 0, ccp(-1000, -1000), ccp(-1000, -1000), ccp(-1000, -1000)
+    },
+    {
+        false, 0, 0, ccp(-1000, -1000), ccp(-1000, -1000), ccp(-1000, -1000)
+    },
+    {
+        false, 0, 0, ccp(-1000, -1000), ccp(-1000, -1000), ccp(-1000, -1000)
+    },
+    {
+        false, 0, 0, ccp(-1000, -1000), ccp(-1000, -1000), ccp(-1000, -1000)
+    },
+    {
+        false, 0, 0, ccp(-1000, -1000), ccp(-1000, -1000), ccp(-1000, -1000)
+    },
+    {
+        false, 0, 0, ccp(-1000, -1000), ccp(-1000, -1000), ccp(-1000, -1000)
+    },
+    {
+        false, 0, 0, ccp(-1000, -1000), ccp(-1000, -1000), ccp(-1000, -1000)
+    }
 };
 
-CCPoint Processor::TOUCH_COORDINATES_TIME_C[10] =
-{
-    ccp(-1, -1),  ccp(-1, -1),  ccp(-1, -1),  ccp(-1, -1),  ccp(-1, -1),
-    ccp(-1, -1),  ccp(-1, -1),  ccp(-1, -1),  ccp(-1, -1),  ccp(-1, -1)
-};
-
-long Processor::TOUCH_COORDINATES_TIME[10] =
-{
-    0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0
-};
+int Processor::FREEZY_STATUS = 0;
 
 float Processor::FREEZY_TIME = 1.0f;
 

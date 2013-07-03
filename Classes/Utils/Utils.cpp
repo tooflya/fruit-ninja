@@ -40,6 +40,11 @@ float Utils::coord(float pCoordinate)
 	return pCoordinate / CCDirector::sharedDirector()->getContentScaleFactor();
 }
 
+float Utils::coordP(float pCoordinate)
+{
+	return pCoordinate / sqrt(Options::CAMERA_WIDTH * Options::CAMERA_WIDTH + Options::CAMERA_HEIGHT * Options::CAMERA_HEIGHT) / CCDevice::getDPI() / 3.5;
+}
+
 float Utils::distance(float dX0, float dY0, float dX1, float dY1)
 {
     return sqrt((dX1 - dX0)*(dX1 - dX0) + (dY1 - dY0)*(dY1 - dY0));
@@ -62,7 +67,7 @@ long Utils::millisecondNow()
 {
     struct cc_timeval now;
     CCTime::gettimeofdayCocos2d(&now, NULL);
-    return (now.tv_sec * 1000.0 + now.tv_usec / 1000.0);
+    return (now.tv_sec * 1000 + now.tv_usec / 1000);
 }
 
 // ===========================================================

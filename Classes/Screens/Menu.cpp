@@ -49,14 +49,14 @@ Menu::Menu()
 	this->mFruitsLayer->addChild(p, 100);
     
     /** */
-	this->mBackground = new Entity("background3.png", this->mFruitsLayer);
+	this->mBackground = new Entity("background2.png", this->mFruitsLayer);
     
 	this->mBackground->create()->setCenterPosition(Options::CAMERA_CENTER_X, Options::CAMERA_CENTER_Y);
     
 	this->addChild(this->mFruitsLayer);
 	this->addChild(this->mMainMenuLayer);
-	this->mFruitsLayer->addChild(this->mTopLayer);
-	this->mFruitsLayer->addChild(this->mBottomLayer);
+	this->addChild(this->mTopLayer);
+	this->addChild(this->mBottomLayer);
     
 	this->mAwCutters = new BatchEntityManager(3, new Cutter(true), this->mFruitsLayer);
     this->mMarks = new BatchEntityManager(20, new Mark(), this->mFruitsLayer);
@@ -69,12 +69,20 @@ Menu::Menu()
 	this->mSparks = new BatchEntityManager(200, new Spark(), this->mFruitsLayer);
 	this->mCutters = new BatchEntityManager(20, new Cutter(false), this->mFruitsLayer);
 	this->mDropsManager = new DropsManager(100, new Drop(), this->mFruitsLayer);
+	this->mParticles = new BatchEntityManager(10, new Particles(), this->mFruitsLayer);
     
-    this->mWhiteEffect = new Entity("white.png");
-    this->mWhiteEffect->setCenterPosition(Options::CAMERA_CENTER_X, Options::CAMERA_CENTER_Y);
-    this->mFruitsLayer->addChild(this->mWhiteEffect, 100);
+    this->mEffect[1] = new Entity("effect.png");
+    this->mEffect[1]->setCenterPosition(Options::CAMERA_CENTER_X, Options::CAMERA_CENTER_Y);
+    this->mFruitsLayer->addChild(this->mEffect[1], 0);
+    
+    this->mEffect[0] = new Entity("effect.png");
+    this->mEffect[0]->setCenterPosition(Options::CAMERA_CENTER_X, Options::CAMERA_CENTER_Y);
+    this->mFruitsLayer->addChild(this->mEffect[0], 100);
 
 	this->addChild(this->mParticlesTypeDanger, 100);
+    
+    this->mAwesomeLights = new Entity("splash-granat.png");
+    this->mFruitsLayer->addChild(this->mAwesomeLights, 0);
 
 	this->mFruitTime = 5.0;
 	this->mFruitTimeElapsed = 0;
@@ -176,8 +184,10 @@ Menu::Menu()
 		this->mDebugInformation[26] = CCLabelTTF::create("0.0 / 0.0", Options::FONT, Utils::coord(16));
 		this->mDebugInformation[27] = CCLabelTTF::create("Drops: ", Options::FONT, Utils::coord(16));
 		this->mDebugInformation[28] = CCLabelTTF::create("0 / 0 / 0", Options::FONT, Utils::coord(16));
+		this->mDebugInformation[29] = CCLabelTTF::create("Particles: ", Options::FONT, Utils::coord(16));
+		this->mDebugInformation[30] = CCLabelTTF::create("0 / 0 / 0", Options::FONT, Utils::coord(16));
 
-		for(int i = 0; i < 29; i++)
+		for(int i = 0; i < 31; i++)
 		{
 			this->addChild(this->mDebugInformation[i], 555);
 		}
@@ -211,6 +221,8 @@ Menu::Menu()
 		this->mDebugInformation[26]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[26]->getContentSize().width / 2, Utils::coord(450)));
 		this->mDebugInformation[27]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(273), Utils::coord(60)));
 		this->mDebugInformation[28]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[28]->getContentSize().width / 2, Utils::coord(60)));
+		this->mDebugInformation[29]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(263), Utils::coord(30)));
+		this->mDebugInformation[30]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[28]->getContentSize().width / 2, Utils::coord(30)));
         
         this->mFpsCount = 0;
         this->mFpsSum = 0;
@@ -331,13 +343,6 @@ void Menu::runSpecialChalenge()
 	}
 }
 
-void Menu::runAwesomeChalenge()
-{
-    ((Fruit*) this->mFruits->create())->setAwesomeChalenge();
-    
-    this->mIsAwesomeChalengeRunning = true;
-}
-
 void Menu::stopSpecialChalenge()
 {
 	this->mIsSpecialChalengeRunning = false;
@@ -351,28 +356,50 @@ void Menu::stopSpecialChalenge()
 	SimpleAudioEngine::sharedEngine()->playEffect(Options::COMBO_BLITZ_BACKING_END);
 }
 
+void Menu::runAwesomeChalenge()
+{
+    ((Fruit*) this->mFruits->create())->setAwesomeChalenge();
+    
+    this->mIsAwesomeChalengeRunning = true;
+}
+
 void Menu::hitedAwesome()
 {
     this->randomSlide();
     
-    this->mWhiteEffect->create()->setOpacity(100.0);
-    this->mWhiteEffect->runAction(CCFadeTo::create(0.3, 0.0));
+    this->mEffect[0]->create()->setOpacity(100.0);
+    this->mEffect[0]->setColor(ccc3(255.0, 255.0, 255.0));
+    this->mEffect[0]->runAction(CCFadeTo::create(Options::EFFECT_WHITE_APPEAR_TIME, 0.0));
+    
+    this->mAwesomeLights->setScale(this->mAwesomeLights->getScaleX() + 0.05);
     
     if(this->mFruitsLayer->getScaleX() != 1.0) return;
     if(Processor::AWESOME_FRUIT == NULL) return;
     
+    this->mAwesomeFruitTimeElapsed = 0;
+    this->mAwesomeFruitTime = 3.0;
+    
+    this->mAwesomeLights->create()->setCenterPosition(Processor::AWESOME_FRUIT->getCenterX(), Processor::AWESOME_FRUIT->getCenterY());
+    this->mAwesomeLights->setScale(0.0);
+    
+    this->mEffect[1]->create()->setOpacity(0.0);
+    this->mEffect[1]->setColor(ccc3(0.0, 0.0, 0.0));
+    this->mEffect[1]->runAction(CCFadeTo::create(Options::EFFECT_BLACK_APPEAR_TIME, 220.0));
+    
     this->mFruitsLayer->setAnchorPoint(ccp(Processor::AWESOME_FRUIT->getCenterX() / Options::CAMERA_WIDTH, Processor::AWESOME_FRUIT->getCenterY() / Options::CAMERA_HEIGHT));
     
-    this->mFruitsLayer->runAction(CCScaleTo::create(0.3, 1.7));
-    this->mFruitsLayer->runAction(CCRotateTo::create(0.3, Utils::randomf(-50.0, 50.0)));
+    this->mFruitsLayer->runAction(CCScaleTo::create(Options::AWESOME_SCALE_APPEAR_TIME, Options::AWESOME_SCALE_APPEAR));
+    this->mFruitsLayer->runAction(CCRotateTo::create(Options::AWESOME_ROTATE_APPEAR_TIME, Utils::randomf(-Options::AWESOME_ROTATE_APPEAR, Options::AWESOME_ROTATE_APPEAR)));
     
-    Processor::FREEZY_TIME = 0.1;
+    this->mFruitsLayer->runAction(CCFollow::create(Processor::AWESOME_FRUIT, CCRectMake(-Utils::coord(184), -Utils::coord(152), Utils::coord(1280) + Utils::coord(368), Utils::coord(720) + Utils::coord(304))));
+    
+    Processor::FREEZY_TIME = 0.05;
 }
 
 void Menu::hitedAwesomeLast()
 {
+    this->mFruitsLayer->stopAllActions();
     this->mFruitsLayer->setAnchorPoint(ccp(0.5, 0.5));
-    this->mFruitsLayer->setScale(1.7);
     this->mFruitsLayer->runAction(CCScaleTo::create(0.2, 1.0));
     
     SimpleAudioEngine::sharedEngine()->playEffect(Options::BONUS_BLOW);
@@ -434,12 +461,15 @@ void Menu::update(float pDeltaTime)
             if(this->mAwCutters->getCapacity() > this->mAwCutters->getInitCapacity()) this->mDebugInformation[20]->setColor(ccc3(255.0, 0.0, 0.0));
 			sprintf(text, "%d / %d / %d", this->mDropsManager->getCount(), this->mDropsManager->getCapacity(), this->mDropsManager->getInitCapacity());
 			this->mDebugInformation[28]->setString(text);
-            if(this->mDropsManager->getCapacity() > this->mDropsManager->getInitCapacity()) this->mDebugInformation[20]->setColor(ccc3(255.0, 0.0, 0.0));
+            if(this->mDropsManager->getCapacity() > this->mDropsManager->getInitCapacity()) this->mDebugInformation[28]->setColor(ccc3(255.0, 0.0, 0.0));
+			sprintf(text, "%d / %d / %d", this->mParticles->getCount(), this->mParticles->getCapacity(), this->mParticles->getInitCapacity());
+			this->mDebugInformation[30]->setString(text);
+            if(this->mParticles->getCapacity() > this->mParticles->getInitCapacity()) this->mDebugInformation[30]->setColor(ccc3(255.0, 0.0, 0.0));
 			sprintf(text, "%f", fps);
 			this->mDebugInformation[22]->setString(text);
 			sprintf(text, "%f", this->mFpsSum / this->mFpsCount);
 			this->mDebugInformation[24]->setString(text);
-			sprintf(text, "%lu / %lu", Utils::millisecondNow(), Processor::TOUCH_COORDINATES_TIME[0]);
+			sprintf(text, "%lu / %lu", Utils::millisecondNow(), Processor::TOUCH_INFORMATION[0].last_sound_time);
 			this->mDebugInformation[26]->setString(text);
             
             if(this->mFpsSum / this->mFpsCount < 55.0)
@@ -474,6 +504,7 @@ void Menu::update(float pDeltaTime)
 			this->mDebugInformation[24]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[24]->getContentSize().width / 2, Utils::coord(420)));
 			this->mDebugInformation[26]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[26]->getContentSize().width / 2, Utils::coord(450)));
 			this->mDebugInformation[28]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[28]->getContentSize().width / 2, Utils::coord(60)));
+			this->mDebugInformation[30]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[30]->getContentSize().width / 2, Utils::coord(30)));
 		}
 	}
     
@@ -562,6 +593,8 @@ void Menu::update(float pDeltaTime)
     
     if(this->mIsAwesomeChalengeRunning)
     {
+        this->mAwesomeLights->setCenterPosition(Processor::AWESOME_FRUIT->getCenterX(), Processor::AWESOME_FRUIT->getCenterY());
+        
         if(this->mAwesomeFruitTimeElapsed >= this->mAwesomeFruitTime)
         {
             this->mAwesomeFruitTimeElapsed = 0;
@@ -571,27 +604,56 @@ void Menu::update(float pDeltaTime)
             
             Processor::AWESOME_FRUIT = NULL;
             
+            this->mFruitsLayer->stopAllActions();
+            
             this->mFruitsLayer->runAction(CCScaleTo::create(0.3, 1.0));
             this->mFruitsLayer->runAction(CCRotateTo::create(0.3, 0.0));
+            
+            this->mFruitsLayer->runAction(CCMoveTo::create(0.2, ccp(0, 0)));
+            
+            Processor::FREEZY_STATUS = Processor::FREEZY_STATUS_END_SCALING;
         }
     }
     else if(Processor::AWESOME_FRUIT == NULL)
     {
         if(this->mAwesomeFruitTimeElapsed >= this->mAwesomeFruitTime)
         {
-            if(Processor::FREEZY_TIME == 1.0)
+            switch(Processor::FREEZY_STATUS)
             {
-                this->mAwesomeFruitTimeElapsed = 0;
-                this->mAwesomeFruitTime = 3.0;
-        
-                this->runAwesomeChalenge();
-            }
-            else
-            {
-                Processor::FREEZY_TIME = 1.0;
-                
-                this->mAwesomeFruitTimeElapsed = 0;
-                this->mAwesomeFruitTime = Utils::randomf(15.0, 300.0);
+                case Processor::FREEZY_STATUS_NONE:
+                    this->mAwesomeFruitTimeElapsed = 0;
+                    this->mAwesomeFruitTime = 3.0;
+                    
+                    this->runAwesomeChalenge();
+                break;
+                case Processor::FREEZY_STATUS_END_SCALING:
+                    this->mAwesomeFruitTimeElapsed = 0;
+                    this->mAwesomeFruitTime = 0.1;
+                    
+                    this->mEffect[0]->setOpacity(255.0);
+                    this->mEffect[1]->setOpacity(0.0);
+                    
+                    Processor::FREEZY_STATUS = 2;
+                break;
+                case Processor::FREEZY_STATUS_START_BLOW:
+                    this->mAwesomeFruitTimeElapsed = 0;
+                    this->mAwesomeFruitTime = 1.0;
+                    
+                    this->mEffect[0]->runAction(CCFadeTo::create(0.5, 0.0));
+                    
+                    this->mAwesomeLights->destroy();
+                    
+                    this->shake(1.0, 5.0);
+                    
+                    Processor::FREEZY_STATUS = 3;
+                break;
+                case Processor::FREEZY_STATUS_RETURN_TIME:
+                    this->mAwesomeFruitTimeElapsed = 0;
+                    this->mAwesomeFruitTime = Utils::randomf(15.0, 300.0);
+                    
+                    Processor::FREEZY_STATUS = 0;
+                    Processor::FREEZY_TIME = 1.0;
+                break;
             }
         }
     }
@@ -636,7 +698,12 @@ void Menu::update(float pDeltaTime)
         {
             this->mSlide = false;
             
-            this->mFruitsLayer->setPosition(ccp(0, 0));
+            if(Processor::AWESOME_FRUIT != NULL)
+            {
+                /*Processor::AWESOME_FRUIT->runAction(CCMoveTo::create(0.2, ccp(Processor::AWESOME_FRUIT->getCenterX() + Utils::randomf(-50.0, 50.0), Processor::AWESOME_FRUIT->getCenterY() + Utils::randomf(-50.0, 50.0))));*/
+                
+                this->mFruitsLayer->runAction(CCFollow::create(Processor::AWESOME_FRUIT, CCRectMake(-Utils::coord(184), -Utils::coord(152), Utils::coord(1280) + Utils::coord(368), Utils::coord(720) + Utils::coord(304))));
+            }
         }
     }
 }
@@ -644,13 +711,15 @@ void Menu::update(float pDeltaTime)
 void Menu::randomSlide()
 {
     if(this->mSlide) return;
+    
+    this->mFruitsLayer->stopAllActions();
         
     this->mSlide = true;
     
     this->mSlideOperations = -10;
     
-    this->mSlideVectorX = Utils::randomf(-1000.0, 1000.0);
-    this->mSlideVectorY = Utils::randomf(-1000.0, 1000.0);
+    this->mSlideVectorX = Utils::randomf(-Options::EFFECT_SLIDE_VECTOR_X, Options::EFFECT_SLIDE_VECTOR_X);
+    this->mSlideVectorY = Utils::randomf(-Options::EFFECT_SLIDE_VECTOR_Y, Options::EFFECT_SLIDE_VECTOR_Y);
 }
 
 void Menu::shake(float d, float i)

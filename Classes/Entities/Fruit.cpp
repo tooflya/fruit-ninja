@@ -15,7 +15,7 @@
 
 bool Fruit::SPECIAL_EXIST = false;
 
-const ccColor3B Fruit::FRUITS_COLORS[Options::FRUITS_COUNT + 1] =
+const ccColor3B Fruit::FRUITS_COLORS[Options::FRUITS_COUNT + 2] =
 {
     ccc3(0.0, 0.0, 0.0),
     ccc3(181.0, 40.0, 46.0),
@@ -31,7 +31,8 @@ const ccColor3B Fruit::FRUITS_COLORS[Options::FRUITS_COUNT + 1] =
     ccc3(225.0, 200.0, 33.0),
     ccc3(255.0, 181.0, 38.0),
     ccc3(241.0, 237.0, 150.0),
-    ccc3(227.0, 37.0, 37.0)
+    ccc3(227.0, 37.0, 37.0),
+    ccc3(189.0, 1.0, 28.0)
 };
 
 // ===========================================================
@@ -93,9 +94,11 @@ void Fruit::update(float pDeltaTime)
     
     for(int i = 0; i < 10; i++)
     {
-        if(this->isCollideWithPoint(Processor::TOUCH_COORDINATES[i].x, Processor::TOUCH_COORDINATES[i].y))
+        if(this->isCollideWithPoint(Processor::TOUCH_INFORMATION[i].position.x, Processor::TOUCH_INFORMATION[i].position.y) && Processor::TOUCH_INFORMATION[i].slice)
         {
             collides = true;
+            
+            Processor::TOUCH_INFORMATION[i].slice = false;
             
             if(this->mAwesome)
             {
@@ -107,7 +110,7 @@ void Fruit::update(float pDeltaTime)
             
             CCPoint diff = ccpSub(
                                   ccp(this->getCenterX(), this->getCenterY()),
-                                  ccp(Processor::TOUCH_COORDINATES[i].x, Processor::TOUCH_COORDINATES[i].y)
+                                  ccp(Processor::TOUCH_INFORMATION[i].position.x, Processor::TOUCH_INFORMATION[i].position.y)
                                   );
             angle = -CC_RADIANS_TO_DEGREES(atan2f(diff.y, diff.x));
         }
@@ -115,7 +118,12 @@ void Fruit::update(float pDeltaTime)
     
     if(this->mAwesome)
     {
-        if(Processor::FREEZY_TIME == 1.0 && this->mLifes > 0)
+        if(this->mLifes > 0 && menu->mFruitsLayer->getScaleX() < Options::AWESOME_SCALE_APPEAR)
+        {
+            collides = false;
+        }
+        
+        if(Processor::FREEZY_STATUS == Processor::FREEZY_STATUS_START_BLOW && this->mLifes > 0)
         {
             collides = true;
             
@@ -136,15 +144,16 @@ void Fruit::update(float pDeltaTime)
         {
             if(this->mAwesome)
             {
+                if(this->mLifes > 0)
+                {
+                    Cutter* cutter = (Cutter*) menu->mAwCutters->create();
                 
-                Cutter* cutter = (Cutter*) menu->mAwCutters->create();
-                
-                cutter->setCenterPosition(this->getCenterX(), this->getCenterY());
-                cutter->setRotation(angle);
+                    cutter->setCenterPosition(this->getCenterX(), this->getCenterY());
+                    cutter->setRotation(angle);
+                }
             }
             else
             {
-                
                 Cutter* cutter = (Cutter*) menu->mCutters->create();
                 
                 cutter->setCenterPosition(this->getCenterX(), this->getCenterY());
@@ -166,24 +175,27 @@ void Fruit::update(float pDeltaTime)
         
         if(this->mLifes >= 0)
         {
-            if(this->getScaleX() == 1)
+            if(true)
             {
                 this->mLifes++;
 
-                if(this->mLifes == 1)
+                if(this->mSpecial)
                 {
-                    menu->mSpecialLabel->setVisible(true);
-                    menu->mSpecialLabelScore->setVisible(true);
+                    if(this->mLifes == 1)
+                    {
+                        menu->mSpecialLabel->setVisible(true);
+                        menu->mSpecialLabelScore->setVisible(true);
+                    }
+                
+                    char text[256];
+                    sprintf(text, "%d points", 100 * this->mLifes);
+                    menu->mSpecialLabelScore->setString(text);
                 }
                 
-                char text[256];
-                sprintf(text, "%d points", 100 * this->mLifes);
-                menu->mSpecialLabelScore->setString(text);
-
                 menu->addScore(100 * this->mLifes);
 
-                this->setScale(1.3);
-                this->runAction(CCScaleTo::create(0.2, 1));
+                //this->setScale(1.3);
+                //this->runAction(CCScaleTo::create(0.2, 1));
 
                 SimpleAudioEngine::sharedEngine()->playEffect(Options::COMBO[this->mLifes]);
 
@@ -312,6 +324,12 @@ void Fruit::update(float pDeltaTime)
                 case Options::TYPE_STRAWBERRY:
                     SimpleAudioEngine::sharedEngine()->playEffect(Options::SQUASH);
                     break;
+                case Options::TYPE_ORANGE:
+                    SimpleAudioEngine::sharedEngine()->playEffect(Options::SQUASH);
+                    break;
+                case Options::TYPE_GARNET:
+                    SimpleAudioEngine::sharedEngine()->playEffect(Options::SQUASH);
+                    break;
                 case Options::TYPE_DANGER:
                     menu->mParticlesTypeDanger->setPosition(this->getCenterX(), this->getCenterY());
                     menu->mParticlesTypeDanger->resetSystem();
@@ -419,39 +437,108 @@ void Fruit::update(float pDeltaTime)
 
             if(this->mType != Options::TYPE_DANGER)
             {
-                int u;
-                
                 if(this->mAwesome)
                 {
-                    u = 10;
+                    Part* part;
+                    Particles* particle;
+                    
+                    // #-1
+                    part = (Part*) menu->mParts->create();
+                    
+                    part->setCurrentFrameIndex(this->mType * 3 + 2);
+                    part->setCenterPosition(this->getCenterX() - Utils::coord(25), this->getCenterY() + Utils::coord(25));
+                    part->setScaleY(-1);
+                    part->setAwesomeByVectors(-30.0, 20.0);
+                    
+                    // #-2
+                    part = (Part*) menu->mParts->create();
+                    
+                    part->setCurrentFrameIndex(this->mType * 3 + 2);
+                    part->setCenterPosition(this->getCenterX() + Utils::coord(25), this->getCenterY() + Utils::coord(25));
+                    part->setScaleX(-1);
+                    part->setScaleY(-1);
+                    part->setAwesomeByVectors(30.0, 20.0);
+                    
+                    // #-3
+                    part = (Part*) menu->mParts->create();
+                    
+                    part->setCurrentFrameIndex(this->mType * 3 + 2);
+                    part->setCenterPosition(this->getCenterX() - Utils::coord(25), this->getCenterY() - Utils::coord(15));
+                    part->setAwesomeByVectors(-30.0, -20.0);
+                    
+                    // #-4
+                    part = (Part*) menu->mParts->create();
+                    
+                    part->setCurrentFrameIndex(this->mType * 3 + 2);
+                    part->setCenterPosition(this->getCenterX() + Utils::coord(25), this->getCenterY() - Utils::coord(15));
+                    part->setScaleX(-1);
+                    part->setAwesomeByVectors(30.0, -20.0);
+                    
+                    // #1
+                    part = (Part*) menu->mParts->create();
+                    
+                    part->setCurrentFrameIndex(this->mType * 3 + 1);
+                    part->setCenterPosition(this->getCenterX() - Utils::coord(25), this->getCenterY() + Utils::coord(45));
+                    part->setAwesomeByVectors(-15.0, 30.0);
+                    
+                    // #2
+                    part = (Part*) menu->mParts->create();
+                    
+                    part->setCurrentFrameIndex(this->mType * 3 + 1);
+                    part->setCenterPosition(this->getCenterX() + Utils::coord(25), this->getCenterY() + Utils::coord(45));
+                    part->setScaleX(-1);
+                    part->setAwesomeByVectors(15.0, 30.0);
+                    
+                    // #3
+                    part = (Part*) menu->mParts->create();
+                    
+                    part->setCurrentFrameIndex(this->mType * 3);
+                    part->setCenterPosition(this->getCenterX() - Utils::coord(35), this->getCenterY() - Utils::coord(25));
+                    part->setAwesomeByVectors(-15.0, -30.0);
+                    
+                    // #4
+                    part = (Part*) menu->mParts->create();
+                    
+                    part->setCurrentFrameIndex(this->mType * 3);
+                    part->setCenterPosition(this->getCenterX() + Utils::coord(35), this->getCenterY() - Utils::coord(25));
+                    part->setScaleX(-1);
+                    part->setAwesomeByVectors(15.0, -30.0);
+                    
+                    for(int i = 0; i < 8; i++)
+                    {
+                        particle = (Particles*) menu->mParticles->create();
+                        
+                        particle->setCenterPosition(this->getCenterX(), this->getCenterY());
+                        particle->setType(Particles::TYPE_GARNET_CORE_SMALL);
+                        particle->setAwesome(i, 8);
+                    }
                 }
                 else
                 {
-                    u = 2;
-                }
-                
-                for(int i = 0; i < u; i++)
-                {
-                    Part* part = (Part*) menu->mParts->create();
-
-                    part->setCurrentFrameIndex(i == 0 ? this->getCurrentFrameIndex() * 3 : this->getCurrentFrameIndex() * 3 + Utils::random(1, 2));
-                    part->setCenterPosition(this->getCenterX() + Utils::coord(Utils::randomf(-50.0, 50.0)), this->getCenterY() + Utils::coord(Utils::randomf(-50.0, 50.0)));
-
-                    part->mRotateImpulse = this->mRotateImpulse;
-                    part->mImpulsePower = this->mImpulsePower;
-                    part->mSideImpulse = i == 0 ? this->mSideImpulse : -this->mSideImpulse;
-                    part->mWeight = this->mWeight;
-
-                    part->mType = this->mType;
-                    
-                    if(this->mAwesome || this->mMustBeDestroy)
+                    for(int i = 0; i < 2; i++)
                     {
-                        part->setAwesome(i, u);
+                        Part* part = (Part*) menu->mParts->create();
+                    
+                        part->setCurrentFrameIndex(i == 0 ? this->getCurrentFrameIndex() * 3 : this->getCurrentFrameIndex() * 3 + Utils::random(1, 2));
+                        part->setCenterPosition(this->getCenterX() + Utils::coord(Utils::randomf(-50.0, 50.0)), this->getCenterY() + Utils::coord(Utils::randomf(-50.0, 50.0)));
+                    
+                        part->mRotateImpulse = this->mRotateImpulse;
+                        part->mImpulsePower = this->mImpulsePower;
+                        part->mSideImpulse = i == 0 ? this->mSideImpulse : -this->mSideImpulse;
+                        part->mWeight = this->mWeight;
+                    
+                        part->mType = this->mType;
+                    
+                        if(this->mAwesome || this->mMustBeDestroy)
+                        {
+                            part->setAwesome(i, u);
                         
-                        part->mRotateImpulse = Utils::randomf(-500.0, 500.0);
+                            part->mRotateImpulse = Utils::randomf(-500.0, 500.0);
+                        }
                     }
                 }
                 
+                                
                 if(this->mAwesome)
                 {
                     for(int i = 0; i < menu->mFruits->getCount(); i++)
@@ -464,7 +551,7 @@ void Fruit::update(float pDeltaTime)
             }
             else
             {
-                menu->shake(1.0, 15.0);
+                menu->shake(0.5, 5.0);
             }
 
             // Critical hit
@@ -577,12 +664,16 @@ void Fruit::setAwesomeChalenge()
     }
     else
     {
-    
+        this->mType = Options::TYPE_GARNET;
+        
+        this->setCurrentFrameIndex(this->mType);
+        
         this->mLight->create()->setCurrentFrameIndex(1);
     
         Processor::AWESOME_FRUIT = this;
     
         this->mAwesome = true;
+        this->mSpecial = false;
         
         this->mLifes = 0;
     }

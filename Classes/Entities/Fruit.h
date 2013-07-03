@@ -6,6 +6,7 @@
 #include "ImpulseEntity.h"
 #include "Part.h"
 #include "Cutter.h"
+#include "Particles.h"
 
 using namespace cocos2d;
 
@@ -23,9 +24,6 @@ class Fruit : public ImpulseEntity
 		// ===========================================================
 		// Fields
 		// ===========================================================
-    
-    	Entity* mLight;
-        Entity* mShadow;
 
     	CCParticleSystemQuad* mParticlesTypeDanger;
     	CCParticleSystemQuad* mParticlesTypePineApple;
@@ -92,11 +90,14 @@ class Fruit : public ImpulseEntity
 
         static bool SPECIAL_EXIST;
     
-        static ccColor3B const FRUITS_COLORS[Options::FRUITS_COUNT + 1];
+        static ccColor3B const FRUITS_COLORS[Options::FRUITS_COUNT + 2];
 
 		// ===========================================================
 		// Fields
         // ===========================================================
+    
+        Entity* mLight;
+        Entity* mShadow;
     
         int mType;
     

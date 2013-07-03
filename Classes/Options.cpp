@@ -29,6 +29,17 @@ int Options::CAMERA_CENTER_Y = 0;
 bool Options::MUSIC_ENABLE = true;
 bool Options::SOUND_ENABLE = true;
 
+float const Options::EFFECT_WHITE_APPEAR_TIME = 0.3;
+float const Options::EFFECT_BLACK_APPEAR_TIME = 3.0;
+float const Options::EFFECT_SLIDE_VECTOR_X = 250.0;
+float const Options::EFFECT_SLIDE_VECTOR_Y = 250.0;
+
+float const Options::AWESOME_SCALE_APPEAR = 1.7;
+float const Options::AWESOME_SCALE_APPEAR_TIME = 0.3;
+
+float const Options::AWESOME_ROTATE_APPEAR = 10.0;
+float const Options::AWESOME_ROTATE_APPEAR_TIME = 0.3;
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFROM == CC_PLATFORM_MAC)
 const char* Options::FONT = "Gang of Three";
 const char* Options::GAME_MUSIC = "nature_bgm.mp3";

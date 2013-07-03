@@ -44,8 +44,10 @@ void Cutter::onCreate()
     
     this->setScale(0.0);
     this->runAction(CCScaleTo::create(0.1, 1.0));
-}
     
+    this->mTimeElapsed = 0;
+}
+
 Cutter* Cutter::deepCopy()
 {
     return new Cutter(this->mBottomed);
