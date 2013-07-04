@@ -82,8 +82,8 @@ void Part::onCreate()
 
     this->mAwesome = false;
     
-    //this->setScale(1.3);
-    //this->runAction(CCScaleTo::create(0.3, 1));
+    this->setScale(1.0);
+    this->setRotation(0);
 }
 
 Part* Part::deepCopy()

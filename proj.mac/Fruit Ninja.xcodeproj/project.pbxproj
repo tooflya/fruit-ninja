@@ -162,6 +162,17 @@
 		78DD9EFA177FDE7500A9AFE3 /* background3.png in Resources */ = {isa = PBXBuildFile; fileRef = 78DD9EF9177FDE7500A9AFE3 /* background3.png */; };
 		78DD9F31178005B900A9AFE3 /* Heart.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 78DD9F2F178005B800A9AFE3 /* Heart.cpp */; };
 		78DD9F331780152800A9AFE3 /* nature_bgm.ogg in Resources */ = {isa = PBXBuildFile; fileRef = 78DD9F321780152800A9AFE3 /* nature_bgm.ogg */; };
+		78DEB3D71785916800A22045 /* main_menu_btn_extra.png in Resources */ = {isa = PBXBuildFile; fileRef = 78DEB3CB1785916800A22045 /* main_menu_btn_extra.png */; };
+		78DEB3DA1785916800A22045 /* main_menu_btn_more_games.png in Resources */ = {isa = PBXBuildFile; fileRef = 78DEB3CE1785916800A22045 /* main_menu_btn_more_games.png */; };
+		78DEB3DB1785916800A22045 /* main_menu_btn_newgame.png in Resources */ = {isa = PBXBuildFile; fileRef = 78DEB3CF1785916800A22045 /* main_menu_btn_newgame.png */; };
+		78DEB3DC1785916800A22045 /* main_menu_btn_sfx.png in Resources */ = {isa = PBXBuildFile; fileRef = 78DEB3D01785916800A22045 /* main_menu_btn_sfx.png */; };
+		78DEB3DD1785916800A22045 /* main_menu_btn_shop.png in Resources */ = {isa = PBXBuildFile; fileRef = 78DEB3D11785916800A22045 /* main_menu_btn_shop.png */; };
+		78DEB3DF1785916800A22045 /* main_menu_gui_black_up.png in Resources */ = {isa = PBXBuildFile; fileRef = 78DEB3D31785916800A22045 /* main_menu_gui_black_up.png */; };
+		78DEB3E01785916800A22045 /* main_menu_label_name_fruit.png in Resources */ = {isa = PBXBuildFile; fileRef = 78DEB3D41785916800A22045 /* main_menu_label_name_fruit.png */; };
+		78DEB3E11785916800A22045 /* main_menu_label_name_mania.png in Resources */ = {isa = PBXBuildFile; fileRef = 78DEB3D51785916800A22045 /* main_menu_label_name_mania.png */; };
+		78DEB3E21785916800A22045 /* main_menu_ninja.png in Resources */ = {isa = PBXBuildFile; fileRef = 78DEB3D61785916800A22045 /* main_menu_ninja.png */; };
+		78DEB3E41785A1B700A22045 /* main_menu_social.png in Resources */ = {isa = PBXBuildFile; fileRef = 78DEB3E31785A1B700A22045 /* main_menu_social.png */; };
+		78DEB3E71785A68200A22045 /* Circle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 78DEB3E51785A68200A22045 /* Circle.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -378,6 +389,18 @@
 		78DD9F2F178005B800A9AFE3 /* Heart.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Heart.cpp; sourceTree = "<group>"; };
 		78DD9F30178005B800A9AFE3 /* Heart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Heart.h; sourceTree = "<group>"; };
 		78DD9F321780152800A9AFE3 /* nature_bgm.ogg */ = {isa = PBXFileReference; lastKnownFileType = file; path = nature_bgm.ogg; sourceTree = "<group>"; };
+		78DEB3CB1785916800A22045 /* main_menu_btn_extra.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = main_menu_btn_extra.png; sourceTree = "<group>"; };
+		78DEB3CE1785916800A22045 /* main_menu_btn_more_games.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = main_menu_btn_more_games.png; sourceTree = "<group>"; };
+		78DEB3CF1785916800A22045 /* main_menu_btn_newgame.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = main_menu_btn_newgame.png; sourceTree = "<group>"; };
+		78DEB3D01785916800A22045 /* main_menu_btn_sfx.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = main_menu_btn_sfx.png; sourceTree = "<group>"; };
+		78DEB3D11785916800A22045 /* main_menu_btn_shop.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = main_menu_btn_shop.png; sourceTree = "<group>"; };
+		78DEB3D31785916800A22045 /* main_menu_gui_black_up.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = main_menu_gui_black_up.png; sourceTree = "<group>"; };
+		78DEB3D41785916800A22045 /* main_menu_label_name_fruit.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = main_menu_label_name_fruit.png; sourceTree = "<group>"; };
+		78DEB3D51785916800A22045 /* main_menu_label_name_mania.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = main_menu_label_name_mania.png; sourceTree = "<group>"; };
+		78DEB3D61785916800A22045 /* main_menu_ninja.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = main_menu_ninja.png; sourceTree = "<group>"; };
+		78DEB3E31785A1B700A22045 /* main_menu_social.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = main_menu_social.png; sourceTree = "<group>"; };
+		78DEB3E51785A68200A22045 /* Circle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Circle.cpp; sourceTree = "<group>"; };
+		78DEB3E61785A68200A22045 /* Circle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Circle.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -568,6 +591,8 @@
 		78B37C73177E4A4A00773C6A /* Entities */ = {
 			isa = PBXGroup;
 			children = (
+				78DEB3E51785A68200A22045 /* Circle.cpp */,
+				78DEB3E61785A68200A22045 /* Circle.h */,
 				784EB7D417846BBB00F99578 /* Particles.cpp */,
 				784EB7D517846BBB00F99578 /* Particles.h */,
 				78DD9F2F178005B800A9AFE3 /* Heart.cpp */,
@@ -697,6 +722,16 @@
 		78B37CA3177E4A4A00773C6A /* 1280x720 */ = {
 			isa = PBXGroup;
 			children = (
+				78DEB3E31785A1B700A22045 /* main_menu_social.png */,
+				78DEB3CB1785916800A22045 /* main_menu_btn_extra.png */,
+				78DEB3CE1785916800A22045 /* main_menu_btn_more_games.png */,
+				78DEB3CF1785916800A22045 /* main_menu_btn_newgame.png */,
+				78DEB3D01785916800A22045 /* main_menu_btn_sfx.png */,
+				78DEB3D11785916800A22045 /* main_menu_btn_shop.png */,
+				78DEB3D31785916800A22045 /* main_menu_gui_black_up.png */,
+				78DEB3D41785916800A22045 /* main_menu_label_name_fruit.png */,
+				78DEB3D51785916800A22045 /* main_menu_label_name_mania.png */,
+				78DEB3D61785916800A22045 /* main_menu_ninja.png */,
 				784EB7CE1784501000F99578 /* sm-parts.png */,
 				784EB7CF1784501000F99578 /* splash-granat.png */,
 				784EB7D01784501000F99578 /* effect.png */,
@@ -975,6 +1010,16 @@
 				784EB7D11784501000F99578 /* sm-parts.png in Resources */,
 				784EB7D21784501000F99578 /* splash-granat.png in Resources */,
 				784EB7D31784501000F99578 /* effect.png in Resources */,
+				78DEB3D71785916800A22045 /* main_menu_btn_extra.png in Resources */,
+				78DEB3DA1785916800A22045 /* main_menu_btn_more_games.png in Resources */,
+				78DEB3DB1785916800A22045 /* main_menu_btn_newgame.png in Resources */,
+				78DEB3DC1785916800A22045 /* main_menu_btn_sfx.png in Resources */,
+				78DEB3DD1785916800A22045 /* main_menu_btn_shop.png in Resources */,
+				78DEB3DF1785916800A22045 /* main_menu_gui_black_up.png in Resources */,
+				78DEB3E01785916800A22045 /* main_menu_label_name_fruit.png in Resources */,
+				78DEB3E11785916800A22045 /* main_menu_label_name_mania.png in Resources */,
+				78DEB3E21785916800A22045 /* main_menu_ninja.png in Resources */,
+				78DEB3E41785A1B700A22045 /* main_menu_social.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1021,6 +1066,7 @@
 				78DD9EF6177FD7D500A9AFE3 /* Wave.cpp in Sources */,
 				78DD9F31178005B900A9AFE3 /* Heart.cpp in Sources */,
 				784EB7D617846BBB00F99578 /* Particles.cpp in Sources */,
+				78DEB3E71785A68200A22045 /* Circle.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

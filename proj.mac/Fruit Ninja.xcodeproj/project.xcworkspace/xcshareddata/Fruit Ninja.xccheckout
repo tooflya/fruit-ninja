@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>7E944B8C-01BC-4C8D-A0F3-BD20BF49D70E</string>
+	<key>IDESourceControlProjectName</key>
+	<string>Fruit Ninja</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>556E1C17-F211-4FDB-9B5E-0A7FF68BC90C</key>
+		<string>ssh://github.com/tooflya/fruit-ninja.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>proj.mac/Fruit Ninja.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>556E1C17-F211-4FDB-9B5E-0A7FF68BC90C</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>ssh://github.com/tooflya/fruit-ninja.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>556E1C17-F211-4FDB-9B5E-0A7FF68BC90C</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>556E1C17-F211-4FDB-9B5E-0A7FF68BC90C</string>
+			<key>IDESourceControlWCCName</key>
+			<string>fruit-ninja</string>
+		</dict>
+	</array>
+</dict>
+</plist>

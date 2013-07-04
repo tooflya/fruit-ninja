@@ -229,6 +229,9 @@ void Fruit::update(float pDeltaTime)
                         SimpleAudioEngine::sharedEngine()->playEffect(Options::SQUASH);
                         break;
                     case Options::TYPE_PEAR:
+                        SimpleAudioEngine::sharedEngine()->playEffect(Options::SQUASH);
+                        break;
+                    case Options::TYPE_ORANGE:
                         SimpleAudioEngine::sharedEngine()->playEffect(Options::IMPACT_ORANGE);
                         break;
                     case Options::TYPE_PINEAPPLE:

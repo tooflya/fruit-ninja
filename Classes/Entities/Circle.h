@@ -1,29 +1,19 @@
-#ifndef CONST_PARTICLES_H
-#define CONST_PARTICLES_H
+#ifndef CONST_CIRCLE_H
+#define CONST_CIRCLE_H
 
 #include "cocos2d.h"
 
 #include "Entity.h"
 #include "Processor.h"
 
-#include "Menu.h"
-
 using namespace cocos2d;
 
-class Particles : public Entity
+class Circle : public Entity
 {
 	protected:
 		// ===========================================================
 		// Inner Classes
 		// ===========================================================
-    
-        int mType;
-    
-        float mAwesomeVectorX;
-        float mAwesomeVectorY;
-    
-        float mGarnetDropsTime;
-        float mGarnetDropsTimeElapsed;
 
 		// ===========================================================
 		// Constants
@@ -32,6 +22,8 @@ class Particles : public Entity
 		// ===========================================================
 		// Fields
         // ===========================================================
+    
+        float mRotationSpeed;
 
 		// ===========================================================
 		// Constructors
@@ -78,9 +70,6 @@ class Particles : public Entity
 		// ===========================================================
 		// Constants
 		// ===========================================================
-    
-        static const int TYPE_GARNET_CORE_BIG = 0;
-        static const int TYPE_GARNET_CORE_SMALL = 1;
 
 		// ===========================================================
 		// Fields
@@ -90,24 +79,17 @@ class Particles : public Entity
 		// Constructors
 		// ===========================================================
     
-        Particles();
+        Circle(const char* pTextureFileName, CCNode* pParent);
 
 		// ===========================================================
 		// Methods
 		// ===========================================================
-    
-        Particles* setType(int pType);
-        void setAwesome(int pCounter, int pCapacity);
 		
 		// ===========================================================
 		// Virtual Methods
 		// ===========================================================
     
         void update(float pDeltaTime);
-    
-        void onCreate();
-    
-        Particles* deepCopy();
 };
 
 #endif

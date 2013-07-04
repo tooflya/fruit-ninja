@@ -9,6 +9,122 @@
 // Inner Classes
 // ===========================================================
 
+class SoundButton : public Entity
+{
+    public:
+    SoundButton(CCNode* pParent) :
+        Entity("main_menu_btn_sfx.png", 2, 2, pParent)
+        {
+            this->create()->setCurrentFrameIndex(0);
+            this->setCenterPosition(Options::CAMERA_WIDTH - Utils::coord(200), Options::CAMERA_HEIGHT - Utils::coord(64));
+            this->setRegisterAsTouchable(true);
+        }
+    
+        void onTouch(CCTouch* touch, CCEvent* event)
+        {
+            if(Options::SOUND_ENABLE)
+            {
+                this->setCurrentFrameIndex(2);
+            }
+            else
+            {
+                this->setCurrentFrameIndex(0);
+            }
+            
+            Options::SOUND_ENABLE = !Options::SOUND_ENABLE;
+        }
+    
+        void onEnter()
+        {
+            CCDirector* pDirector = CCDirector::sharedDirector();
+            pDirector->getTouchDispatcher()->addTargetedDelegate(this, 0, true);
+        
+            Entity::onEnter();
+        }
+};
+
+class MusicButton : public Entity
+{
+    public:
+    MusicButton(CCNode* pParent) :
+        Entity("main_menu_btn_sfx.png", 2, 2, pParent)
+        {
+            this->create()->setCurrentFrameIndex(1);
+            this->setCenterPosition(Options::CAMERA_WIDTH - Utils::coord(100), Options::CAMERA_HEIGHT -  Utils::coord(64));
+            this->setRegisterAsTouchable(true);
+        }
+    
+        void onTouch(CCTouch* touch, CCEvent* event)
+        {
+            if(Options::MUSIC_ENABLE)
+            {
+                this->setCurrentFrameIndex(3);
+            }
+            else
+            {
+                this->setCurrentFrameIndex(1);
+            }
+        
+            Options::MUSIC_ENABLE = !Options::MUSIC_ENABLE;
+        }
+    
+        void onEnter()
+        {
+            CCDirector* pDirector = CCDirector::sharedDirector();
+            pDirector->getTouchDispatcher()->addTargetedDelegate(this, 0, true);
+        
+            Entity::onEnter();
+        }
+};
+
+class TwitterButton : public Entity
+{
+    public:
+    TwitterButton(CCNode* pParent) :
+    Entity("main_menu_social.png", 2, 1, pParent)
+    {
+        this->create()->setCurrentFrameIndex(0);
+        this->setCenterPosition(Options::CAMERA_WIDTH - Utils::coord(260), Utils::coord(64));
+        this->setRegisterAsTouchable(true);
+    }
+    
+    void onTouch(CCTouch* touch, CCEvent* event)
+    {
+    }
+    
+    void onEnter()
+    {
+        CCDirector* pDirector = CCDirector::sharedDirector();
+        pDirector->getTouchDispatcher()->addTargetedDelegate(this, 0, true);
+        
+        Entity::onEnter();
+    }
+};
+
+class FacebookButton : public Entity
+{
+    public:
+    FacebookButton(CCNode* pParent) :
+    Entity("main_menu_social.png", 2, 1, pParent)
+    {
+        this->create()->setCurrentFrameIndex(1);
+        this->setCenterPosition(Options::CAMERA_WIDTH - Utils::coord(100), Utils::coord(64));
+        this->setRegisterAsTouchable(true);
+    }
+    
+    void onTouch(CCTouch* touch, CCEvent* event)
+    {
+    }
+    
+    void onEnter()
+    {
+        CCDirector* pDirector = CCDirector::sharedDirector();
+        pDirector->getTouchDispatcher()->addTargetedDelegate(this, 0, true);
+        
+        Entity::onEnter();
+    }
+};
+
 // ===========================================================
 // Constants
 // ===========================================================
@@ -29,9 +145,34 @@ Menu::Menu()
 {
     this->mParticlesTypeDanger = CCParticleSystemQuad::create("explosion.plist");
     this->mParticlesTypeDanger->stopSystem();
+    
+	TouchTrailLayer* p = TouchTrailLayer::create();
+    
+	this->addChild(p, 100);
 
 	/** Main menu layer **/
 	this->mMainMenuLayer = CCLayer::create();
+    
+    (new Entity("main_menu_gui_black_up.png", this->mMainMenuLayer))->create()->setCenterPosition(Options::CAMERA_CENTER_X, Options::CAMERA_CENTER_Y);
+    (new Entity("main_menu_label_name_fruit.png", this->mMainMenuLayer))->create()->setCenterPosition(Utils::coord(300), Options::CAMERA_HEIGHT - Utils::coord(128));
+    (new Entity("main_menu_label_name_mania.png", this->mMainMenuLayer))->create()->setCenterPosition(Utils::coord(800), Options::CAMERA_HEIGHT - Utils::coord(64));
+    (new Entity("main_menu_ninja.png", this->mMainMenuLayer))->create()->setCenterPosition(Utils::coord(200), Utils::coord(220));
+    
+    (new Circle("main_menu_btn_newgame.png", this->mMainMenuLayer))->create()->setCenterPosition(Options::CAMERA_CENTER_X, Options::CAMERA_CENTER_Y);
+    (new Circle("main_menu_btn_shop.png", this->mMainMenuLayer))->create()->setCenterPosition(Options::CAMERA_CENTER_X - Utils::coord(250), Options::CAMERA_CENTER_Y - Utils::coord(100));
+    (new Circle("main_menu_btn_extra.png", this->mMainMenuLayer))->create()->setCenterPosition(Options::CAMERA_CENTER_X + Utils::coord(250), Options::CAMERA_CENTER_Y + Utils::coord(100));
+    (new Circle("main_menu_btn_more_games.png", this->mMainMenuLayer))->create()->setCenterPosition(Options::CAMERA_CENTER_X + Utils::coord(250), Options::CAMERA_CENTER_Y - Utils::coord(100));
+    
+    
+    this->mSoundButton = new SoundButton(this->mMainMenuLayer);
+    this->mMusicButton = new MusicButton(this->mMainMenuLayer);
+    this->mTwitterButton = new TwitterButton(this->mMainMenuLayer);
+    this->mFacebookButton = new FacebookButton(this->mMainMenuLayer);
+    
+    
+    
+    
+    
 
 	/** Top layer **/
 	this->mTopLayer = CCLayer::create();
@@ -44,12 +185,8 @@ Menu::Menu()
     /** Fruits Layer */
     this->mFruitsLayer = CCLayer::create();
     
-	TouchTrailLayer* p = TouchTrailLayer::create();
-    
-	this->mFruitsLayer->addChild(p, 100);
-    
     /** */
-	this->mBackground = new Entity("background2.png", this->mFruitsLayer);
+	this->mBackground = new Entity("background3.png", this->mFruitsLayer);
     
 	this->mBackground->create()->setCenterPosition(Options::CAMERA_CENTER_X, Options::CAMERA_CENTER_Y);
     
@@ -128,13 +265,6 @@ Menu::Menu()
 	SimpleAudioEngine::sharedEngine()->playBackgroundMusic(Options::GAME_MUSIC, true);
 
 	this->mIsGameRunning = false;
-
-	//
-
-	test = new Entity("test.png", this);
-	//test->create()->setCenterPosition(Options::CAMERA_CENTER_X, Options::CAMERA_CENTER_Y);
-
-	//
 
 	this->mSpecialLabel = CCLabelTTF::create("Fruit Combo", Options::FONT, Utils::coord(64));
 	this->mSpecialLabelScore = CCLabelTTF::create("100 points", Options::FONT, Utils::coord(48));
@@ -249,7 +379,7 @@ void Menu::startGame()
 	this->mSpecialChalengeTime = 60.0;
 	this->mSpecialChalengeTimeElapsed = 0;
     
-	this->mAwesomeFruitTime = Utils::randomf(15.0f, 150.0f);
+	this->mAwesomeFruitTime = 0;//Utils::randomf(15.0f, 150.0f);
 	this->mAwesomeFruitTimeElapsed = 0;
 
 	this->mIsSpecialChalengeRunning = false;
@@ -523,7 +653,7 @@ void Menu::update(float pDeltaTime)
 	{
 		this->mTimeBeforeRestartElapsed += pDeltaTime;
 
-		if(this->mTimeBeforeRestartElapsed >= 7.0)
+		if(this->mTimeBeforeRestartElapsed >= 70000.0)
 		{
             this->mTimeBeforeRestartElapsed = 0;
             
@@ -604,7 +734,10 @@ void Menu::update(float pDeltaTime)
     
     if(this->mIsAwesomeChalengeRunning)
     {
-        this->mAwesomeLights->setCenterPosition(Processor::AWESOME_FRUIT->getCenterX(), Processor::AWESOME_FRUIT->getCenterY());
+        if(Processor::AWESOME_FRUIT != NULL)
+        {
+            this->mAwesomeLights->setCenterPosition(Processor::AWESOME_FRUIT->getCenterX(), Processor::AWESOME_FRUIT->getCenterY());
+        }
         
         if(this->mAwesomeFruitTimeElapsed >= this->mAwesomeFruitTime)
         {
@@ -633,7 +766,7 @@ void Menu::update(float pDeltaTime)
             {
                 case Processor::FREEZY_STATUS_NONE:
                     this->mAwesomeFruitTimeElapsed = 0;
-                    this->mAwesomeFruitTime = 3.0;
+                    this->mAwesomeFruitTime = INT_MAX;
                     
                     this->runAwesomeChalenge();
                 break;

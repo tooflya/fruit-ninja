@@ -40,7 +40,7 @@ float const Options::AWESOME_SCALE_APPEAR_TIME = 0.3;
 float const Options::AWESOME_ROTATE_APPEAR = 10.0;
 float const Options::AWESOME_ROTATE_APPEAR_TIME = 0.3;
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFROM == CC_PLATFORM_MAC) && false
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFROM == CC_PLATFORM_MAC)
 
 const char* Options::FONT = "Gang of Three";
 const char* Options::GAME_MUSIC = "nature_bgm.mp3";

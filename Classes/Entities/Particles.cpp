@@ -40,6 +40,9 @@ Particles* Particles::setType(int pType)
         break;
         case TYPE_GARNET_CORE_SMALL:
             this->setCurrentFrameIndex(1);
+            
+            this->mGarnetDropsTime = 0.3;
+            this->mGarnetDropsTimeElapsed = this->mGarnetDropsTime;
         break;
     }
     
@@ -80,6 +83,17 @@ void Particles::update(float pDeltaTime)
         case TYPE_GARNET_CORE_SMALL:
             
             this->setCenterPosition(this->getCenterX() + this->mAwesomeVectorX * Processor::FREEZY_TIME, this->getCenterY() + this->mAwesomeVectorY * Processor::FREEZY_TIME);
+            
+            this->mGarnetDropsTimeElapsed += pDeltaTime * Processor::FREEZY_TIME;
+            
+            if(this->mGarnetDropsTimeElapsed >= this->mGarnetDropsTime)
+            {
+                this->mGarnetDropsTimeElapsed = 0;
+                
+                
+                Menu* menu = (Menu*) this->getParent()->getParent()->getParent();
+                menu->mDropsManager->init(this->getCenterX(), this->getCenterY(), Options::TYPE_GARNET);
+            }
             
             if(this->getCenterX() < 0 || this->getCenterX() > Options::CAMERA_WIDTH || this->getCenterY() < 0 || this->getCenterY() > Options::CAMERA_HEIGHT)
             {

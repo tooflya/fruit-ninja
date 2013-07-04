@@ -31,6 +31,9 @@ class BatchEntityManager : public CCSpriteBatchNode
 		void resumeSchedulerAndActions();
     
         int getInitCapacity();
+    
+        void update(float pDeltaTime);
+        void draw();
 };
 
 #endif

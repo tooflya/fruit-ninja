@@ -18,6 +18,12 @@
 #include "Wave.h"
 #include "Heart.h"
 #include "Particles.h"
+#include "Circle.h"
+
+class SoundButton;
+class MusicButton;
+class TwitterButton;
+class FacebookButton;
 
 using namespace cocos2d;
 
@@ -74,6 +80,11 @@ class Menu : public Screen
     
         float mSlideVectorX;
         float mSlideVectorY;
+    
+        SoundButton* mSoundButton;
+        MusicButton* mMusicButton;
+        TwitterButton* mTwitterButton;
+        FacebookButton* mFacebookButton;
 
 		// ===========================================================
 		// Constructors
