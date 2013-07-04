@@ -74,7 +74,7 @@ void TouchTrailLayer::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
             
         }
         
-        if(abs(ccpDistance(point, Processor::TOUCH_INFORMATION[touch->getID()].last_slice_position)) > Options::CAMERA_WIDTH / 30.0)
+        if(abs(ccpDistance(point, Processor::TOUCH_INFORMATION[touch->getID()].last_slice_position)) > Options::CAMERA_WIDTH / 10.0)
          {
              float dtime = 50.0;
              

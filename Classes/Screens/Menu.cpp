@@ -148,7 +148,7 @@ Menu::Menu()
 	this->mIsSpecialChalengeRunning = false;
     this->mIsAwesomeChalengeRunning = false;
 
-	this->mDebugInformationNeed = true;
+	this->mDebugInformationNeed = false;
 
 	if(this->mDebugInformationNeed)
 	{
