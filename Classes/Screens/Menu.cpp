@@ -96,6 +96,9 @@ Menu::Menu()
 	this->mAwesomeFruitTimeElapsed = 0;
 
 	this->mFruitRemaning = 0;
+    
+    this->mShaking = false;
+    this->mSlide = false;
 
 	this->mFruitsSlashed = CCLabelTTF::create("0", Options::FONT, Utils::coord(64));
 	this->mFruitsSlashed->setPosition(ccp(Utils::coord(90) + mFruitsSlashed->getContentSize().width / 2, Options::CAMERA_HEIGHT - Utils::coord(48)));
@@ -111,7 +114,7 @@ Menu::Menu()
 	this->mBottomLayer->addChild(this->mScore, 101);
 
 	this->mCounter = new Entity("counter.png", this->mTopLayer);
-	this->mCounter->create()->setCenterPosition(Utils::coord(48), Options::CAMERA_HEIGHT - Utils::coord(45));
+	this->mCounter->create()->setCenterPosition(Utils::coord(48), Options::CAMERA_HEIGHT - Utils::coord(48));
 
 	this->mLifes = new BatchEntityManager(3, new Heart(), this->mTopLayer);
 
@@ -180,49 +183,53 @@ Menu::Menu()
 		this->mDebugInformation[22] = CCLabelTTF::create("0.0000", Options::FONT, Utils::coord(16));
 		this->mDebugInformation[23] = CCLabelTTF::create("Average fps: ", Options::FONT, Utils::coord(16));
 		this->mDebugInformation[24] = CCLabelTTF::create("0.0000", Options::FONT, Utils::coord(16));
-		this->mDebugInformation[25] = CCLabelTTF::create("Touch time: ", Options::FONT, Utils::coord(16));
-		this->mDebugInformation[26] = CCLabelTTF::create("0.0 / 0.0", Options::FONT, Utils::coord(16));
+		this->mDebugInformation[25] = CCLabelTTF::create("Unix time: ", Options::FONT, Utils::coord(16));
+		this->mDebugInformation[26] = CCLabelTTF::create("0.00000", Options::FONT, Utils::coord(16));
 		this->mDebugInformation[27] = CCLabelTTF::create("Drops: ", Options::FONT, Utils::coord(16));
 		this->mDebugInformation[28] = CCLabelTTF::create("0 / 0 / 0", Options::FONT, Utils::coord(16));
 		this->mDebugInformation[29] = CCLabelTTF::create("Particles: ", Options::FONT, Utils::coord(16));
 		this->mDebugInformation[30] = CCLabelTTF::create("0 / 0 / 0", Options::FONT, Utils::coord(16));
+		this->mDebugInformation[31] = CCLabelTTF::create("Resolution: ", Options::FONT, Utils::coord(16));
+		this->mDebugInformation[32] = CCLabelTTF::create("0 / 0 / 0", Options::FONT, Utils::coord(16));
 
-		for(int i = 0; i < 31; i++)
+		for(int i = 0; i < 33; i++)
 		{
 			this->addChild(this->mDebugInformation[i], 555);
 		}
 
-		this->mDebugInformation[0]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(203), Utils::coord(500)));
-		this->mDebugInformation[1]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(262), Utils::coord(360)));
-		this->mDebugInformation[2]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[2]->getContentSize().width / 2, Utils::coord(360)));
-		this->mDebugInformation[3]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(277), Utils::coord(330)));
-		this->mDebugInformation[4]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[4]->getContentSize().width / 2, Utils::coord(330)));
-		this->mDebugInformation[5]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(279), Utils::coord(300)));
-		this->mDebugInformation[6]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[6]->getContentSize().width / 2, Utils::coord(300)));
-		this->mDebugInformation[7]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(273), Utils::coord(270)));
-		this->mDebugInformation[8]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[8]->getContentSize().width / 2, Utils::coord(270)));
-		this->mDebugInformation[9]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(264), Utils::coord(240)));
-		this->mDebugInformation[10]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[10]->getContentSize().width / 2, Utils::coord(240)));
-		this->mDebugInformation[11]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(274), Utils::coord(210)));
-		this->mDebugInformation[12]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[12]->getContentSize().width / 2, Utils::coord(210)));
-		this->mDebugInformation[13]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(263), Utils::coord(180)));
-		this->mDebugInformation[14]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[14]->getContentSize().width / 2, Utils::coord(180)));
-		this->mDebugInformation[15]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(271), Utils::coord(150)));
-		this->mDebugInformation[16]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[16]->getContentSize().width / 2, Utils::coord(150)));
-		this->mDebugInformation[17]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(269), Utils::coord(120)));
-		this->mDebugInformation[18]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[18]->getContentSize().width / 2, Utils::coord(120)));
-		this->mDebugInformation[19]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(257), Utils::coord(90)));
-		this->mDebugInformation[20]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[20]->getContentSize().width / 2, Utils::coord(90)));
-		this->mDebugInformation[21]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(258), Utils::coord(390)));
-		this->mDebugInformation[22]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[22]->getContentSize().width / 2, Utils::coord(390)));
-		this->mDebugInformation[23]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(256), Utils::coord(420)));
-		this->mDebugInformation[24]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[24]->getContentSize().width / 2, Utils::coord(420)));
-		this->mDebugInformation[25]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(261), Utils::coord(450)));
-		this->mDebugInformation[26]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[26]->getContentSize().width / 2, Utils::coord(450)));
-		this->mDebugInformation[27]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(273), Utils::coord(60)));
-		this->mDebugInformation[28]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[28]->getContentSize().width / 2, Utils::coord(60)));
-		this->mDebugInformation[29]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(263), Utils::coord(30)));
-		this->mDebugInformation[30]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[28]->getContentSize().width / 2, Utils::coord(30)));
+		this->mDebugInformation[0]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(320) + this->mDebugInformation[0]->getContentSize().width / 2, Utils::coord(630)));
+		this->mDebugInformation[1]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(320) + this->mDebugInformation[1]->getContentSize().width / 2, Utils::coord(460)));
+		this->mDebugInformation[2]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[2]->getContentSize().width / 2, Utils::coord(460)));
+		this->mDebugInformation[3]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(320) + this->mDebugInformation[3]->getContentSize().width / 2, Utils::coord(430)));
+		this->mDebugInformation[4]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[4]->getContentSize().width / 2, Utils::coord(430)));
+		this->mDebugInformation[5]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(320) + this->mDebugInformation[5]->getContentSize().width / 2, Utils::coord(400)));
+		this->mDebugInformation[6]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[6]->getContentSize().width / 2, Utils::coord(400)));
+		this->mDebugInformation[7]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(320) + this->mDebugInformation[7]->getContentSize().width / 2, Utils::coord(370)));
+		this->mDebugInformation[8]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[8]->getContentSize().width / 2, Utils::coord(370)));
+		this->mDebugInformation[9]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(320) + this->mDebugInformation[9]->getContentSize().width / 2, Utils::coord(340)));
+		this->mDebugInformation[10]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[10]->getContentSize().width / 2, Utils::coord(340)));
+		this->mDebugInformation[11]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(320) + this->mDebugInformation[11]->getContentSize().width / 2, Utils::coord(310)));
+		this->mDebugInformation[12]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[12]->getContentSize().width / 2, Utils::coord(310)));
+		this->mDebugInformation[13]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(320) + this->mDebugInformation[13]->getContentSize().width / 2, Utils::coord(280)));
+		this->mDebugInformation[14]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[14]->getContentSize().width / 2, Utils::coord(280)));
+		this->mDebugInformation[15]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(320) + this->mDebugInformation[15]->getContentSize().width / 2, Utils::coord(250)));
+		this->mDebugInformation[16]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[16]->getContentSize().width / 2, Utils::coord(250)));
+		this->mDebugInformation[17]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(320) + this->mDebugInformation[17]->getContentSize().width / 2, Utils::coord(220)));
+		this->mDebugInformation[18]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[18]->getContentSize().width / 2, Utils::coord(220)));
+		this->mDebugInformation[19]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(320) + this->mDebugInformation[19]->getContentSize().width / 2, Utils::coord(190)));
+		this->mDebugInformation[20]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[20]->getContentSize().width / 2, Utils::coord(190)));
+		this->mDebugInformation[21]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(320) + this->mDebugInformation[21]->getContentSize().width / 2, Utils::coord(490)));
+		this->mDebugInformation[22]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[22]->getContentSize().width / 2, Utils::coord(490)));
+		this->mDebugInformation[23]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(320) + this->mDebugInformation[23]->getContentSize().width / 2, Utils::coord(520)));
+		this->mDebugInformation[24]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[24]->getContentSize().width / 2, Utils::coord(520)));
+		this->mDebugInformation[25]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(320) + this->mDebugInformation[25]->getContentSize().width / 2, Utils::coord(550)));
+		this->mDebugInformation[26]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[26]->getContentSize().width / 2, Utils::coord(550)));
+		this->mDebugInformation[27]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(320) + this->mDebugInformation[27]->getContentSize().width / 2, Utils::coord(160)));
+		this->mDebugInformation[28]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[28]->getContentSize().width / 2, Utils::coord(160)));
+		this->mDebugInformation[29]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(320) + this->mDebugInformation[29]->getContentSize().width / 2, Utils::coord(130)));
+		this->mDebugInformation[30]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[30]->getContentSize().width / 2, Utils::coord(130)));
+		this->mDebugInformation[31]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(320) + this->mDebugInformation[31]->getContentSize().width / 2, Utils::coord(580)));
+		this->mDebugInformation[32]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[32]->getContentSize().width / 2, Utils::coord(580)));
         
         this->mFpsCount = 0;
         this->mFpsSum = 0;
@@ -242,13 +249,14 @@ void Menu::startGame()
 	this->mSpecialChalengeTime = 60.0;
 	this->mSpecialChalengeTimeElapsed = 0;
     
-	this->mAwesomeFruitTime = 0;//Utils::randomf(15.0f, 150.0f);
+	this->mAwesomeFruitTime = Utils::randomf(15.0f, 150.0f);
 	this->mAwesomeFruitTimeElapsed = 0;
 
 	this->mIsSpecialChalengeRunning = false;
     this->mIsAwesomeChalengeRunning = false;
     
     this->mShaking = false;
+    this->mSlide = false;
     
     Processor::SPECIAL_FRUIT = NULL;
     Processor::AWESOME_FRUIT = NULL;
@@ -311,7 +319,7 @@ void Menu::removeLife()
 {
 	((Heart*) this->mLifes->objectAtIndex(LIFES))->disable();
 
-    //LIFES++;
+    LIFES++;
     
 	if(LIFES == 3)
 	{
@@ -469,8 +477,10 @@ void Menu::update(float pDeltaTime)
 			this->mDebugInformation[22]->setString(text);
 			sprintf(text, "%f", this->mFpsSum / this->mFpsCount);
 			this->mDebugInformation[24]->setString(text);
-			sprintf(text, "%lu / %lu", Utils::millisecondNow(), Processor::TOUCH_INFORMATION[0].last_sound_time);
+			sprintf(text, "%lu", Utils::millisecondNow());
 			this->mDebugInformation[26]->setString(text);
+			sprintf(text, "%d / %d / %d / %.02f''", Options::CAMERA_WIDTH, Options::CAMERA_HEIGHT, CCDevice::getDPI(), (sqrt(Options::CAMERA_WIDTH * Options::CAMERA_WIDTH + Options::CAMERA_HEIGHT * Options::CAMERA_HEIGHT) / CCDevice::getDPI()));
+			this->mDebugInformation[32]->setString(text);
             
             if(this->mFpsSum / this->mFpsCount < 55.0)
             {
@@ -490,21 +500,22 @@ void Menu::update(float pDeltaTime)
                 this->mDebugInformation[22]->setColor(ccc3(255.0, 255.0, 255.0));
             }
             
-			this->mDebugInformation[2]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[2]->getContentSize().width / 2, Utils::coord(360)));
-			this->mDebugInformation[4]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[4]->getContentSize().width / 2, Utils::coord(330)));
-			this->mDebugInformation[6]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[6]->getContentSize().width / 2, Utils::coord(300)));
-			this->mDebugInformation[8]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[8]->getContentSize().width / 2, Utils::coord(270)));
-			this->mDebugInformation[10]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[10]->getContentSize().width / 2, Utils::coord(240)));
-			this->mDebugInformation[12]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[12]->getContentSize().width / 2, Utils::coord(210)));
-			this->mDebugInformation[14]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[14]->getContentSize().width / 2, Utils::coord(180)));
-			this->mDebugInformation[16]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[16]->getContentSize().width / 2, Utils::coord(150)));
-			this->mDebugInformation[18]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[18]->getContentSize().width / 2, Utils::coord(120)));
-			this->mDebugInformation[20]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[20]->getContentSize().width / 2, Utils::coord(90)));
-			this->mDebugInformation[22]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[22]->getContentSize().width / 2, Utils::coord(390)));
-			this->mDebugInformation[24]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[24]->getContentSize().width / 2, Utils::coord(420)));
-			this->mDebugInformation[26]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[26]->getContentSize().width / 2, Utils::coord(450)));
-			this->mDebugInformation[28]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[28]->getContentSize().width / 2, Utils::coord(60)));
-			this->mDebugInformation[30]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[30]->getContentSize().width / 2, Utils::coord(30)));
+			this->mDebugInformation[2]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[2]->getContentSize().width / 2, Utils::coord(460)));
+			this->mDebugInformation[4]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[4]->getContentSize().width / 2, Utils::coord(430)));
+			this->mDebugInformation[6]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[6]->getContentSize().width / 2, Utils::coord(400)));
+			this->mDebugInformation[8]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[8]->getContentSize().width / 2, Utils::coord(370)));
+			this->mDebugInformation[10]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[10]->getContentSize().width / 2, Utils::coord(340)));
+			this->mDebugInformation[12]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[12]->getContentSize().width / 2, Utils::coord(310)));
+			this->mDebugInformation[14]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[14]->getContentSize().width / 2, Utils::coord(280)));
+			this->mDebugInformation[16]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[16]->getContentSize().width / 2, Utils::coord(250)));
+			this->mDebugInformation[18]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[18]->getContentSize().width / 2, Utils::coord(220)));
+			this->mDebugInformation[20]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[20]->getContentSize().width / 2, Utils::coord(190)));
+			this->mDebugInformation[22]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[22]->getContentSize().width / 2, Utils::coord(490)));
+			this->mDebugInformation[24]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[24]->getContentSize().width / 2, Utils::coord(520)));
+			this->mDebugInformation[26]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[26]->getContentSize().width / 2, Utils::coord(550)));
+			this->mDebugInformation[28]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[28]->getContentSize().width / 2, Utils::coord(160)));
+			this->mDebugInformation[30]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[30]->getContentSize().width / 2, Utils::coord(130)));
+			this->mDebugInformation[32]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[32]->getContentSize().width / 2, Utils::coord(580)));
 		}
 	}
     

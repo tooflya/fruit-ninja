@@ -104,6 +104,8 @@ class Utils
 		static bool probably(int pProbably);
     
         static long millisecondNow();
+
+        static float round(float x);
 		
 		// ===========================================================
 		// Virtual Methods

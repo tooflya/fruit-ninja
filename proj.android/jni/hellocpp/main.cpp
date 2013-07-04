@@ -24,6 +24,7 @@
 #include "Cutter.cpp"
 #include "Heart.cpp"
 #include "Wave.cpp"
+#include "Particles.cpp"
 #include "platform/android/jni/JniHelper.h"
 #include <jni.h>
 #include <android/log.h>

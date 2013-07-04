@@ -175,7 +175,7 @@ void Fruit::update(float pDeltaTime)
         
         if(this->mLifes >= 0)
         {
-            if(true)
+            if(this->getScaleX() == 1.0)
             {
                 this->mLifes++;
 
@@ -194,8 +194,8 @@ void Fruit::update(float pDeltaTime)
                 
                 menu->addScore(100 * this->mLifes);
 
-                //this->setScale(1.3);
-                //this->runAction(CCScaleTo::create(0.2, 1));
+                this->setScale(1.3);
+                this->runAction(CCScaleTo::create(0.15, 1));
 
                 SimpleAudioEngine::sharedEngine()->playEffect(Options::COMBO[this->mLifes]);
 

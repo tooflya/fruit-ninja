@@ -26,6 +26,7 @@ INCLUDES =  -I../ \
 SOURCES = ./main.cpp \
 			../Classes/Options.cpp \
 			../Classes/AppDelegate.cpp \
+			../Classes/Processor.cpp \
 			../Classes/Utils/Utils.cpp \
 			../Classes/Utils/Touchable.cpp \
 			../Classes/Entities/Entity.cpp \
@@ -34,11 +35,19 @@ SOURCES = ./main.cpp \
 			../Classes/Entities/Part.cpp \
 			../Classes/Entities/Label.cpp \
 			../Classes/Entities/Splash.cpp \
+			../Classes/Entities/Particles.cpp \
+			../Classes/Entities/Drop.cpp \
+			../Classes/Entities/Cutter.cpp \
+			../Classes/Entities/Heart.cpp \
+			../Classes/Entities/Spark.cpp \
+			../Classes/Entities/Wave.cpp \
+			../Classes/Entities/Mark.cpp \
 			../Classes/Managers/EntityManager.cpp \
 			../Classes/Managers/BatchEntityManager.cpp \
 			../Classes/Screens/Screen.cpp \
 			../Classes/Screens/Menu.cpp \
 			../Classes/Managers/ScreenManager.cpp \
+			../Classes/Managers/DropsManager.cpp \
 			../Classes/Graphics/Texture.cpp \
 			../Classes/TEST/TouchTrailLayer.cpp \
 			../Classes/TEST/CCBlade.cpp \
