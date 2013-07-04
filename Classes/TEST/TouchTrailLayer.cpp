@@ -6,7 +6,7 @@
 #include "CCBlade.h"
 #include "Menu.h"
 
-#define kFileStreak "streak1-hd.png"
+#define kFileStreak "streak0-hd.png"
 
 TouchTrailLayer::TouchTrailLayer()
 {

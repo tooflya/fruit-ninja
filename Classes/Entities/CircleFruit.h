@@ -1,16 +1,14 @@
-#ifndef CONST_CIRCLE_H
-#define CONST_CIRCLE_H
+#ifndef CONST_CIRCLEFRUIT_H
+#define CONST_CIRCLEFRUIT_H
 
 #include "cocos2d.h"
 
-#include "Entity.h"
-#include "CircleFruit.h"
+#include "ImpulseEntity.h"
 #include "Processor.h"
-#include "BatchEntityManager.h"
 
 using namespace cocos2d;
 
-class Circle : public Entity
+class CircleFruit : public ImpulseEntity
 {
 	protected:
 		// ===========================================================
@@ -26,8 +24,6 @@ class Circle : public Entity
         // ===========================================================
     
         float mRotationSpeed;
-    
-        BatchEntityManager* mFruitsManager;
 
 		// ===========================================================
 		// Constructors
@@ -83,11 +79,13 @@ class Circle : public Entity
 		// Constructors
 		// ===========================================================
     
-        Circle(BatchEntityManager* pFruitsManager);
+        CircleFruit();
 
 		// ===========================================================
 		// Methods
 		// ===========================================================
+    
+        void setRotationSpeed(float pRotationSpeed);
     
         void free();
 		
@@ -97,10 +95,9 @@ class Circle : public Entity
     
         void update(float pDeltaTime);
     
-        Circle* deepCopy();
-    
         void onCreate();
-        void setCurrentFrameIndex(int pIndex);
+    
+        CircleFruit* deepCopy();
 };
 
 #endif

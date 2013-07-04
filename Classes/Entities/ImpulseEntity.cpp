@@ -71,6 +71,7 @@ void ImpulseEntity::update(float pDelta)
 bool ImpulseEntity::isCollideWithPoint(float pX, float pY)
 {
     if(pX < 0 || pY < 0) return false;
+    if(!this->isVisible()) return false;
     
     float x = pX - this->getCenterX();
     float y = pY - this->getCenterY();

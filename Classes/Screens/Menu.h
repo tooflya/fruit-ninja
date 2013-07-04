@@ -19,6 +19,7 @@
 #include "Heart.h"
 #include "Particles.h"
 #include "Circle.h"
+#include "CircleFruit.h"
 
 class SoundButton;
 class MusicButton;
@@ -148,6 +149,11 @@ class Menu : public Screen
 		// Constants
 		// ===========================================================
     
+        static int APPEND_STATUS;
+    
+        static const int APPEND_STATUS_MAIN_MENU = 1;
+        static const int APPEND_STATUS_MODE = 2;
+    
 		static int FRUITS;
 		static int SCORE;
 		static int LIFES;
@@ -155,7 +161,11 @@ class Menu : public Screen
 		// ===========================================================
 		// Fields
 		// ===========================================================
-
+    
+        BatchEntityManager* mCirclesManager;
+        BatchEntityManager* mCirclesFruits;
+        BatchEntityManager* mCirclesParts;
+    
 		BatchEntityManager* mFruits;
 		BatchEntityManager* mParts;
 		BatchEntityManager* mSplashes;

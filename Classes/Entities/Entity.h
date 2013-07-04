@@ -187,7 +187,7 @@ class Entity : public CCSprite, public Touchable
     
 		void setEntityManagerId(int pId);
 
-		void setCurrentFrameIndex(int pIndex);
+		virtual void setCurrentFrameIndex(int pIndex);
 
 		void previousFrameIndex();
 		void nextFrameIndex();
