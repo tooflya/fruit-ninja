@@ -98,7 +98,7 @@ void Fruit::update(float pDeltaTime)
         {
             collides = true;
             
-            Processor::TOUCH_INFORMATION[i].slice = false;
+            //Processor::TOUCH_INFORMATION[i].slice = false;
             
             if(this->mAwesome)
             {
@@ -191,8 +191,6 @@ void Fruit::update(float pDeltaTime)
                     sprintf(text, "%d points", 100 * this->mLifes);
                     menu->mSpecialLabelScore->setString(text);
                 }
-                
-                menu->addScore(100 * this->mLifes);
 
                 this->setScale(1.3);
                 this->runAction(CCScaleTo::create(0.15, 1));
@@ -276,7 +274,6 @@ void Fruit::update(float pDeltaTime)
             if(this->mType != Options::TYPE_DANGER)
             {
                 menu->updateCounter();
-                menu->addScore(10);
             }
             else
             {
@@ -573,8 +570,6 @@ void Fruit::update(float pDeltaTime)
                     spark->setCurrentFrameIndex(frame);
                     spark->setCenterPosition(this->getCenterX(), this->getCenterY());
                 }
-
-                menu->addScore(1000);
             }
         }
     }

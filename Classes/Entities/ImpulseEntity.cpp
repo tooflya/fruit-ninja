@@ -43,8 +43,6 @@ ImpulseEntity::ImpulseEntity(const char* pTextureFileName, int pHorizontalFrames
 
 void ImpulseEntity::update(float pDelta)
 {
-    if(!this->isVisible()) return;
-    
     Entity::update(pDelta);
     
     if(!this->isVisible()) return;

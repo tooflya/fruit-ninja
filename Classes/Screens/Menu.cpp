@@ -77,15 +77,86 @@ class MusicButton : public Entity
         }
 };
 
+class PauseSoundButton : public Entity
+{
+    public:
+    PauseSoundButton(CCNode* pParent) :
+    Entity("main_menu_btn_sfx.png", 2, 2, pParent)
+    {
+        this->create()->setCurrentFrameIndex(0);
+        this->setCenterPosition(Options::CAMERA_CENTER_X - Utils::coord(50), Options::CAMERA_CENTER_Y - Utils::coord(200));
+        this->setRegisterAsTouchable(true);
+    }
+    
+    void onTouch(CCTouch* touch, CCEvent* event)
+    {
+        if(Options::SOUND_ENABLE)
+        {
+            this->setCurrentFrameIndex(2);
+        }
+        else
+        {
+            this->setCurrentFrameIndex(0);
+        }
+        
+        Options::SOUND_ENABLE = !Options::SOUND_ENABLE;
+    }
+    
+    void onEnter()
+    {
+        CCDirector* pDirector = CCDirector::sharedDirector();
+        pDirector->getTouchDispatcher()->addTargetedDelegate(this, 0, true);
+        
+        Entity::onEnter();
+    }
+};
+
+class PauseMusicButton : public Entity
+{
+    public:
+    PauseMusicButton(CCNode* pParent) :
+    Entity("main_menu_btn_sfx.png", 2, 2, pParent)
+    {
+        this->create()->setCurrentFrameIndex(1);
+        this->setCenterPosition(Options::CAMERA_CENTER_X + Utils::coord(50), Options::CAMERA_CENTER_Y - Utils::coord(200));
+        this->setRegisterAsTouchable(true);
+    }
+    
+    void onTouch(CCTouch* touch, CCEvent* event)
+    {
+        if(Options::MUSIC_ENABLE)
+        {
+            this->setCurrentFrameIndex(3);
+        }
+        else
+        {
+            this->setCurrentFrameIndex(1);
+        }
+        
+        Options::MUSIC_ENABLE = !Options::MUSIC_ENABLE;
+    }
+    
+    void onEnter()
+    {
+        CCDirector* pDirector = CCDirector::sharedDirector();
+        pDirector->getTouchDispatcher()->addTargetedDelegate(this, 0, true);
+        
+        Entity::onEnter();
+    }
+};
+
 class TwitterButton : public Entity
 {
     public:
     TwitterButton(CCNode* pParent) :
-    Entity("main_menu_social.png", 2, 1, pParent)
+    Entity("main_menu_social.png", 2, 1)
     {
+        this->setAnchorPoint(ccp(-7.0, 0.5));
         this->create()->setCurrentFrameIndex(0);
-        this->setCenterPosition(Options::CAMERA_WIDTH - Utils::coord(260), Utils::coord(64));
+        this->setCenterPosition(Options::CAMERA_WIDTH - Utils::coord(260) - Utils::coord(1500), Utils::coord(64));
         this->setRegisterAsTouchable(true);
+        
+        pParent->addChild(this, 21);
     }
     
     void onTouch(CCTouch* touch, CCEvent* event)
@@ -105,15 +176,98 @@ class FacebookButton : public Entity
 {
     public:
     FacebookButton(CCNode* pParent) :
-    Entity("main_menu_social.png", 2, 1, pParent)
+    Entity("main_menu_social.png", 2, 1)
     {
+        this->setAnchorPoint(ccp(-7.0, 0.5));
         this->create()->setCurrentFrameIndex(1);
-        this->setCenterPosition(Options::CAMERA_WIDTH - Utils::coord(100), Utils::coord(64));
+        this->setCenterPosition(Options::CAMERA_WIDTH - Utils::coord(100) - Utils::coord(1500), Utils::coord(64));
+        this->setRegisterAsTouchable(true);
+        
+        pParent->addChild(this, 21);
+    }
+    
+    void onTouch(CCTouch* touch, CCEvent* event)
+    {
+    }
+    
+    void onEnter()
+    {
+        CCDirector* pDirector = CCDirector::sharedDirector();
+        pDirector->getTouchDispatcher()->addTargetedDelegate(this, 0, true);
+        
+        Entity::onEnter();
+    }
+};
+
+class PauseButton : public Entity
+{
+    public:
+    PauseButton(CCNode* pParent) :
+    Entity("pause_btn.png", pParent)
+    {
+        this->create()->setCenterPosition(Utils::coord(32), Utils::coord(32));
         this->setRegisterAsTouchable(true);
     }
     
     void onTouch(CCTouch* touch, CCEvent* event)
     {
+        Menu* menu = (Menu*) this->getParent()->getParent();
+        
+        menu->switchPause();
+    }
+    
+    void onEnter()
+    {
+        CCDirector* pDirector = CCDirector::sharedDirector();
+        pDirector->getTouchDispatcher()->addTargetedDelegate(this, 0, true);
+        
+        Entity::onEnter();
+    }
+};
+
+class RestartButton : public Entity
+{
+    public:
+    RestartButton(CCNode* pParent) :
+    Entity("pause_buttons.png", 1, 2, pParent)
+    {
+        this->setCurrentFrameIndex(1);
+        this->create()->setCenterPosition(Options::CAMERA_CENTER_X + Utils::coord(128), Options::CAMERA_CENTER_Y);
+        this->setRegisterAsTouchable(true);
+    }
+    
+    void onTouch(CCTouch* touch, CCEvent* event)
+    {
+        Menu* menu = (Menu*) this->getParent()->getParent();
+        
+        menu->startGame();
+    }
+    
+    void onEnter()
+    {
+        CCDirector* pDirector = CCDirector::sharedDirector();
+        pDirector->getTouchDispatcher()->addTargetedDelegate(this, 0, true);
+        
+        Entity::onEnter();
+    }
+};
+
+class ContinueButton : public Entity
+{
+    public:
+    ContinueButton(CCNode* pParent) :
+    Entity("pause_buttons.png", 1, 2, pParent)
+    {
+        this->setCurrentFrameIndex(0);
+        this->create()->setCenterPosition(Options::CAMERA_CENTER_X - Utils::coord(100), Options::CAMERA_CENTER_Y);
+        this->setRegisterAsTouchable(true);
+    }
+    
+    void onTouch(CCTouch* touch, CCEvent* event)
+    {
+        Menu* menu = (Menu*) this->getParent()->getParent();
+        
+        menu->switchPause();
     }
     
     void onEnter()
@@ -144,7 +298,7 @@ int Menu::APPEND_STATUS = APPEND_STATUS_MAIN_MENU;
 // ===========================================================
 
 Menu::Menu()
-{
+{this->mScreenSwitched = false;
     this->mParticlesTypeDanger = CCParticleSystemQuad::create("explosion.plist");
     this->mParticlesTypeDanger->stopSystem();
     
@@ -155,46 +309,133 @@ Menu::Menu()
 	/** Main menu layer **/
 	this->mMainMenuLayer = CCLayer::create();
     
-    (new Entity("main_menu_gui_black_up.png", this->mMainMenuLayer))->create()->setCenterPosition(Options::CAMERA_CENTER_X, Options::CAMERA_CENTER_Y);
-    (new Entity("main_menu_label_name_fruit.png", this->mMainMenuLayer))->create()->setCenterPosition(Utils::coord(300), Options::CAMERA_HEIGHT - Utils::coord(128));
-    (new Entity("main_menu_label_name_mania.png", this->mMainMenuLayer))->create()->setCenterPosition(Utils::coord(800), Options::CAMERA_HEIGHT - Utils::coord(64));
-    (new Entity("main_menu_ninja.png", this->mMainMenuLayer))->create()->setCenterPosition(Utils::coord(200), Utils::coord(220));
+    this->mMenuDecorations[0] = new Entity("main_menu_gui_black_up.png", this->mMainMenuLayer);
+    this->mMenuDecorations[0]->create()->setCenterPosition(this->mMenuDecorations[0]->getWidth() / 2, Options::CAMERA_HEIGHT - this->mMenuDecorations[0]->getHeight() / 2);
+    this->mMenuDecorations[1] = new Entity("main_menu_label_name_fruit.png", this->mMainMenuLayer);
+    this->mMenuDecorations[1]->create()->setCenterPosition(Utils::coord(300), Options::CAMERA_HEIGHT - Utils::coord(128));
+    this->mMenuDecorations[2] = new Entity("main_menu_label_name_mania.png", this->mMainMenuLayer);
+    this->mMenuDecorations[2]->create()->setCenterPosition(Utils::coord(800), Options::CAMERA_HEIGHT - Utils::coord(64));
+    this->mMenuDecorations[3] = new Entity("main_menu_ninja.png", this->mMainMenuLayer);
+    this->mMenuDecorations[3]->create()->setCenterPosition(Utils::coord(200), Utils::coord(220));
     
     this->mCirclesFruits = new BatchEntityManager(4, new CircleFruit(), NULL);
-    this->mCirclesParts = new BatchEntityManager(4, new Part(), NULL);
+    this->mCirclesParts = new BatchEntityManager(4, new CirclePart(), NULL);
     this->mCirclesManager = new BatchEntityManager(4, new Circle(this->mCirclesFruits), NULL);
+    this->mCirclesDropsManager = new DropsManager(20, new Drop(), NULL);
+    this->mCirclesCutters = new BatchEntityManager(2, new Cutter(false), NULL);
+    this->mCirclesSplashes = new BatchEntityManager(2, new Splash(), NULL);
     
     this->mMainMenuLayer->addChild(this->mCirclesFruits, 17);
     this->mMainMenuLayer->addChild(this->mCirclesParts, 17);
+    this->mMainMenuLayer->addChild(this->mCirclesDropsManager, 17);
+    this->mMainMenuLayer->addChild(this->mCirclesCutters, 17);
+    this->mMainMenuLayer->addChild(this->mCirclesSplashes, 15);
     this->mMainMenuLayer->addChild(this->mCirclesManager, 16);
     
-    Circle* circle;
+    this->mCircles[0] = (Circle*) this->mCirclesManager->create();
+    this->mCircles[0]->setCenterPosition(Options::CAMERA_CENTER_X, Options::CAMERA_CENTER_Y);
+    this->mCircles[0]->create()->setCurrentFrameIndex(0);
+    this->mCircles[0]->setScaleX(0.0);
+    this->mCircles[0]->destroy(false);
     
-    circle = (Circle*) this->mCirclesManager->create();
-    circle->setCenterPosition(Options::CAMERA_CENTER_X, Options::CAMERA_CENTER_Y);
-    circle->create()->setCurrentFrameIndex(0);
+    this->mCircles[1] = (Circle*) this->mCirclesManager->create();
+    this->mCircles[1]->setCenterPosition(Options::CAMERA_CENTER_X - Utils::coord(250), Options::CAMERA_CENTER_Y - Utils::coord(100));
+    this->mCircles[1]->create()->setCurrentFrameIndex(11);
+    this->mCircles[1]->setScaleX(0.0);
+    this->mCircles[1]->destroy(false);
     
-    circle = (Circle*) this->mCirclesManager->create();
-    circle->setCenterPosition(Options::CAMERA_CENTER_X - Utils::coord(250), Options::CAMERA_CENTER_Y - Utils::coord(100));
-    circle->create()->setCurrentFrameIndex(3);
+    this->mCircles[2] = (Circle*) this->mCirclesManager->create();
+    this->mCircles[2]->setCenterPosition(Options::CAMERA_CENTER_X + Utils::coord(350), Options::CAMERA_CENTER_Y + Utils::coord(100));
+    this->mCircles[2]->create()->setCurrentFrameIndex(2);
+    this->mCircles[2]->setScaleX(0.0);
+    this->mCircles[2]->destroy(false);
     
-    circle = (Circle*) this->mCirclesManager->create();
-    circle->setCenterPosition(Options::CAMERA_CENTER_X + Utils::coord(350), Options::CAMERA_CENTER_Y + Utils::coord(100));
-    circle->create()->setCurrentFrameIndex(1);
-    
-    circle = (Circle*) this->mCirclesManager->create();
-    circle->setCenterPosition(Options::CAMERA_CENTER_X + Utils::coord(250), Options::CAMERA_CENTER_Y - Utils::coord(100));
-    circle->create()->setCurrentFrameIndex(2);
+    this->mCircles[3] = (Circle*) this->mCirclesManager->create();
+    this->mCircles[3]->setCenterPosition(Options::CAMERA_CENTER_X + Utils::coord(250), Options::CAMERA_CENTER_Y - Utils::coord(100));
+    this->mCircles[3]->create()->setCurrentFrameIndex(1);
+    this->mCircles[3]->setScaleX(0.0);
+    this->mCircles[3]->destroy(false);
 
     this->mSoundButton = new SoundButton(this->mMainMenuLayer);
     this->mMusicButton = new MusicButton(this->mMainMenuLayer);
     this->mTwitterButton = new TwitterButton(this->mMainMenuLayer);
     this->mFacebookButton = new FacebookButton(this->mMainMenuLayer);
     
+    /** Extras layer **/
+    this->mExtrasLayer = CCLayer::create();
     
+    Entity* n = new Entity("extras_black_down.png", this->mExtrasLayer);
+    n->setAnchorPoint(ccp(0.0, 0.0));
+    n->create()->setPosition(Options::CAMERA_WIDTH - n->getWidth() / 2, -n->getHeight() / 2);
+    n->setRotation(45.0);
     
+    this->mCircles[4] = (Circle*) this->mCirclesManager->create();
+    this->mCircles[4]->setCenterPosition(Options::CAMERA_WIDTH - Utils::coord(100), Utils::coord(100));
+    this->mCircles[4]->setCurrentFrameIndex(10);
+    this->mCircles[4]->setScaleX(0.0);
+    this->mCircles[4]->destroy(false);
     
+    this->mCircles[5] = (Circle*) this->mCirclesManager->create();
+    this->mCircles[5]->setCenterPosition(Options::CAMERA_CENTER_X, Options::CAMERA_CENTER_Y);
+    this->mCircles[5]->setCurrentFrameIndex(9);
+    this->mCircles[5]->setScaleX(0.0);
+    this->mCircles[5]->destroy(false);
     
+    /** Mode layer **/
+    this->mModeLayer = CCLayer::create();
+    
+    this->mCircles[6] = (Circle*) this->mCirclesManager->create();
+    this->mCircles[6]->setCenterPosition(Options::CAMERA_CENTER_X + Utils::coord(50), Options::CAMERA_CENTER_Y);
+    this->mCircles[6]->setCurrentFrameIndex(5);
+    this->mCircles[6]->setScaleX(0.0);
+    this->mCircles[6]->destroy(false);
+    
+    this->mCircles[7] = (Circle*) this->mCirclesManager->create();
+    this->mCircles[7]->setCenterPosition(Options::CAMERA_CENTER_X - Utils::coord(250), Options::CAMERA_CENTER_Y - Utils::coord(100));
+    this->mCircles[7]->setCurrentFrameIndex(6);
+    this->mCircles[7]->setScaleX(0.0);
+    this->mCircles[7]->destroy(false);
+    
+    this->mCircles[8] = (Circle*) this->mCirclesManager->create();
+    this->mCircles[8]->setCenterPosition(Options::CAMERA_CENTER_X + Utils::coord(350), Options::CAMERA_CENTER_Y + Utils::coord(100));
+    this->mCircles[8]->setCurrentFrameIndex(7);
+    this->mCircles[8]->setScaleX(0.0);
+    this->mCircles[8]->destroy(false);
+    
+    this->mCircles[9] = (Circle*) this->mCirclesManager->create();
+    this->mCircles[9]->setCenterPosition(Options::CAMERA_WIDTH - Utils::coord(100), Utils::coord(100));
+    this->mCircles[9]->setCurrentFrameIndex(10);
+    this->mCircles[9]->setScaleX(0.0);
+    this->mCircles[9]->destroy(false);
+    
+    n = new Entity("choose_mode_bg_down.png");
+    n->setAnchorPoint(ccp(0.0, 0.0));
+    n->create()->setPosition(Options::CAMERA_WIDTH - n->getWidth() / 2, -n->getHeight() / 2);
+    n->setRotation(45.0);
+    
+    this->mModeLayer->addChild(n, 7);
+    
+    /** Pause layer **/
+    this->mPauseLayer = CCLayer::create();
+    this->mPauseLayer->setVisible(false);
+    
+    this->mRestartButton = new RestartButton(this->mPauseLayer);
+    this->mContinueButton = new ContinueButton(this->mPauseLayer);
+    
+    this->mPauseSoundButton = new PauseSoundButton(this->mPauseLayer);
+    this->mPauseMusicButton = new PauseMusicButton(this->mPauseLayer);
+    
+    Entity* y = new Entity("shop_bg_up.png", this->mPauseLayer);
+    y->create()->setCenterPosition(Options::CAMERA_CENTER_X, Options::CAMERA_HEIGHT - y->getHeight() / 2);
+    
+    Entity* i = new Entity("pause_label.png", y);
+    i->create()->setCenterPosition(i->getWidth() / 2, y->getHeight() / 2);
+    
+    (new Entity("shop_bg_name.png", y))->create()->setCenterPosition(y->getWidth() / 2, y->getHeight() / 2);
+    (new Entity("shop_carambols_icon.png", y))->create()->setCenterPosition(0, 0);
+    
+    (new Entity("shop_bg_scram.png", y))->create()->setCenterPosition(i->getCenterX() - i->getWidth() / 2 - Utils::coord(25), y->getHeight() / 2);
+    (new Entity("shop_bg_scram.png", y))->create()->setCenterPosition(i->getCenterX() + i->getWidth() / 2 + Utils::coord(25), y->getHeight() / 2);
 
 	/** Top layer **/
 	this->mTopLayer = CCLayer::create();
@@ -213,9 +454,14 @@ Menu::Menu()
 	this->mBackground->create()->setCenterPosition(Options::CAMERA_CENTER_X, Options::CAMERA_CENTER_Y);
     
 	this->addChild(this->mFruitsLayer);
-	this->addChild(this->mMainMenuLayer);
+	this->addChild(this->mMainMenuLayer, 0);
 	this->addChild(this->mTopLayer);
 	this->addChild(this->mBottomLayer);
+	this->addChild(this->mPauseLayer);
+    this->mMainMenuLayer->addChild(this->mExtrasLayer, 0);
+    this->mMainMenuLayer->addChild(this->mModeLayer, 0);
+    
+    this->mPauseButton = new PauseButton(this->mBottomLayer);
     
 	this->mAwCutters = new BatchEntityManager(3, new Cutter(true), this->mFruitsLayer);
     this->mMarks = new BatchEntityManager(20, new Mark(), this->mFruitsLayer);
@@ -265,12 +511,8 @@ Menu::Menu()
 	this->mBestFruitsSlashed = CCLabelTTF::create("Best: 0", Options::FONT, Utils::coord(32));
 	this->mBestFruitsSlashed->setPosition(ccp(Utils::coord(25) + mBestFruitsSlashed->getContentSize().width / 2, Options::CAMERA_HEIGHT - Utils::coord(100)));
 
-	this->mScore = CCLabelTTF::create("Score: 0", Options::FONT, Utils::coord(32));
-	this->mScore->setPosition(ccp(Utils::coord(25) + mScore->getContentSize().width / 2, Utils::coord(48)));
-
 	this->mTopLayer->addChild(this->mFruitsSlashed, 101);
 	this->mTopLayer->addChild(this->mBestFruitsSlashed, 101);
-	this->mBottomLayer->addChild(this->mScore, 101);
 
 	this->mCounter = new Entity("counter.png", this->mTopLayer);
 	this->mCounter->create()->setCenterPosition(Utils::coord(48), Options::CAMERA_HEIGHT - Utils::coord(48));
@@ -401,7 +643,7 @@ void Menu::startGame()
 	this->mSpecialChalengeTime = 60.0;
 	this->mSpecialChalengeTimeElapsed = 0;
     
-	this->mAwesomeFruitTime = 0;//Utils::randomf(15.0f, 150.0f);
+	this->mAwesomeFruitTime = Utils::randomf(15.0f, 150.0f);
 	this->mAwesomeFruitTimeElapsed = 0;
 
 	this->mIsSpecialChalengeRunning = false;
@@ -414,7 +656,6 @@ void Menu::startGame()
     Processor::AWESOME_FRUIT = NULL;
 
 	this->updateCounter();
-	this->addScore(0);
 
 	for(int i = 0; i < 3; i++)
 	{
@@ -456,17 +697,6 @@ void Menu::updateCounter()
 	this->mBestFruitsSlashed->setPosition(ccp(Utils::coord(25) + this->mBestFruitsSlashed->getContentSize().width / 2, Options::CAMERA_HEIGHT - Utils::coord(100)));
 }
 
-void Menu::addScore(int pScore)
-{
-	SCORE += pScore;
-
-	char text[256];
-	sprintf(text, "Score: %d", SCORE);
-	this->mScore->setString(text);
-
-	this->mScore->setPosition(ccp(Utils::coord(25) + this->mScore->getContentSize().width / 2, Utils::coord(48)));
-}
-
 void Menu::removeLife()
 {
 	((Heart*) this->mLifes->objectAtIndex(LIFES))->disable();
@@ -482,6 +712,9 @@ void Menu::removeLife()
 		this->mIsGameRunning = false;
 
 		SimpleAudioEngine::sharedEngine()->playEffect(Options::GAME_OVER);
+        
+        this->mTopLayer->runAction(CCMoveTo::create(0.8, ccp(this->mTopLayer->getPosition().x, Options::CAMERA_HEIGHT - Utils::coord(200))));
+        this->mBottomLayer->runAction(CCMoveTo::create(0.8, ccp(this->mBottomLayer->getPosition().x, 0 - Utils::coord(200))));
 	}
 }
 
@@ -565,6 +798,30 @@ void Menu::hitedAwesomeLast()
     SimpleAudioEngine::sharedEngine()->playEffect(Options::BONUS_BLOW);
 }
 
+void Menu::switchPause()
+{
+    this->mPauseLayer->setVisible(!this->mPauseLayer->isVisible());
+    
+    this->mIsGameRunning = !this->mPauseLayer->isVisible(); // TODO: ?
+    
+    if(this->mPauseLayer->isVisible())
+    {
+        this->mFruits->pauseSchedulerAndActions();
+        this->mParts->pauseSchedulerAndActions();
+        this->mMarks->pauseSchedulerAndActions();
+        this->mDropsManager->pauseSchedulerAndActions();
+        this->mSplashes->pauseSchedulerAndActions();
+    }
+    else
+    {
+        this->mFruits->resumeSchedulerAndActions();
+        this->mParts->resumeSchedulerAndActions();
+        this->mMarks->resumeSchedulerAndActions();
+        this->mDropsManager->resumeSchedulerAndActions();
+        this->mSplashes->resumeSchedulerAndActions();
+    }
+}
+
 // ===========================================================
 // Virtual Methods
 // ===========================================================
@@ -572,6 +829,26 @@ void Menu::hitedAwesomeLast()
 void Menu::update(float pDeltaTime)
 {
 	Screen::update(pDeltaTime);
+    
+    if(!this->mScreenSwitched)
+    {
+        int c = 0;
+        
+        for(int i = 0; i < this->mCirclesFruits->getCount(); i++)
+        {
+           if(((Entity*) this->mCirclesFruits->objectAtIndex(i))->isVisible())
+           {
+               c++;
+           }
+        }
+        
+        if(c <= 0)
+        {
+            this->mScreenSwitched = true;
+            
+            this->switchScreen();
+        }
+    }
     
     if(APPEND_STATUS == APPEND_STATUS_MAIN_MENU)
     {
@@ -581,7 +858,7 @@ void Menu::update(float pDeltaTime)
         {
             if(!check) return;
             
-            CircleFruit* fruit = (CircleFruit*) this->mCirclesFruits->objectAtIndex(i);
+            CircleFruit* fruit = (CircleFruit*) this->mCircles[i]->mFruit;
             
             bool collides = false;
             
@@ -597,28 +874,32 @@ void Menu::update(float pDeltaTime)
             
             if(collides)
             {
-                for(int j = 0; j < 4; j++)
+                switch(fruit->getCurrentFrameIndex())
                 {
-                    CircleFruit* fruit = (CircleFruit*) this->mCirclesFruits->objectAtIndex(j);
-                    
-                    fruit->free();
+                    case Options::TYPE_ORANGE:
+                        APPEND_STATUS = APPEND_STATUS_EXTRAS;
+                        break;
+                    case Options::TYPE_COCONUT:
+                        APPEND_STATUS = APPEND_STATUS_MODE;
+                        break;
                 }
                 
-                fruit->destroy();
-                
-                for(int i = 0; i < 2; i++)
+                if(fruit->getCurrentFrameIndex() == Options::TYPE_DANGER)
                 {
-                    Part* part = (Part*) this->mCirclesParts->create();
+                    this->mParticlesTypeDanger->setPosition(fruit->getCenterX(), fruit->getCenterY());
+                    this->mParticlesTypeDanger->resetSystem();
                     
-                    part->setCurrentFrameIndex(fruit->getCurrentFrameIndex() * 3 + Utils::random(1, 2));
-                    part->setCenterPosition(fruit->getCenterX() + Utils::coord(Utils::randomf(-50.0, 50.0)), fruit->getCenterY() + Utils::coord(Utils::randomf(-50.0, 50.0)));
+                    SimpleAudioEngine::sharedEngine()->playEffect(Options::EXPLOSION);
+                }
+                else
+                {
+                    this->mCirclesDropsManager->init(fruit->getCenterX(), fruit->getCenterY(), fruit->getCurrentFrameIndex());
                     
-                    part->mRotateImpulse = fruit->mRotateImpulse;
-                    part->mImpulsePower = fruit->mImpulsePower;
-                    part->mSideImpulse = i == 0 ? fruit->mSideImpulse : -fruit->mSideImpulse;
-                    part->mWeight = fruit->mWeight;
+                    Splash* splash = (Splash*) this->mCirclesSplashes->create();
+                    splash->setCenterPosition(fruit->getCenterX(), fruit->getCenterY());
+                    splash->setColor(Fruit::FRUITS_COLORS[fruit->getCurrentFrameIndex()]);
                     
-                    part->mType = fruit->getCurrentFrameIndex();
+                    SimpleAudioEngine::sharedEngine()->playEffect(Options::SQUASH);
                 }
                 
                 for(int j = 0; j < 4; j++)
@@ -626,17 +907,206 @@ void Menu::update(float pDeltaTime)
                     ((Circle*) this->mCirclesManager->objectAtIndex(j))->free();
                 }
                 
+                for(int i = 0; i < 2; i++)
+                {
+                    CirclePart* part = (CirclePart*) this->mCirclesParts->create();
+                    
+                    part->setCurrentFrameIndex(fruit->getCurrentFrameIndex() * 3 + Utils::random(1, 2));
+                    part->setCenterPosition(fruit->getCenterX() + Utils::coord(Utils::randomf(-50.0, 50.0)), fruit->getCenterY() + Utils::coord(Utils::randomf(-50.0, 50.0)));
+                    
+                    part->mRotateImpulse = fruit->mRotateImpulse;
+                    part->mImpulsePower = fruit->mImpulsePower;
+                    part->mSideImpulse = (i == 0 ? fruit->mSideImpulse : -fruit->mSideImpulse) / 2;
+                    part->mWeight = fruit->mWeight;
+                    part->setScale(fruit->getScaleX());
+                }
+                
+                fruit->destroy(false);
+                
                 check = false;
                 
-                APPEND_STATUS = APPEND_STATUS_MODE;
+                this->mScreenSwitched = false;
+                
+                this->mSoundButton->runAction(CCMoveTo::create(0.3, ccp(Options::CAMERA_WIDTH - Utils::coord(200), Options::CAMERA_HEIGHT + Utils::coord(64))));
+                this->mMusicButton->runAction(CCMoveTo::create(0.3, ccp(Options::CAMERA_WIDTH - Utils::coord(100), Options::CAMERA_HEIGHT + Utils::coord(64))));
+            }
+        }
+    }
+    else if(APPEND_STATUS == APPEND_STATUS_EXTRAS)
+    {
+        bool check = true;
+        
+        for(int i = 4; i < 7; i++)
+        {
+            if(!check) return;
+            
+            CircleFruit* fruit = (CircleFruit*) this->mCircles[i]->mFruit;
+            
+            bool collides = false;
+            
+            for(int a = 0; a < 10; a++)
+            {
+                if(fruit->isCollideWithPoint(Processor::TOUCH_INFORMATION[a].position.x, Processor::TOUCH_INFORMATION[a].position.y) && Processor::TOUCH_INFORMATION[a].slice)
+                {
+                    collides = true;
+                    
+                    Processor::TOUCH_INFORMATION[a].slice = false;
+                }
+            }
+            
+            if(collides)
+            {
+                switch(fruit->getCurrentFrameIndex())
+                {
+                    case Options::TYPE_DANGER:
+                        APPEND_STATUS = APPEND_STATUS_MAIN_MENU;
+                        break;
+                    case Options::TYPE_COCONUT:
+                        //APPEND_STATUS = APPEND_STATUS_GAME;
+                        break;
+                }
+                
+                fruit->destroy(false);
+                
+                if(fruit->getCurrentFrameIndex() == Options::TYPE_DANGER)
+                {
+                    this->mParticlesTypeDanger->setPosition(fruit->getCenterX(), fruit->getCenterY());
+                    this->mParticlesTypeDanger->resetSystem();
+                    
+                    SimpleAudioEngine::sharedEngine()->playEffect(Options::EXPLOSION);
+                }
+                else
+                {
+                    this->mCirclesDropsManager->init(fruit->getCenterX(), fruit->getCenterY(), fruit->getCurrentFrameIndex());
+                    
+                    Splash* splash = (Splash*) this->mCirclesSplashes->create();
+                    splash->setCenterPosition(fruit->getCenterX(), fruit->getCenterY());
+                    splash->setColor(Fruit::FRUITS_COLORS[fruit->getCurrentFrameIndex()]);
+                    
+                    SimpleAudioEngine::sharedEngine()->playEffect(Options::SQUASH);
+                }
+                
+                for(int j = 4; j < 6; j++)
+                {
+                    ((Circle*) this->mCirclesManager->objectAtIndex(j))->free();
+                }
+                
+                for(int b = 0; b < 2; b++)
+                {
+                    CirclePart* part = (CirclePart*) this->mCirclesParts->create();
+                    
+                    part->setCurrentFrameIndex(fruit->getCurrentFrameIndex() * 3 + Utils::random(1, 2));
+                    part->setCenterPosition(fruit->getCenterX() + Utils::coord(Utils::randomf(-50.0, 50.0)), fruit->getCenterY() + Utils::coord(Utils::randomf(-50.0, 50.0)));
+                    
+                    part->mRotateImpulse = fruit->mRotateImpulse;
+                    part->mImpulsePower = fruit->mImpulsePower;
+                    part->mSideImpulse = (i == 0 ? fruit->mSideImpulse : -fruit->mSideImpulse) / 2;
+                    part->mWeight = fruit->mWeight;
+                    part->setScale(fruit->getScaleX());
+                }
+                
+                check = false;
+                
+                this->mScreenSwitched = false;
+                
+                
+                ((Entity*) this->mExtrasLayer->getChildren()->objectAtIndex(0))->runAction(CCRotateTo::create(0.3, 45));
+                this->mTwitterButton->runAction(CCRotateTo::create(0.2, 0));
+                this->mFacebookButton->runAction(CCRotateTo::create(0.2, 0));
             }
         }
     }
     else if(APPEND_STATUS == APPEND_STATUS_MODE)
     {
+        bool check = true;
         
+        for(int i = 6; i < 10; i++)
+        {
+            if(!check) return;
+            
+            CircleFruit* fruit = (CircleFruit*) this->mCircles[i]->mFruit;
+            
+            bool collides = false;
+            
+            for(int a = 0; a < 10; a++)
+            {
+                if(fruit->isCollideWithPoint(Processor::TOUCH_INFORMATION[a].position.x, Processor::TOUCH_INFORMATION[a].position.y) && Processor::TOUCH_INFORMATION[a].slice)
+                {
+                    collides = true;
+                    
+                    Processor::TOUCH_INFORMATION[a].slice = false;
+                }
+            }
+            
+            if(collides)
+            {
+                switch(fruit->getCurrentFrameIndex())
+                {
+                    case Options::TYPE_DANGER:
+                        APPEND_STATUS = APPEND_STATUS_MAIN_MENU;
+                        break;
+                    case Options::TYPE_COCONUT:
+                        APPEND_STATUS = APPEND_STATUS_GAME;
+                        break;
+                }
+                
+                fruit->destroy(false);
+                
+                if(fruit->getCurrentFrameIndex() == Options::TYPE_DANGER)
+                {
+                    this->mParticlesTypeDanger->setPosition(fruit->getCenterX(), fruit->getCenterY());
+                    this->mParticlesTypeDanger->resetSystem();
+                    
+                    SimpleAudioEngine::sharedEngine()->playEffect(Options::EXPLOSION);
+                }
+                else
+                {
+                    this->mCirclesDropsManager->init(fruit->getCenterX(), fruit->getCenterY(), fruit->getCurrentFrameIndex());
+                    
+                    Splash* splash = (Splash*) this->mCirclesSplashes->create();
+                    splash->setCenterPosition(fruit->getCenterX(), fruit->getCenterY());
+                    splash->setColor(Fruit::FRUITS_COLORS[fruit->getCurrentFrameIndex()]);
+                    
+                    SimpleAudioEngine::sharedEngine()->playEffect(Options::SQUASH);
+                }
+                
+                for(int j = 6; j < 10; j++)
+                {
+                    ((Circle*) this->mCirclesManager->objectAtIndex(j))->free();
+                }
+                
+                for(int b = 0; b < 2; b++)
+                {
+                    CirclePart* part = (CirclePart*) this->mCirclesParts->create();
+                    
+                    part->setCurrentFrameIndex(fruit->getCurrentFrameIndex() * 3 + Utils::random(1, 2));
+                    part->setCenterPosition(fruit->getCenterX() + Utils::coord(Utils::randomf(-50.0, 50.0)), fruit->getCenterY() + Utils::coord(Utils::randomf(-50.0, 50.0)));
+                    
+                    part->mRotateImpulse = fruit->mRotateImpulse;
+                    part->mImpulsePower = fruit->mImpulsePower;
+                    part->mSideImpulse = (i == 0 ? fruit->mSideImpulse : -fruit->mSideImpulse) / 2;
+                    part->mWeight = fruit->mWeight;
+                    part->setScale(fruit->getScaleX());
+                }
+                
+                check = false;
+                
+                this->mScreenSwitched = false;
+                
+                
+                ((Entity*) this->mModeLayer->getChildren()->objectAtIndex(0))->runAction(CCRotateTo::create(0.3, 45));
+                
+                if(fruit->getCurrentFrameIndex() != Options::TYPE_DANGER)
+                {
+                    this->mMenuDecorations[0]->runAction(CCFadeTo::create(0.3, 0.0));
+                    this->mMenuDecorations[1]->runAction(CCMoveTo::create(0.3, ccp(this->mMenuDecorations[1]->getPosition().x - Utils::coord(1000), this->mMenuDecorations[1]->getPosition().y)));
+                    this->mMenuDecorations[2]->runAction(CCMoveTo::create(0.3, ccp(this->mMenuDecorations[2]->getPosition().x, this->mMenuDecorations[2]->getPosition().y + Utils::coord(1000))));
+                    this->mMenuDecorations[3]->runAction(CCMoveTo::create(0.3, ccp(this->mMenuDecorations[3]->getPosition().x - Utils::coord(1000), this->mMenuDecorations[3]->getPosition().y)));
+                }
+            }
+        }
     }
-    else
+    else if(APPEND_STATUS == APPEND_STATUS_GAME)
     {
     	// Debug Information
         
@@ -735,21 +1205,9 @@ void Menu::update(float pDeltaTime)
     			this->mDebugInformation[32]->setPosition(ccp(Options::CAMERA_WIDTH - Utils::coord(200) + this->mDebugInformation[32]->getContentSize().width / 2, Utils::coord(580)));
     		}
     	}
-        
-    	if(!this->mIsGameRunning)
-    	{
-    		this->mTimeBeforeRestartElapsed += pDeltaTime;
-
-    		if(this->mTimeBeforeRestartElapsed >= 70000.0)
-    		{
-                this->mTimeBeforeRestartElapsed = 0;
-                
-    			this->startGame();
-    		}
-
-    		return;
-    	}
     	
+        if(!this->mIsGameRunning) return;
+        
     	if(this->mIsSpecialChalengeRunning)
     	{
     		this->mFruitTimeElapsed += pDeltaTime * Processor::FREEZY_TIME;
@@ -937,6 +1395,44 @@ void Menu::update(float pDeltaTime)
                 }
             }
         }
+    }
+}
+
+void Menu::switchScreen()
+{
+    switch(APPEND_STATUS)
+    {
+        case APPEND_STATUS_MAIN_MENU:
+            this->mCircles[0]->create()->runAction(CCScaleTo::create(0.3, 1.0));
+            this->mCircles[1]->create()->runAction(CCScaleTo::create(0.3, 1.0));
+            this->mCircles[2]->create()->runAction(CCScaleTo::create(0.3, 1.0));
+            this->mCircles[3]->create()->runAction(CCScaleTo::create(0.3, 1.0));
+            
+            this->mSoundButton->runAction(CCMoveTo::create(0.3, ccp(Options::CAMERA_WIDTH - Utils::coord(200), Options::CAMERA_HEIGHT - Utils::coord(64))));
+            this->mMusicButton->runAction(CCMoveTo::create(0.3, ccp(Options::CAMERA_WIDTH - Utils::coord(100), Options::CAMERA_HEIGHT - Utils::coord(64))));
+            
+            this->mTwitterButton->runAction(CCRotateTo::create(0.2, 0));
+            this->mFacebookButton->runAction(CCRotateTo::create(0.2, 0));
+            break;
+        case APPEND_STATUS_EXTRAS:
+            this->mCircles[4]->create()->runAction(CCScaleTo::create(0.2, 1.0));
+            this->mCircles[5]->create()->runAction(CCScaleTo::create(0.2, 1.0));
+            ((Entity*) this->mExtrasLayer->getChildren()->objectAtIndex(0))->runAction(CCRotateTo::create(0.3, 0));
+            this->mTwitterButton->runAction(CCRotateTo::create(0.2, -6.5));
+            this->mFacebookButton->runAction(CCRotateTo::create(0.2, -8.0));
+            break;
+        case APPEND_STATUS_MODE:
+            this->mCircles[6]->create()->runAction(CCScaleTo::create(0.3, 1.0));
+            this->mCircles[7]->create()->runAction(CCScaleTo::create(0.3, 1.0));
+            this->mCircles[8]->create()->runAction(CCScaleTo::create(0.3, 1.0));
+            this->mCircles[9]->create()->runAction(CCScaleTo::create(0.3, 1.0));
+            ((Entity*) this->mModeLayer->getChildren()->objectAtIndex(0))->runAction(CCRotateTo::create(0.3, 0));
+            this->mTwitterButton->runAction(CCRotateTo::create(0.2, 6.5));
+            this->mFacebookButton->runAction(CCRotateTo::create(0.2, 8.0));
+            break;
+        case APPEND_STATUS_GAME:
+            this->startGame();
+            break;
     }
 }
 

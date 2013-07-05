@@ -22,7 +22,7 @@
 // ===========================================================
 
 Part::Part() :
-    ImpulseEntity("parts.png", 6, 8)
+    ImpulseEntity("parts.png", 6, 9)
     {
     }
 

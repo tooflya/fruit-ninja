@@ -73,7 +73,11 @@ class CircleFruit : public ImpulseEntity
 
 		// ===========================================================
 		// Fields
-		// ===========================================================
+        // ===========================================================
+        
+        float is;
+    
+        bool free1;
 
 		// ===========================================================
 		// Constructors
@@ -98,6 +102,8 @@ class CircleFruit : public ImpulseEntity
         void onCreate();
     
         CircleFruit* deepCopy();
+    
+        void setScale(float pScale);
 };
 
 #endif

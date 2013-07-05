@@ -101,7 +101,7 @@ void Entity::constructor(const char* pszFileName, int pHorizontalFramesCount, in
 
 	this->scheduleUpdate();
 
-	this->autorelease();
+	this->retain();
 
 	this->destroy();
 }

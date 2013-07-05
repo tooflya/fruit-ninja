@@ -117,13 +117,14 @@ int BatchEntityManager::getInitCapacity()
 
 void BatchEntityManager::draw()
 {
-    if(this->getCount() <= 0) return;
+    //if(this->getCount() <= 0) return;
     
     CCSpriteBatchNode::draw();
 }
 
 void BatchEntityManager::update(float pDeltaTime)
 {
+    CCSpriteBatchNode::update(pDeltaTime);
 }
 
 #endif

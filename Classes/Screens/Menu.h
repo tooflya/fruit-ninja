@@ -20,11 +20,17 @@
 #include "Particles.h"
 #include "Circle.h"
 #include "CircleFruit.h"
+#include "CirclePart.h"
 
 class SoundButton;
 class MusicButton;
+class PauseSoundButton;
+class PauseMusicButton;
 class TwitterButton;
 class FacebookButton;
+class PauseButton;
+class RestartButton;
+class ContinueButton;
 
 using namespace cocos2d;
 
@@ -42,7 +48,8 @@ class Menu : public Screen
 		// ===========================================================
 		// Fields
 		// ===========================================================
-
+    bool mScreenSwitched;
+    void switchScreen();
 		int mFruitRemaning;
 
 		float mFruitTime;
@@ -62,12 +69,21 @@ class Menu : public Screen
 		Entity* mBackground;
 		Entity* mCounter;
         Entity* mEffect[2];
+    
+        PauseButton* mPauseButton;
+        RestartButton* mRestartButton;
+        ContinueButton* mContinueButton;
+        PauseSoundButton* mPauseSoundButton;
+        PauseMusicButton* mPauseMusicButton;
 
 		Entity* test;
 
-		CCLayer* mMainMenuLayer;
+        CCLayer* mMainMenuLayer;
+        CCLayer* mExtrasLayer;
+        CCLayer* mModeLayer;
 		CCLayer* mTopLayer;
         CCLayer* mBottomLayer;
+        CCLayer* mPauseLayer;
     
         bool mShaking;
     
@@ -86,6 +102,8 @@ class Menu : public Screen
         MusicButton* mMusicButton;
         TwitterButton* mTwitterButton;
         FacebookButton* mFacebookButton;
+    
+        Circle* mCircles[16];
 
 		// ===========================================================
 		// Constructors
@@ -114,7 +132,6 @@ class Menu : public Screen
 
 		CCLabelTTF* mFruitsSlashed;
 		CCLabelTTF* mBestFruitsSlashed;
-		CCLabelTTF* mScore;
 
 		bool mIsGameRunning;
 
@@ -152,7 +169,9 @@ class Menu : public Screen
         static int APPEND_STATUS;
     
         static const int APPEND_STATUS_MAIN_MENU = 1;
-        static const int APPEND_STATUS_MODE = 2;
+        static const int APPEND_STATUS_EXTRAS = 2;
+        static const int APPEND_STATUS_MODE = 3;
+        static const int APPEND_STATUS_GAME = 4;
     
 		static int FRUITS;
 		static int SCORE;
@@ -165,6 +184,10 @@ class Menu : public Screen
         BatchEntityManager* mCirclesManager;
         BatchEntityManager* mCirclesFruits;
         BatchEntityManager* mCirclesParts;
+        BatchEntityManager* mCirclesCutters;
+        BatchEntityManager* mCirclesSplashes;
+    
+        DropsManager* mCirclesDropsManager;
     
 		BatchEntityManager* mFruits;
 		BatchEntityManager* mParts;
@@ -189,6 +212,8 @@ class Menu : public Screen
         CCLabelTTF* mSpecialLabelScore;
     
         CCLayer* mFruitsLayer;
+    
+        Entity* mMenuDecorations[4];
 
 		// ===========================================================
 		// Constructors
@@ -202,7 +227,6 @@ class Menu : public Screen
 
 		void startGame();
 		void updateCounter();
-		void addScore(int pScore);
 		void removeLife();
 		void runSpecialChalenge();
         void runAwesomeChalenge();
@@ -214,6 +238,8 @@ class Menu : public Screen
         void randomSlide();
     
         void hitedAwesomeLast();
+    
+        void switchPause();
 		
 		// ===========================================================
 		// Virtual Methods

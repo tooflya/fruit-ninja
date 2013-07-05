@@ -1,7 +1,7 @@
-#ifndef CONST_SPLASH
-#define CONST_SPLASH
+#ifndef CONST_CIRCLEPART
+#define CONST_CIRCLEPART
 
-#include "Splash.h"
+#include "CirclePart.h"
 
 // ===========================================================
 // Inner Classes
@@ -19,33 +19,24 @@
 // Constructors
 // ===========================================================
 
-Splash::Splash() :
-    Entity("splashes.png", 4, 2)
+CirclePart::CirclePart() :
+    ImpulseEntity("parts.png", 6, 9)
     {
-        this->setAnchorPoint(ccp(0.5, 1.0));
     }
 
 // ===========================================================
 // Methods
 // ===========================================================
 
-void Splash::update(float pDeltaTime)
+void CirclePart::update(float pDeltaTime)
 {
-    Entity::update(pDeltaTime);
+    ImpulseEntity::update(pDeltaTime * 3);
     
     if(!this->isVisible()) return;
     
-    this->mLiveTimeElapsed += pDeltaTime;
-    
-    if(this->mLiveTimeElapsed >= this->mLiveTime)
+    if(this->getCenterY() < -Utils::coord(200))
     {
-        this->setOpacity(this->getOpacity() - this->mAlphaSpeed);
-        this->setScaleY(this->getScaleY() + this->mScaleSpeed);
-    }
-
-    if(this->getOpacity() <= 0)
-    {
-    	this->destroy();
+        this->destroy(true);
     }
 }
 
@@ -53,25 +44,9 @@ void Splash::update(float pDeltaTime)
 // Virtual Methods
 // ===========================================================
 
-void Splash::onCreate()
+CirclePart* CirclePart::deepCopy()
 {
-    Entity::onCreate();
-    
-    this->setCurrentFrameIndex(Utils::random(0, 7));
-    this->setOpacity(255.0);
-    
-    this->mLiveTime = Utils::randomf(1.5, 4.0);
-    this->mLiveTimeElapsed = 0;
-    
-    this->mAlphaSpeed = Utils::randomf(0.1, 3.0);
-    this->mScaleSpeed = 0.001;
-    
-    this->setScale(1.0);
-}
-
-Splash* Splash::deepCopy()
-{
-    return new Splash();
+    return new CirclePart();
 }
 
 #endif

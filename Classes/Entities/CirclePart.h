@@ -1,16 +1,13 @@
-#ifndef CONST_CIRCLE_H
-#define CONST_CIRCLE_H
+#ifndef CONST_CIRCLEPART_H
+#define CONST_CIRCLEPART_H
 
 #include "cocos2d.h"
 
-#include "Entity.h"
-#include "CircleFruit.h"
-#include "Processor.h"
-#include "BatchEntityManager.h"
+#include "ImpulseEntity.h"
 
 using namespace cocos2d;
 
-class Circle : public Entity
+class CirclePart : public ImpulseEntity
 {
 	protected:
 		// ===========================================================
@@ -23,11 +20,7 @@ class Circle : public Entity
 
 		// ===========================================================
 		// Fields
-        // ===========================================================
-    
-        float mRotationSpeed;
-    
-        BatchEntityManager* mFruitsManager;
+		// ===========================================================
 
 		// ===========================================================
 		// Constructors
@@ -77,34 +70,25 @@ class Circle : public Entity
 
 		// ===========================================================
 		// Fields
-		// ===========================================================
+        // ===========================================================
 
 		// ===========================================================
 		// Constructors
 		// ===========================================================
     
-        Circle(BatchEntityManager* pFruitsManager);
+        CirclePart();
 
 		// ===========================================================
 		// Methods
 		// ===========================================================
-    
-        void free();
+
+        void update(float pDelta);
 		
 		// ===========================================================
 		// Virtual Methods
 		// ===========================================================
-    void onCreate();
     
-    CircleFruit* mFruit;
-    void onDestroy();
-        void setScaleX(float pScale);
-    
-        void update(float pDeltaTime);
-    
-        Circle* deepCopy();
-    
-        void setCurrentFrameIndex(int pIndex);
+        virtual CirclePart* deepCopy();
 };
 
 #endif

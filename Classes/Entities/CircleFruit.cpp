@@ -22,6 +22,8 @@
 CircleFruit::CircleFruit() :
     ImpulseEntity("fruits.png", 6, 3)
     {
+        this->is = 0;
+        this->free1 = false;
     }
 
 // ===========================================================
@@ -39,6 +41,8 @@ void CircleFruit::free()
     this->mImpulsePower = Utils::coord(600.0f);
     this->mSideImpulse   = Utils::coord(Utils::randomf(-300.0f, 300.0f));
     this->mRotateImpulse = Utils::randomf(-360.0f, 360.0f);
+    
+    this->free1 = true;
 }
 
 // ===========================================================
@@ -48,8 +52,10 @@ void CircleFruit::free()
 void CircleFruit::onCreate()
 {
     Entity::onCreate();
-}
     
+    this->free1 = false;
+}
+
 CircleFruit* CircleFruit::deepCopy()
 {
     return new CircleFruit();
@@ -57,11 +63,29 @@ CircleFruit* CircleFruit::deepCopy()
     
 void CircleFruit::update(float pDeltaTime)
 {
-    ImpulseEntity::update(pDeltaTime * 2.0);
+    ImpulseEntity::update(pDeltaTime * 2.3);
     
     if(!this->isVisible()) return;
     
     this->setRotation(this->getRotation() + this->mRotationSpeed);
+    
+    if(this->getCenterY() < -Utils::coord(200))
+    {
+        this->destroy(false);
+    }
 }
+
+void CircleFruit::setScale(float pScale)
+{
+    if(pScale < 0) pScale = 0;
+    
+    ImpulseEntity::setScale(pScale);
+    
+    if(this->is == 0)
+    {
+        this->is = pScale;
+    }
+}
+
 
 #endif
